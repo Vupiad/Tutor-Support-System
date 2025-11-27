@@ -1,0 +1,59 @@
+{
+  "sessions": [
+    {
+      "session_id": "38a4c4a0-fbf9-4381-af3c-2547ed99ccc4",
+      "sso_id": "SE2025001",
+      "username": "student1",
+      "role": "student",
+      "email": "student1@hcmut.edu.vn",
+      "display_name": "Nguyễn Văn An",
+      "created_at": "2025-11-27T06:55:15.491787+00:00",
+      "last_activity": "2025-11-27T06:55:15.491787+00:00",
+      "expires_at": null
+    },
+    {
+      "session_id": "a7799f6b-3f10-4341-931b-9e6c2e6c742c",
+      "sso_id": "SE2025001",
+      "username": "student1",
+      "role": "student",
+      "email": "student1@hcmut.edu.vn",
+      "display_name": "Nguyễn Văn An",
+      "created_at": "2025-11-27T07:01:16.206768+00:00",
+      "last_activity": "2025-11-27T07:01:16.206768+00:00",
+      "expires_at": null
+    },
+    {
+      "session_id": "e262fdbc-6683-4cf6-93dc-d2c69c08e6e8",
+      "sso_id": "SE2025001",
+      "username": "student1",
+      "role": "student",
+      "email": "student1@hcmut.edu.vn",
+      "display_name": "Nguyễn Văn An",
+      "created_at": "2025-11-27T07:01:32.679934+00:00",
+      "last_activity": "2025-11-27T07:01:32.679934+00:00",
+      "expires_at": null
+    },
+    {
+      "session_id": "68aa45bc-2201-40db-9b4a-0ff71df72fc9",
+      "sso_id": "SE2025001",
+      "username": "student1",
+      "role": "student",
+      "email": "student1@hcmut.edu.vn",
+      "display_name": "Nguyễn Văn An",
+      "created_at": "2025-11-27T07:02:07.700307+00:00",
+      "last_activity": "2025-11-27T07:02:07.700307+00:00",
+      "expires_at": null
+    },
+    {
+      "session_id": "97ada54d-4030-4b66-9941-cb8c2a7f2c65",
+      "sso_id": "SE2025001",
+      "username": "student1",
+      "role": "student",
+      "email": "student1@hcmut.edu.vn",
+      "display_name": "Nguyễn Văn An",
+      "created_at": "2025-11-27T07:06:36.837343+00:00",
+      "last_activity": "2025-11-27T07:06:36.837343+00:00",
+      "expires_at": null
+    }
+  ]
+}

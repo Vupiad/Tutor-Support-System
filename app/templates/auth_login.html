@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Login - TutorSupport{% endblock %}
+
+{% block content %}
+<div class="card">
+  <h1>Sign In</h1>
+  
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for cat, msg in messages %}
+        <div class="alert alert-{{ cat }}">
+          {{ msg }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form action="{{ url_for('auth.login_post') }}" method="post" class="login-form">
+    
+    <!-- Role Selection -->
+    <div class="form-group">
+      <label>Login as:</label>
+      <div class="radio-group">
+        <div class="radio-option">
+          <input type="radio" id="role-student" name="role" value="student" checked>
+          <label for="role-student">Student</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="role-tutor" name="role" value="tutor">
+          <label for="role-tutor">Tutor</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Username -->
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input 
+        id="username" 
+        name="username" 
+        type="text" 
+        placeholder="Enter your username" 
+        required
+        autofocus
+      >
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input 
+        id="password" 
+        name="password" 
+        type="password" 
+        placeholder="Enter your password" 
+        required
+      >
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn">Sign In</button>
+  </form>
+
+  <!-- Footer / Dev Info -->
+  <div class="footer">
+    <p><strong>Demo Credentials:</strong></p>
+    <p>Student: <code>student1</code> / <code>studentpass</code></p>
+    <p>Tutor: <code>tutor1</code> / <code>tutorpass</code></p>
+  </div>
+</div>
+{% endblock %}

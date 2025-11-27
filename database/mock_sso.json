@@ -1,0 +1,36 @@
+{
+  "users": [
+    {
+      "id": "SE2025001",
+      "username": "student1",
+      "password": "studentpass",
+      "email": "student1@hcmut.edu.vn",
+      "created_at": "2025-11-01T10:00:00Z",
+      "last_login": "2025-11-27T07:06:36.840571+00:00"
+    },
+    {
+      "id": "SE2025002",
+      "username": "student2",
+      "password": "studentpass2",
+      "email": "student2@hcmut.edu.vn",
+      "created_at": "2025-11-05T10:00:00Z",
+      "last_login": "2025-11-26T14:30:00Z"
+    },
+    {
+      "id": "LECTURER_001",
+      "username": "tutor1",
+      "password": "tutorpass",
+      "email": "tutor1@hcmut.edu.vn",
+      "created_at": "2025-10-15T09:00:00Z",
+      "last_login": "2025-11-27T09:00:00Z"
+    },
+    {
+      "id": "LECTURER_002",
+      "username": "tutor2",
+      "password": "tutorpass2",
+      "email": "tutor2@hcmut.edu.vn",
+      "created_at": "2025-10-20T09:00:00Z",
+      "last_login": "2025-11-25T15:00:00Z"
+    }
+  ]
+}

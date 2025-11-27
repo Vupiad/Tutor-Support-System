@@ -1,0 +1,20 @@
+{
+  "mappings": [
+    {
+      "sso_id": "SE2025001",
+      "role": "student"
+    },
+    {
+      "sso_id": "SE2025002",
+      "role": "student"
+    },
+    {
+      "sso_id": "LECTURER_001",
+      "role": "tutor"
+    },
+    {
+      "sso_id": "LECTURER_002",
+      "role": "tutor"
+    }
+  ]
+}

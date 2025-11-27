@@ -1,0 +1,62 @@
+{
+  "users": [
+    {
+      "id": "SE2025001",
+      "name": "Nguyễn Văn An",
+      "faculty": "Computer Science",
+      "department": "Software Engineering",
+      "role_in_school": "student",
+      "student_id": "SE2025001",
+      "courses": ["CSC101", "CSC102", "CSC201"],
+      "email": "student1@hcmut.edu.vn",
+      "phone": "+84-9-xxx-xxxx",
+      "avatar_url": null,
+      "last_modified": "2025-11-27T08:00:00Z"
+    },
+    {
+      "id": "SE2025002",
+      "name": "Trần Thị Bình",
+      "faculty": "Computer Science",
+      "department": "Software Engineering",
+      "role_in_school": "student",
+      "student_id": "SE2025002",
+      "courses": ["CSC101", "CSC102", "CSC201", "CSC301"],
+      "email": "student2@hcmut.edu.vn",
+      "phone": "+84-9-yyy-yyyy",
+      "avatar_url": null,
+      "last_modified": "2025-11-26T14:30:00Z"
+    },
+    {
+      "id": "LECTURER_001",
+      "name": "Phạm Thị Tú",
+      "faculty": "Computer Science",
+      "department": "Software Engineering",
+      "role_in_school": "lecturer",
+      "lecturer_id": "LECTURER_001",
+      "subjects": ["CSC101", "CSC102", "CSC201"],
+      "qualifications": ["M.Sc. in Computer Science", "B.Sc. in Information Technology"],
+      "bio": "Experienced software engineer with 8 years teaching experience",
+      "rating": 4.8,
+      "email": "tutor1@hcmut.edu.vn",
+      "phone": "+84-9-ttt-tttt",
+      "avatar_url": null,
+      "last_modified": "2025-11-27T09:00:00Z"
+    },
+    {
+      "id": "LECTURER_002",
+      "name": "Lê Minh Đức",
+      "faculty": "Mathematics",
+      "department": "Applied Mathematics",
+      "role_in_school": "lecturer",
+      "lecturer_id": "LECTURER_002",
+      "subjects": ["MATH101", "MATH102", "MATH201"],
+      "qualifications": ["Ph.D. in Mathematics"],
+      "bio": "Expert in numerical analysis and optimization",
+      "rating": 4.5,
+      "email": "tutor2@hcmut.edu.vn",
+      "phone": "+84-9-ddd-dddd",
+      "avatar_url": null,
+      "last_modified": "2025-11-25T15:00:00Z"
+    }
+  ]
+}

@@ -257,22 +257,6 @@ def deleteFreetime(tutor_id, slot_id):
 @schedule_bp.route('/<tutor_id>', methods=['GET'])
 def getScheduleByTutorId(tutor_id):
     """Implements getScheduleByTutorId(tutorId, start, end)."""
-    
-    # Validate request
-    session_id = request.cookies.get('session_id')
-    if not session_id:
-        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
-    
-    session_record = session_store.get_session(session_id)
-    if not session_record:
-        return jsonify({'error': 'Invalid or expired session'}), 401
-    
-    print(session_record)
-    if session_record['sso_id'] != tutor_id:
-        return jsonify({'error': 'Youre not allowed to get from this user'}), 401
-    
-    
-    
     # Begin
     
     start_str = request.args.get('start')

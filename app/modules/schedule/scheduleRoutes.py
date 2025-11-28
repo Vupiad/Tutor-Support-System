@@ -2,28 +2,14 @@ import json
 from flask import Blueprint, Flask, jsonify, request, abort
 from datetime import datetime
 from pathlib import Path
+from app.modules.schedule.scheduleConnectors import schedulesData
+from app.modules.auth.connectors import session_store
 
 schedule_bp = Blueprint('schedule', __name__)
 DATA_FILE = "database/mock_schedule.json"
 MOCK_TUTOR_ID = 1 # We'll assume operations default to this tutor if not specified
 
 # --- Utility Functions for Mock Data ---
-
-def load_data():
-    """Reads all schedules (keyed by tutor_id) from the JSON file."""
-    file_path = Path(DATA_FILE)
-    try:
-        with open(file_path, 'r') as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error schedule file not found: {e}")
-        # If file is missing or corrupt, return an empty dictionary
-        return {}
-
-def save_data(data):
-    """Writes the current dictionary of schedules back to the JSON file."""
-    with open(DATA_FILE, 'w') as f:
-        json.dump(data, f, indent=4)
 
 def generate_new_id(schedules):
     """Generates a unique ID across all slots in all schedules."""
@@ -54,6 +40,25 @@ def validate_times(start_str, end_str):
 @schedule_bp.route('/<tutor_id>/slot/new', methods=['POST'])
 def createFreetime(tutor_id):
     """Implements createFreetime(start, end) for a hardcoded MOCK_TUTOR_ID."""
+    
+    
+    # Validate request
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
+    
+    session_record = session_store.get_session(session_id)
+    if not session_record:
+        return jsonify({'error': 'Invalid or expired session'}), 401
+    
+    print(session_record)
+    if session_record['sso_id'] != tutor_id:
+        return jsonify({'error': 'Youre not allowed to get from this user'}), 401
+    
+    
+    
+    # Begin
+    
     start_str = request.args.get('start')
     end_str = request.args.get('end')
 
@@ -64,7 +69,7 @@ def createFreetime(tutor_id):
     if error:
         return jsonify({"error": error}), 400
     
-    schedules = load_data()
+    schedules = schedulesData.data
     
     # 1. Ensure the tutor's schedule structure exists
     if tutor_id not in schedules:
@@ -86,7 +91,7 @@ def createFreetime(tutor_id):
         "end": end_str
     }
     tutor_slots.append(new_slot)
-    save_data(schedules)
+    schedulesData._save()
 
     # Return the newly created slot, including the implicit tutor_id
     response = new_slot.copy()
@@ -101,6 +106,25 @@ def editFreetime(tutor_id, slot_id):
     Edits the start and end times of a specific slot identified by slot_id 
     for a given tutor_id.
     """
+    
+    
+    # Validate request
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
+    
+    session_record = session_store.get_session(session_id)
+    if not session_record:
+        return jsonify({'error': 'Invalid or expired session'}), 401
+    
+    print(session_record)
+    if session_record['sso_id'] != tutor_id:
+        return jsonify({'error': 'Youre not allowed to get from this user'}), 401
+    
+    
+    
+    # Begin
+    
     start_str = request.args.get('start')
     end_str = request.args.get('end')
 
@@ -118,7 +142,7 @@ def editFreetime(tutor_id, slot_id):
     except ValueError:
         return jsonify({"error": "Invalid slot ID format. Must be an integer."}), 400
 
-    schedules = load_data()
+    schedules = schedulesData.data
 
     # 2. Check if the tutor exists
     if tutor_id not in schedules:
@@ -159,7 +183,7 @@ def editFreetime(tutor_id, slot_id):
     found_slot['end'] = end_str
     
     # 6. Save the modified schedules back to the file
-    save_data(schedules)
+    schedulesData._save()
     
     # 7. Return the updated slot data
     response = found_slot.copy()
@@ -175,8 +199,25 @@ def editFreetime(tutor_id, slot_id):
 @schedule_bp.route('<tutor_id>/slot/<slot_id>', methods=['DELETE'])
 def deleteFreetime(tutor_id, slot_id):
     """Implements deleteFreetime(start, end) for a hardcoded MOCK_TUTOR_ID."""
-
-    schedules = load_data()
+    
+    # Validate request
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
+    
+    session_record = session_store.get_session(session_id)
+    if not session_record:
+        return jsonify({'error': 'Invalid or expired session'}), 401
+    
+    print(session_record)
+    if session_record['sso_id'] != tutor_id:
+        return jsonify({'error': 'Youre not allowed to get from this user'}), 401
+    
+    
+    
+    # Begin
+    
+    schedules = schedulesData.data
 
     try:
         slot_id_int = int(slot_id)
@@ -206,7 +247,7 @@ def deleteFreetime(tutor_id, slot_id):
     # The .pop() method removes the item at the specified index
     deleted_slot = tutor_slots.pop(slot_index_to_delete)
         
-    save_data(schedules)
+    schedulesData._save()
     return jsonify({"message": "Free time slot deleted successfully."}), 200
 
 
@@ -216,6 +257,24 @@ def deleteFreetime(tutor_id, slot_id):
 @schedule_bp.route('/<tutor_id>', methods=['GET'])
 def getScheduleByTutorId(tutor_id):
     """Implements getScheduleByTutorId(tutorId, start, end)."""
+    
+    # Validate request
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
+    
+    session_record = session_store.get_session(session_id)
+    if not session_record:
+        return jsonify({'error': 'Invalid or expired session'}), 401
+    
+    print(session_record)
+    if session_record['sso_id'] != tutor_id:
+        return jsonify({'error': 'Youre not allowed to get from this user'}), 401
+    
+    
+    
+    # Begin
+    
     start_str = request.args.get('start')
     end_str = request.args.get('end')
 
@@ -226,7 +285,8 @@ def getScheduleByTutorId(tutor_id):
     if error:
         return jsonify({"error": error}), 400
 
-    schedules = load_data()
+
+    schedules = schedulesData.data
     
     if tutor_id not in schedules:
         return jsonify({"error": "Tutor schedule not found."}), 404

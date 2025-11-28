@@ -1,0 +1,12 @@
+{
+  "notifications": [],
+  "enrollments": [
+    {
+      "id": 1,
+      "student_id": "SE2025001",
+      "tutor_id": "LECTURER_001",
+      "course_id": "course_001"
+    }
+  ]
+}
+

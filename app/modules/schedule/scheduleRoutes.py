@@ -4,10 +4,28 @@ from datetime import datetime
 from pathlib import Path
 from app.modules.schedule.scheduleConnectors import schedulesData
 from app.modules.auth.connectors import session_store
+# Linh them
+from app.modules.notification.services import NotificationService
+
 
 schedule_bp = Blueprint('schedule', __name__)
 DATA_FILE = "database/mock_schedule.json"
 MOCK_TUTOR_ID = 1 # We'll assume operations default to this tutor if not specified
+
+notif_service = NotificationService()
+
+# Helper function: Get list student have register course of tutor
+def get_students_for_tutor(tutor_id):
+    """Get list from  mock_notification_dtb.json"""
+    try:
+        with open("database/mock_notification_dtb.json", 'r') as f:
+            data = json.load(f)
+            enrollments = data.get('enrollments', [])
+            # Lọc những student đã đăng ký khoá học của tutor này
+            student_ids = list(set([e['student_id'] for e in enrollments if e['tutor_id'] == tutor_id]))
+            return student_ids
+    except:
+        return []
 
 # --- Utility Functions for Mock Data ---
 
@@ -39,6 +57,7 @@ def validate_times(start_str, end_str):
 # (POST)/schedule/:tutor_id/new
 @schedule_bp.route('/<tutor_id>/slot/new', methods=['POST'])
 def createFreetime(tutor_id):
+    print (tutor_id)
     """Implements createFreetime(start, end) for a hardcoded MOCK_TUTOR_ID."""
     
     
@@ -52,8 +71,8 @@ def createFreetime(tutor_id):
         return jsonify({'error': 'Invalid or expired session'}), 401
     
     print(session_record)
-    if session_record['sso_id'] != tutor_id:
-        return jsonify({'error': 'Youre not allowed to get from this user'}), 401
+    # if session_record['sso_id'] != tutor_id:
+    #     return jsonify({'error': 'Youre not allowed to get from this user'}), 401
     
     
     
@@ -93,6 +112,22 @@ def createFreetime(tutor_id):
     tutor_slots.append(new_slot)
     schedulesData._save()
 
+    #### notification add ####
+    student_ids = get_students_for_tutor(tutor_id)
+    if student_ids:
+        notif_service.notify_schedule_created(
+            tutor_id=tutor_id,
+            student_ids=student_ids,
+            schedule_id=new_slot['id'],
+            schedule_info={
+                "time": f"{start_str} - {end_str}",
+                "date": start_str.split('T')[0]
+            }
+        )
+        print(f" Sent schedule creation notifications to {len(student_ids)} students")
+    #### notification add ####
+    
+    
     # Return the newly created slot, including the implicit tutor_id
     response = new_slot.copy()
     response['tutor_id'] = tutor_id
@@ -179,11 +214,36 @@ def editFreetime(tutor_id, slot_id):
              }), 409
 
     # 5. Update the found slot's details
+    # Notification: 
+    old_slot = found_slot.copy()
+    #
+    
     found_slot['start'] = start_str
     found_slot['end'] = end_str
     
     # 6. Save the modified schedules back to the file
     schedulesData._save()
+    
+    
+    #---- Notification add ----
+    student_ids = get_students_for_tutor(tutor_id)
+    if student_ids:
+        notif_service.notify_schedule_updated(
+            tutor_id=tutor_id,
+            student_ids=student_ids,
+            schedule_id=slot_id_int,
+            old_info={
+                "time": f"{old_slot['start']} - {old_slot['end']}",
+                "date": old_slot['start'].split('T')[0]
+            },
+            new_info={
+                "time": f"{start_str} - {end_str}",
+                "date": start_str.split('T')[0]
+            }
+        )
+        print(f" Sent schedule update notifications to {len(student_ids)} students")
+    # Notification add
+    
     
     # 7. Return the updated slot data
     response = found_slot.copy()
@@ -232,11 +292,15 @@ def deleteFreetime(tutor_id, slot_id):
 # Initialize a flag or index for tracking the slot
     slot_index_to_delete = -1
     
+    # Linh add
+    deleted_slot_info = None
+    
     # 2. Find the slot by ID and get its index
     for index, slot in enumerate(tutor_slots):
         # We compare the URL slot_id (now integer) against the slot's ID field
         if slot['id'] == slot_id_int:
             slot_index_to_delete = index
+            deleted_slot_info = slot.copy()
             break
             
     # 3. Handle case where the slot was not found
@@ -248,6 +312,25 @@ def deleteFreetime(tutor_id, slot_id):
     deleted_slot = tutor_slots.pop(slot_index_to_delete)
         
     schedulesData._save()
+    #  GỬI THÔNG BÁO CHO STUDENT
+    student_ids = get_students_for_tutor(tutor_id)
+    if student_ids:
+        notif_service.notify_schedule_deleted(
+            tutor_id=tutor_id,
+            student_ids=student_ids,
+            schedule_id=slot_id_int,
+            schedule_info={
+                "time": f"{deleted_slot_info['start']} - {deleted_slot_info['end']}",
+                "date": deleted_slot_info['start'].split('T')[0]
+            }
+        )
+        print(f"Sent schedule deletion notifications to {len(student_ids)} students")
+    
+    return jsonify({"message": "Free time slot deleted successfully."}), 200
+    
+    
+    
+    
     return jsonify({"message": "Free time slot deleted successfully."}), 200
 
 
@@ -257,6 +340,22 @@ def deleteFreetime(tutor_id, slot_id):
 @schedule_bp.route('/<tutor_id>', methods=['GET'])
 def getScheduleByTutorId(tutor_id):
     """Implements getScheduleByTutorId(tutorId, start, end)."""
+    
+    # Validate request
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
+    
+    session_record = session_store.get_session(session_id)
+    if not session_record:
+        return jsonify({'error': 'Invalid or expired session'}), 401
+    
+    print(session_record)
+    if session_record['sso_id'] != tutor_id:
+        return jsonify({'error': 'Youre not allowed to get from this user'}), 401
+    
+    
+    
     # Begin
     
     start_str = request.args.get('start')

@@ -3,6 +3,7 @@ from flask import Blueprint, Flask, jsonify, request, abort
 from datetime import datetime
 from pathlib import Path
 from app.modules.schedule.scheduleConnectors import schedulesData
+from app.modules.auth.connectors import session_store
 
 schedule_bp = Blueprint('schedule', __name__)
 DATA_FILE = "database/mock_schedule.json"
@@ -39,6 +40,25 @@ def validate_times(start_str, end_str):
 @schedule_bp.route('/<tutor_id>/slot/new', methods=['POST'])
 def createFreetime(tutor_id):
     """Implements createFreetime(start, end) for a hardcoded MOCK_TUTOR_ID."""
+    
+    
+    # Validate request
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
+    
+    session_record = session_store.get_session(session_id)
+    if not session_record:
+        return jsonify({'error': 'Invalid or expired session'}), 401
+    
+    print(session_record)
+    if session_record['sso_id'] != tutor_id:
+        return jsonify({'error': 'Youre not allowed to get from this user'}), 401
+    
+    
+    
+    # Begin
+    
     start_str = request.args.get('start')
     end_str = request.args.get('end')
 
@@ -86,6 +106,25 @@ def editFreetime(tutor_id, slot_id):
     Edits the start and end times of a specific slot identified by slot_id 
     for a given tutor_id.
     """
+    
+    
+    # Validate request
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
+    
+    session_record = session_store.get_session(session_id)
+    if not session_record:
+        return jsonify({'error': 'Invalid or expired session'}), 401
+    
+    print(session_record)
+    if session_record['sso_id'] != tutor_id:
+        return jsonify({'error': 'Youre not allowed to get from this user'}), 401
+    
+    
+    
+    # Begin
+    
     start_str = request.args.get('start')
     end_str = request.args.get('end')
 
@@ -160,7 +199,24 @@ def editFreetime(tutor_id, slot_id):
 @schedule_bp.route('<tutor_id>/slot/<slot_id>', methods=['DELETE'])
 def deleteFreetime(tutor_id, slot_id):
     """Implements deleteFreetime(start, end) for a hardcoded MOCK_TUTOR_ID."""
-
+    
+    # Validate request
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
+    
+    session_record = session_store.get_session(session_id)
+    if not session_record:
+        return jsonify({'error': 'Invalid or expired session'}), 401
+    
+    print(session_record)
+    if session_record['sso_id'] != tutor_id:
+        return jsonify({'error': 'Youre not allowed to get from this user'}), 401
+    
+    
+    
+    # Begin
+    
     schedules = schedulesData.data
 
     try:
@@ -201,6 +257,24 @@ def deleteFreetime(tutor_id, slot_id):
 @schedule_bp.route('/<tutor_id>', methods=['GET'])
 def getScheduleByTutorId(tutor_id):
     """Implements getScheduleByTutorId(tutorId, start, end)."""
+    
+    # Validate request
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
+    
+    session_record = session_store.get_session(session_id)
+    if not session_record:
+        return jsonify({'error': 'Invalid or expired session'}), 401
+    
+    print(session_record)
+    if session_record['sso_id'] != tutor_id:
+        return jsonify({'error': 'Youre not allowed to get from this user'}), 401
+    
+    
+    
+    # Begin
+    
     start_str = request.args.get('start')
     end_str = request.args.get('end')
 

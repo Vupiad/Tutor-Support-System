@@ -1,0 +1,167 @@
+import json
+from flask import Blueprint, Flask, jsonify, request, abort
+from datetime import datetime
+from pathlib import Path
+
+schedule_bp = Blueprint('schedule', __name__)
+DATA_FILE = "database/mock_schedule.json"
+MOCK_TUTOR_ID = 1 # We'll assume operations default to this tutor if not specified
+
+# --- Utility Functions for Mock Data ---
+
+def load_data():
+    """Reads all schedules (keyed by tutor_id) from the JSON file."""
+    file_path = Path(DATA_FILE)
+    try:
+        with open(file_path, 'r') as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error schedule file not found: {e}")
+        # If file is missing or corrupt, return an empty dictionary
+        return {}
+
+def save_data(data):
+    """Writes the current dictionary of schedules back to the JSON file."""
+    with open(DATA_FILE, 'w') as f:
+        json.dump(data, f, indent=4)
+
+def generate_new_id(schedules):
+    """Generates a unique ID across all slots in all schedules."""
+    max_id = 100 
+    for schedule in schedules.values():
+        if schedule['slots']:
+            current_max = max(slot['id'] for slot in schedule['slots'])
+            max_id = max(max_id, current_max)
+    return max_id + 1
+
+def validate_times(start_str, end_str):
+    """Basic validation and returns datetime objects."""
+    try:
+        # Handling the Z (Zulu time) for parsing
+        start_dt = datetime.fromisoformat(start_str.replace('Z', '+00:00'))
+        end_dt = datetime.fromisoformat(end_str.replace('Z', '+00:00'))
+        if start_dt >= end_dt:
+            return None, None, "Start time must be before end time."
+        return start_dt, end_dt, None
+    except ValueError:
+        return None, None, "Invalid datetime format. Use ISO 8601 (e.g., 2025-12-01T09:00:00Z)."
+
+# --- ScheduleAccessService Implementation (API Endpoints) ---
+
+
+# POST new timeslot by tutor
+# (POST)/schedule/:tutor_id/new
+@schedule_bp.route('/<tutor_id>/slot/new', methods=['POST'])
+def createFreetime(tutor_id):
+    """Implements createFreetime(start, end) for a hardcoded MOCK_TUTOR_ID."""
+    start_str = request.args.get('start')
+    end_str = request.args.get('end')
+
+    if not start_str or not end_str:
+        return jsonify({"error": "Missing 'start' or 'end' query parameters."}), 400
+    
+    start_dt, end_dt, error = validate_times(start_str, end_str)
+    if error:
+        return jsonify({"error": error}), 400
+    
+    schedules = load_data()
+    
+    # 1. Ensure the tutor's schedule structure exists
+    if tutor_id not in schedules:
+        schedules[tutor_id] = {"tutor_id": MOCK_TUTOR_ID, "slots": []}
+
+    tutor_slots = schedules[tutor_id]['slots']
+
+    # 2. Check for overlaps
+    for slot in tutor_slots:
+        slot_start = datetime.fromisoformat(slot['start'].replace('Z', '+00:00'))
+        slot_end = datetime.fromisoformat(slot['end'].replace('Z', '+00:00'))
+        if (start_dt < slot_end and end_dt > slot_start):
+             return jsonify({"error": "New free time overlaps with an existing slot."}), 409
+
+    # 3. Create the new slot
+    new_slot = {
+        "id": generate_new_id(schedules),
+        "start": start_str,
+        "end": end_str
+    }
+    tutor_slots.append(new_slot)
+    save_data(schedules)
+
+    # Return the newly created slot, including the implicit tutor_id
+    response = new_slot.copy()
+    response['tutor_id'] = tutor_id
+    return jsonify(response), 201
+
+
+
+
+@schedule_bp.route('<tutor_id>/slot/<slot_id>', methods=['DELETE'])
+def deleteFreetime(tutor_id, slot_id):
+    """Implements deleteFreetime(start, end) for a hardcoded MOCK_TUTOR_ID."""
+
+    schedules = load_data()
+
+    try:
+        slot_id_int = int(slot_id)
+    except ValueError:
+        return jsonify({"error": "Invalid slot ID format. Must be an integer."}), 400
+    
+    if tutor_id not in schedules:
+        return jsonify({"message": "Tutor schedule not found."}), 404
+
+    tutor_slots = schedules[tutor_id]['slots']
+
+# Initialize a flag or index for tracking the slot
+    slot_index_to_delete = -1
+    
+    # 2. Find the slot by ID and get its index
+    for index, slot in enumerate(tutor_slots):
+        # We compare the URL slot_id (now integer) against the slot's ID field
+        if slot['id'] == slot_id_int:
+            slot_index_to_delete = index
+            break
+            
+    # 3. Handle case where the slot was not found
+    if slot_index_to_delete == -1:
+        return jsonify({"message": f"Free time slot with ID {slot_id} not found for tutor {tutor_id}."}), 404
+
+    # 4. Delete the slot
+    # The .pop() method removes the item at the specified index
+    deleted_slot = tutor_slots.pop(slot_index_to_delete)
+        
+    save_data(schedules)
+    return jsonify({"message": "Free time slot deleted successfully."}), 200
+
+
+
+# GET schedule by tutor
+# (GET)/schedule/:tutor_id
+@schedule_bp.route('/<tutor_id>', methods=['GET'])
+def getScheduleByTutorId(tutor_id):
+    """Implements getScheduleByTutorId(tutorId, start, end)."""
+    start_str = request.args.get('start')
+    end_str = request.args.get('end')
+
+    if not start_str or not end_str:
+        return jsonify({"error": "Missing 'start' or 'end' query parameters."}), 400
+
+    start_dt, end_dt, error = validate_times(start_str, end_str)
+    if error:
+        return jsonify({"error": error}), 400
+
+    schedules = load_data()
+    
+    if tutor_id not in schedules:
+        return jsonify({"error": "Tutor schedule not found."}), 404
+
+    tutor_slots = schedules[tutor_id]['slots']
+    
+    # Filter the tutor's slots by the requested time range
+    filtered_slots = [
+        slot for slot in tutor_slots
+        if datetime.fromisoformat(slot['start'].replace('Z', '+00:00')) >= start_dt and
+           datetime.fromisoformat(slot['end'].replace('Z', '+00:00')) <= end_dt
+    ]
+    
+    return jsonify(filtered_slots)

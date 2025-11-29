@@ -1,0 +1,54 @@
+{
+  "assignments": [
+    {
+      "assignment_id": "ASN001",
+      "tutor_id": "LECTURER_001",
+      "student_id": "SE2025001",
+      "student_name": "Nguyễn Văn An",
+      "course_name": "CSC101",
+      "class_name": "SE-K2024-1",
+      "start_date": "2025-11-20",
+      "rating": 4.5
+    },
+    {
+      "assignment_id": "ASN002",
+      "tutor_id": "LECTURER_001",
+      "student_id": "SE2025002",
+      "student_name": "Trần Thị Bình",
+      "course_name": "CSC102",
+      "class_name": "SE-K2024-1",
+      "start_date": "2025-11-22",
+      "rating": 4.8
+    },
+    {
+      "assignment_id": "ASN003",
+      "tutor_id": "LECTURER_001",
+      "student_id": "SE2025001",
+      "student_name": "Nguyễn Văn An",
+      "course_name": "CSC201",
+      "class_name": "SE-K2024-2",
+      "start_date": "2025-11-18",
+      "rating": 4.3
+    },
+    {
+      "assignment_id": "ASN004",
+      "tutor_id": "LECTURER_002",
+      "student_id": "SE2025002",
+      "student_name": "Trần Thị Bình",
+      "course_name": "MATH101",
+      "class_name": "SE-K2024-1",
+      "start_date": "2025-11-20",
+      "rating": 4.6
+    },
+    {
+      "assignment_id": "ASN005",
+      "tutor_id": "LECTURER_002",
+      "student_id": "SE2025001",
+      "student_name": "Nguyễn Văn An",
+      "course_name": "MATH102",
+      "class_name": "SE-K2024-1",
+      "start_date": "2025-11-25",
+      "rating": 4.2
+    }
+  ]
+}

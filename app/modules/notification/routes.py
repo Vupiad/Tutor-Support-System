@@ -1,6 +1,5 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from .services import NotificationService
-from app.modules.auth.connectors import session_store
 import logging
 
 logger = logging.getLogger(__name__)
@@ -8,15 +7,18 @@ notification_bp = Blueprint('notification', __name__, url_prefix='notification')
 notif_service = NotificationService()
 
 def verify_session():
-    """Authentication by cookie"""
-    session_id = request.cookies.get('session_id')
-    if not session_id:
-        return None, jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
-    
-    session_record = session_store.get_session(session_id)
-    if not session_record:
-        return None, jsonify({'error': 'Invalid or expired session'}), 401
-    
+    """Authentication by Flask session"""
+    if 'user_id' not in session:
+        return None, jsonify({'error': 'Not authenticated'}), 401
+
+    session_record = {
+        'sso_id': session.get('user_id'),
+        'username': session.get('username'),
+        'email': session.get('email'),
+        'display_name': session.get('display_name'),
+        'role': session.get('role')
+    }
+
     return session_record, None, None
 
 

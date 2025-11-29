@@ -1,9 +1,9 @@
 import json
-from flask import Blueprint, Flask, jsonify, request, abort
+from flask import Blueprint, Flask, jsonify, request, abort, session
 from datetime import datetime
 from pathlib import Path
 from app.modules.schedule.scheduleConnectors import schedulesData
-from app.modules.auth.connectors import session_store
+# Using Flask session instead of session_store
 # Linh them
 from app.modules.notification.services import NotificationService
 
@@ -61,15 +61,16 @@ def createFreetime(tutor_id):
     """Implements createFreetime(start, end) for a hardcoded MOCK_TUTOR_ID."""
     
     
-    # Validate request
-    session_id = request.cookies.get('session_id')
-    if not session_id:
-        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
-    
-    session_record = session_store.get_session(session_id)
-    if not session_record:
-        return jsonify({'error': 'Invalid or expired session'}), 401
-    
+    # Validate request using Flask session
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not authenticated'}), 401
+    session_record = {
+        'sso_id': session.get('user_id'),
+        'username': session.get('username'),
+        'email': session.get('email'),
+        'display_name': session.get('display_name'),
+        'role': session.get('role')
+    }
     print(session_record)
     # if session_record['sso_id'] != tutor_id:
     #     return jsonify({'error': 'Youre not allowed to get from this user'}), 401
@@ -143,15 +144,18 @@ def editFreetime(tutor_id, slot_id):
     """
     
     
-    # Validate request
-    session_id = request.cookies.get('session_id')
-    if not session_id:
-        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
-    
-    session_record = session_store.get_session(session_id)
-    if not session_record:
-        return jsonify({'error': 'Invalid or expired session'}), 401
-    
+    # Validate request using Flask session
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not authenticated'}), 401
+
+    session_record = {
+        'sso_id': session.get('user_id'),
+        'username': session.get('username'),
+        'email': session.get('email'),
+        'display_name': session.get('display_name'),
+        'role': session.get('role')
+    }
+
     print(session_record)
     if session_record['sso_id'] != tutor_id:
         return jsonify({'error': 'Youre not allowed to get from this user'}), 401
@@ -260,15 +264,18 @@ def editFreetime(tutor_id, slot_id):
 def deleteFreetime(tutor_id, slot_id):
     """Implements deleteFreetime(start, end) for a hardcoded MOCK_TUTOR_ID."""
     
-    # Validate request
-    session_id = request.cookies.get('session_id')
-    if not session_id:
-        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
-    
-    session_record = session_store.get_session(session_id)
-    if not session_record:
-        return jsonify({'error': 'Invalid or expired session'}), 401
-    
+    # Validate request using Flask session
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not authenticated'}), 401
+
+    session_record = {
+        'sso_id': session.get('user_id'),
+        'username': session.get('username'),
+        'email': session.get('email'),
+        'display_name': session.get('display_name'),
+        'role': session.get('role')
+    }
+
     print(session_record)
     if session_record['sso_id'] != tutor_id:
         return jsonify({'error': 'Youre not allowed to get from this user'}), 401
@@ -341,15 +348,18 @@ def deleteFreetime(tutor_id, slot_id):
 def getScheduleByTutorId(tutor_id):
     """Implements getScheduleByTutorId(tutorId, start, end)."""
     
-    # Validate request
-    session_id = request.cookies.get('session_id')
-    if not session_id:
-        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
-    
-    session_record = session_store.get_session(session_id)
-    if not session_record:
-        return jsonify({'error': 'Invalid or expired session'}), 401
-    
+    # Validate request using Flask session
+    if 'user_id' not in session:
+        return jsonify({'error': 'Not authenticated'}), 401
+
+    session_record = {
+        'sso_id': session.get('user_id'),
+        'username': session.get('username'),
+        'email': session.get('email'),
+        'display_name': session.get('display_name'),
+        'role': session.get('role')
+    }
+
     print(session_record)
     if session_record['sso_id'] != tutor_id:
         return jsonify({'error': 'Youre not allowed to get from this user'}), 401

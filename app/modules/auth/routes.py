@@ -104,7 +104,7 @@ def login_post():
     
     
     if request.is_json:
-        # API response
+    # API response
         resp = make_response(jsonify({
             'success': True,
             'user': user_info,
@@ -113,8 +113,12 @@ def login_post():
             }
         }), 200)
     else:
-        # Form response: render success page
-        resp = make_response(render_template('login_success.html', user=user_info), 200)
+    # Form response → redirect sau login
+        if mapped_role == "tutor":
+            resp = make_response(redirect("/tutor"))
+        else:
+            resp = make_response(redirect("/student"))
+
     
     # Set session_id as HttpOnly cookie (client cannot access via JS, sent with every request)
     resp.set_cookie(

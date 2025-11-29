@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from .Config import Config
 from .extensions import db, ma
 
@@ -20,5 +20,7 @@ def create_app(config_class=Config):
     # Future modules (Session, Report, etc.) will be registered here
     # from app.modules.session.routes import session_bp
     # app.register_blueprint(session_bp, url_prefix='/api/v1/sessions')
-
+    @app.route("/tutor")
+    def tutor_dashboard():
+        return render_template("tutor_dashboard.html")
     return app

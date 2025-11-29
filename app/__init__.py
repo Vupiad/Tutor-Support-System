@@ -19,9 +19,11 @@ def create_app(config_class=Config):
     
     from app.modules.notification.routes import notification_bp
     app.register_blueprint(notification_bp, url_prefix='/notification')
-
-    # Future modules (Session, Report, etc.) will be registered here
-    # from app.modules.session.routes import session_bp
-    # app.register_blueprint(session_bp, url_prefix='/api/v1/sessions')
+    
+    from app.modules.tutor.routes import tutor_bp
+    app.register_blueprint(tutor_bp)
+    
+    from app.modules.student.routes import student_bp
+    app.register_blueprint(student_bp)
 
     return app

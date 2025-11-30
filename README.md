@@ -473,7 +473,34 @@ TutorSupportSystem/
 - SVG (.svg)
 - WebP (.webp)
 
-## 🛠️ Development Guide
+## �️ Login page image & customization
+
+If you want the login page to display the HCMUT building image (right column):
+
+- Place the image file in the static images folder:
+
+```
+app/static/images/hcmut_building.png
+```
+
+- The template `app/templates/auth_login.html` references this file using:
+
+```html
+<img src="{{ url_for('static', filename='images/hcmut_building.png') }}" alt="HCMUT Building">
+```
+
+- Recommended image formats: PNG or JPG, with an aspect ratio close to portrait (e.g. 3:4). A 1200×1600 (or scaled equivalent) image will look sharp; the CSS will crop to fit.
+
+- To change the filename, update the `src` in `auth_login.html` to the new filename.
+
+- Quick CSS tweaks (in `app/static/css/style.css`):
+  - `.login-container { max-width: 950px; max-height: 550px; }` — controls overall card size.
+  - `.login-form { max-width: 380px; }` — controls form width.
+  - `.login-image-section { display: none; }` inside the `@media (max-width: 600px)` block hides the image on small screens.
+
+This README section documents the default place and name we use for the building photo used on the login page.
+
+## �🛠️ Development Guide
 
 ### Adding a New Module
 
@@ -575,4 +602,5 @@ For questions or issues:
 
 ---
 
-**Last Updated:** November 27, 2025
+**Last Updated:** November 30, 2025
+

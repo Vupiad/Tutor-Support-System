@@ -343,6 +343,27 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.bookings-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.bookings-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.bookings-list::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 10px;
+}
+
+.bookings-list::-webkit-scrollbar-thumb:hover {
+  background: #5568d3;
 }
 
 .booking-card {
@@ -524,6 +545,27 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.notifications-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notifications-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.notifications-list::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 10px;
+}
+
+.notifications-list::-webkit-scrollbar-thumb:hover {
+  background: #5568d3;
 }
 
 .notification-item {

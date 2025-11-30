@@ -143,6 +143,7 @@ class NotificationService:
             sender_id=student_id,
             related_data={
                 "student_id": student_id,
+                "booking_id": booking_info.get('booking_id'),
                 "course_name": booking_info.get('course_name'),
                 "date_time": booking_info.get('date_time'),
                 "slot_end": booking_info.get('slot_end')
@@ -161,6 +162,42 @@ class NotificationService:
             related_data={
                 "tutor_name": tutor_name,
                 "schedule_info": schedule_info
+            }
+        )
+    
+    def notify_booking_approved(self, student_id, tutor_name, booking_info):
+        """Notify student when tutor approves their booking"""
+        return self.send_event_notification(
+            recipient_id=student_id,
+            recipient_type=RecipientType.STUDENT.value,
+            event_type=EventType.COURSE_REQUEST.value,
+            title="Buổi học được chấp nhận ✅",
+            message=f"Gia sư {tutor_name} đã chấp nhận buổi học {booking_info.get('course_name', '')} vào {booking_info.get('date_time', '')}",
+            sender_id="SYSTEM",
+            related_data={
+                "tutor_name": tutor_name,
+                "course_name": booking_info.get('course_name'),
+                "date_time": booking_info.get('date_time'),
+                "booking_id": booking_info.get('booking_id'),
+                "status": "approved"
+            }
+        )
+    
+    def notify_booking_rejected(self, student_id, tutor_name, booking_info):
+        """Notify student when tutor rejects their booking"""
+        return self.send_event_notification(
+            recipient_id=student_id,
+            recipient_type=RecipientType.STUDENT.value,
+            event_type=EventType.COURSE_REQUEST.value,
+            title="Buổi học bị từ chối ❌",
+            message=f"Gia sư {tutor_name} đã từ chối buổi học {booking_info.get('course_name', '')} vào {booking_info.get('date_time', '')}",
+            sender_id="SYSTEM",
+            related_data={
+                "tutor_name": tutor_name,
+                "course_name": booking_info.get('course_name'),
+                "date_time": booking_info.get('date_time'),
+                "booking_id": booking_info.get('booking_id'),
+                "status": "rejected"
             }
         )
     

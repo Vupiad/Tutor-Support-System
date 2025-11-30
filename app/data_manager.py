@@ -441,6 +441,46 @@ class StudentBookingManager:
                 return MockDataManager.save_json('mock_student_bookings.json', data)
         
         return False
+    
+    @staticmethod
+    def approve_booking(booking_id: str) -> bool:
+        """
+        Approve a booking by setting its status to 'confirmed'.
+        
+        Args:
+            booking_id: ID of the booking to approve
+            
+        Returns:
+            True if successful, False otherwise.
+        """
+        data = MockDataManager.load_json('mock_student_bookings.json')
+        
+        for booking in data.get('bookings', []):
+            if booking.get('booking_id') == booking_id:
+                booking['status'] = 'confirmed'
+                return MockDataManager.save_json('mock_student_bookings.json', data)
+        
+        return False
+    
+    @staticmethod
+    def reject_booking(booking_id: str) -> bool:
+        """
+        Reject a booking by setting its status to 'rejected'.
+        
+        Args:
+            booking_id: ID of the booking to reject
+            
+        Returns:
+            True if successful, False otherwise.
+        """
+        data = MockDataManager.load_json('mock_student_bookings.json')
+        
+        for booking in data.get('bookings', []):
+            if booking.get('booking_id') == booking_id:
+                booking['status'] = 'rejected'
+                return MockDataManager.save_json('mock_student_bookings.json', data)
+        
+        return False
 
     @staticmethod
     def get_bookings_by_tutor(tutor_id: str) -> List[Dict]:

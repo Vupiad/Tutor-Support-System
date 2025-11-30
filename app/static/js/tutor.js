@@ -541,14 +541,17 @@ async function loadNotifications() {
       html += `<div class="card">Không có thông báo nào.</div>`;
     } else {
       notifications.forEach((n, index) => {
-        // Format timestamp
+        // Format timestamp - Add UTC+7 offset for Vietnamese timezone
         const createdDate = new Date(n.created_at);
-        const dateStr = createdDate.toLocaleDateString('vi-VN');
-        const timeStr = createdDate.toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'});
+        const vietnamTime = new Date(createdDate.getTime() + 7 * 60 * 60 * 1000);
+        const dateStr = vietnamTime.toLocaleDateString('vi-VN');
+        const timeStr = vietnamTime.toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit', hour12: false});
         const formattedTime = `${dateStr} ${timeStr}`;
         
         // Extract details from related_data
         let details = '';
+        let actionButtons = '';
+        let statusBadge = '';
         if (n.related_data) {
           if (n.event_type === 'course_request' && n.related_data.student_id) {
             // Booking notification - show course and date
@@ -556,6 +559,29 @@ async function loadNotifications() {
               <strong>Khóa học:</strong> ${n.related_data.course_name || 'N/A'}<br>
               <strong>Thời gian:</strong> ${n.related_data.date_time || 'N/A'}
             </div>`;
+            
+            // Check if booking title indicates approval/rejection (tutor receives update notifications)
+            const hasApprovedInTitle = n.title.includes('chấp nhận') || n.title.includes('được chấp nhận');
+            const hasRejectedInTitle = n.title.includes('từ chối') || n.title.includes('bị từ chối');
+            
+            if (hasApprovedInTitle) {
+              statusBadge = `<div style="display: inline-block; background-color: #4CAF50; color: white; padding: 6px 12px; border-radius: 4px; margin-top: 8px; font-weight: bold;">
+                ✅ Đã chấp nhận
+              </div>`;
+            } else if (hasRejectedInTitle) {
+              statusBadge = `<div style="display: inline-block; background-color: #F44336; color: white; padding: 6px 12px; border-radius: 4px; margin-top: 8px; font-weight: bold;">
+                ❌ Đã từ chối
+              </div>`;
+            } else {
+              // Add approve/reject buttons only for pending bookings (no approval/rejection in title)
+              const bookingId = n.related_data.booking_id;
+              if (bookingId) {
+                actionButtons = `
+                  <button class="btn small btn-success" onclick="approveBooking('${bookingId}')"><i class="ri-check-line"></i> Chấp nhận</button>
+                  <button class="btn small btn-danger" onclick="rejectBooking('${bookingId}')"><i class="ri-close-line"></i> Từ chối</button>
+                `;
+              }
+            }
           } else if ((n.event_type === 'schedule_create' || n.event_type === 'schedule_update' || n.event_type === 'schedule_delete') && n.related_data.schedule_info) {
             // Schedule notification
             details = `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee; font-size: 0.9em; color: #666;">
@@ -574,8 +600,10 @@ async function loadNotifications() {
 
             <p>${n.message}</p>
             ${details}
+            ${statusBadge}
 
             <div class="notif-actions">
+              ${actionButtons}
               ${!n.is_read ? `<button class="btn small" onclick="markNotificationRead('${n.id}', '${userId}')">Đánh dấu đã đọc</button>` : ''}
               
               <button class="btn small danger" onclick="deleteNotification('${n.id}', '${userId}')">Xoá</button>
@@ -587,6 +615,9 @@ async function loadNotifications() {
 
     html += `</div>`;
     setContent(html);
+    
+    // Update unread count badge
+    updateUnreadNotificationCount();
 
   } catch (err) {
     console.error(err);
@@ -601,6 +632,52 @@ async function markNotificationRead(id, userId) {
   });
 
   loadNotifications(); // reload UI
+}
+
+async function approveBooking(bookingId) {
+  if (!confirm('Bạn có chắc chắn muốn chấp nhận buổi học này?')) return;
+
+  try {
+    const res = await fetch(`/api/tutor/bookings/${encodeURIComponent(bookingId)}/approve`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      alert('Lỗi: ' + (data.message || 'Không thể chấp nhận buổi học'));
+      return;
+    }
+
+    alert('✅ Đã chấp nhận buổi học');
+    loadNotifications(); // Reload to show status instead of buttons
+  } catch (err) {
+    console.error(err);
+    alert('Lỗi: ' + err.message);
+  }
+}
+
+async function rejectBooking(bookingId) {
+  if (!confirm('Bạn có chắc chắn muốn từ chối buổi học này?')) return;
+
+  try {
+    const res = await fetch(`/api/tutor/bookings/${encodeURIComponent(bookingId)}/reject`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      alert('Lỗi: ' + (data.message || 'Không thể từ chối buổi học'));
+      return;
+    }
+
+    alert('❌ Đã từ chối buổi học');
+    loadNotifications(); // Reload to show status instead of buttons
+  } catch (err) {
+    console.error(err);
+    alert('Lỗi: ' + err.message);
+  }
 }
 
 async function markAllNotificationsAsRead(userId) {
@@ -657,6 +734,37 @@ async function logoutNow() {
   }
 }
 
+// Update unread notification count badge
+async function updateUnreadNotificationCount() {
+  try {
+    const meRes = await fetch('/auth/me', { credentials: 'include' });
+    if (!meRes.ok) return;
+    const meJson = await meRes.json();
+    const userId = meJson.data.user_id;
+
+    const res = await fetch(
+      `/notification/unread-count/${encodeURIComponent(userId)}`,
+      { credentials: 'include' }
+    );
+
+    if (!res.ok) return;
+    const data = await res.json();
+    const unreadCount = data.unread_count || 0;
+
+    const badgeEl = document.getElementById('unread-count');
+    if (badgeEl) {
+      if (unreadCount > 0) {
+        badgeEl.textContent = unreadCount;
+        badgeEl.style.display = 'inline-block';
+      } else {
+        badgeEl.style.display = 'none';
+      }
+    }
+  } catch (err) {
+    console.error("Lỗi update unread count:", err);
+  }
+}
+
 // small helper
 function escapeHtml(unsafe) {
   if (!unsafe) return '';
@@ -672,4 +780,5 @@ function escapeHtml(unsafe) {
 document.addEventListener("DOMContentLoaded", () => {
   loadPage("home");
   loadUserInfo();
+  updateUnreadNotificationCount();
 });

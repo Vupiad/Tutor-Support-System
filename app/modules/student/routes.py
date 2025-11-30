@@ -319,14 +319,15 @@ def book_tutoring_session():
                 'data': None
             }), 404
         
-        # Create booking using StudentBookingManager
+        # Create booking using StudentBookingManager (status='pending' initially)
         booking_id = StudentBookingManager.create_booking(
             student_id=student_id,
             tutor_id=tutor_id,
             session_id=f"SL{int(datetime.now().timestamp())}",  # Generate unique ID
             course_name=course_name,
             tutor_name=tutor_profile.get('name'),
-            date_time=slot_start
+            date_time=slot_start,
+            status='pending'  # Changed from 'confirmed' to 'pending' - tutor must approve
         )
         
         if not booking_id:
@@ -346,6 +347,7 @@ def book_tutoring_session():
                 student_id=student_id,
                 tutor_id=tutor_id,
                 booking_info={
+                    "booking_id": booking_id,
                     "student_name": DatacoreManager.get_user_profile(student_id).get('name'),
                     "course_name": course_name,
                     "date_time": slot_start,
@@ -423,6 +425,152 @@ def cancel_booking(booking_id):
         
     except Exception as e:
         logger.error(f"Error cancelling booking: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': 'Internal server error',
+            'data': None
+        }), 500
+
+
+@student_bp.route('/tutor/bookings/<booking_id>/approve', methods=['POST'])
+@auth_required
+@role_required('tutor')
+def approve_booking(booking_id):
+    """
+    POST /api/tutor/bookings/<booking_id>/approve
+    
+    Approve a student's booking request.
+    Requires: authentication, tutor role
+    
+    Response (200):
+        {
+            "status": "success",
+            "message": "Booking approved successfully"
+        }
+    """
+    try:
+        tutor_id = session.get('user_id')
+        
+        # Get booking to verify it belongs to this tutor
+        booking = StudentBookingManager.get_booking_by_id(booking_id)
+        if not booking:
+            return jsonify({
+                'status': 'error',
+                'message': 'Booking not found',
+                'data': None
+            }), 404
+        
+        if booking.get('tutor_id') != tutor_id:
+            return jsonify({
+                'status': 'error',
+                'message': 'This booking does not belong to you',
+                'data': None
+            }), 403
+        
+        # Approve booking
+        StudentBookingManager.approve_booking(booking_id)
+        
+        logger.info(f"Tutor {tutor_id} approved booking {booking_id}")
+        
+        # Send notification to student
+        from app.modules.notification.services import NotificationService
+        notif_service = NotificationService()
+        try:
+            tutor_profile = DatacoreManager.get_user_profile(tutor_id)
+            tutor_name = tutor_profile.get('name', 'Unknown') if tutor_profile else 'Unknown'
+            
+            notif_service.notify_booking_approved(
+                student_id=booking.get('student_id'),
+                tutor_name=tutor_name,
+                booking_info={
+                    'booking_id': booking_id,
+                    'course_name': booking.get('course_name'),
+                    'date_time': booking.get('date_time')
+                }
+            )
+        except Exception as e:
+            logger.error(f"Failed to send approval notification: {e}")
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Booking approved successfully'
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error approving booking: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': 'Internal server error',
+            'data': None
+        }), 500
+
+
+@student_bp.route('/tutor/bookings/<booking_id>/reject', methods=['POST'])
+@auth_required
+@role_required('tutor')
+def reject_booking(booking_id):
+    """
+    POST /api/tutor/bookings/<booking_id>/reject
+    
+    Reject a student's booking request.
+    Requires: authentication, tutor role
+    
+    Response (200):
+        {
+            "status": "success",
+            "message": "Booking rejected successfully"
+        }
+    """
+    try:
+        tutor_id = session.get('user_id')
+        
+        # Get booking to verify it belongs to this tutor
+        booking = StudentBookingManager.get_booking_by_id(booking_id)
+        if not booking:
+            return jsonify({
+                'status': 'error',
+                'message': 'Booking not found',
+                'data': None
+            }), 404
+        
+        if booking.get('tutor_id') != tutor_id:
+            return jsonify({
+                'status': 'error',
+                'message': 'This booking does not belong to you',
+                'data': None
+            }), 403
+        
+        # Reject booking
+        StudentBookingManager.reject_booking(booking_id)
+        
+        logger.info(f"Tutor {tutor_id} rejected booking {booking_id}")
+        
+        # Send notification to student
+        from app.modules.notification.services import NotificationService
+        notif_service = NotificationService()
+        try:
+            tutor_profile = DatacoreManager.get_user_profile(tutor_id)
+            tutor_name = tutor_profile.get('name', 'Unknown') if tutor_profile else 'Unknown'
+            
+            notif_service.notify_booking_rejected(
+                student_id=booking.get('student_id'),
+                tutor_name=tutor_name,
+                booking_info={
+                    'booking_id': booking_id,
+                    'course_name': booking.get('course_name'),
+                    'date_time': booking.get('date_time')
+                }
+            )
+        except Exception as e:
+            logger.error(f"Failed to send rejection notification: {e}")
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Booking rejected successfully'
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error rejecting booking: {e}")
         return jsonify({
             'status': 'error',
             'message': 'Internal server error',

@@ -530,36 +530,46 @@ async function loadCalendar() {
     } else {
       html += `<div class="bookings-list">`;
       
-      // Sort bookings by date
-      const bookings = data.data.bookings.sort((a, b) => 
-        new Date(a.date_time) - new Date(b.date_time)
-      );
+      // Sort bookings by date and filter out cancelled/rejected
+      const bookings = data.data.bookings
+        .filter(b => b.status !== 'cancelled' && b.status !== 'rejected')
+        .sort((a, b) => 
+          new Date(a.date_time) - new Date(b.date_time)
+        );
       
-      bookings.forEach(booking => {
-        const bookingDate = new Date(booking.date_time);
-        const status = booking.status === 'confirmed' ? '✅ Xác nhận' : '⏳ ' + booking.status;
-        const isUpcoming = bookingDate > new Date();
-        
-        html += `
-          <div class="booking-card card ${isUpcoming ? 'upcoming' : 'past'}">
-            <div class="booking-info">
-              <div>
-                <h3><i class="ri-user-3-fill"></i> ${escapeHtml(booking.tutor_name)}</h3>
-                <p><b>Môn học:</b> ${escapeHtml(booking.course_name)}</p>
-                <p><b>Thời gian:</b> <i class="ri-calendar-line"></i> ${bookingDate.toLocaleString('vi-VN')}</p>
-                <p><b>Mã đặt:</b> ${booking.booking_id}</p>
-                ${isUpcoming ? `<p style="color: #ff6b6b; font-weight: bold;"><i class="ri-alarm-line"></i> Sắp tới</p>` : ''}
-              </div>
-              <div style="margin-top: 10px;">
-                <button class="btn btn-small btn-danger" 
-                        onclick="cancelBooking('${booking.booking_id}')">
-                  <i class="ri-close-line"></i> Hủy
-                </button>
+      if (bookings.length === 0) {
+        html += `<div class="card alert alert-info">
+          <i class="ri-information-line"></i> Bạn chưa có buổi học nào (chỉ hiển thị confirmed/pending)
+        </div>`;
+      } else {
+        bookings.forEach(booking => {
+          const bookingDate = new Date(booking.date_time);
+          const status = booking.status === 'confirmed' ? '✅ Xác nhận' : '⏳ ' + booking.status;
+          const isUpcoming = bookingDate > new Date();
+          const canCancel = booking.status === 'confirmed' || booking.status === 'pending';
+          
+          html += `
+            <div class="booking-card card ${isUpcoming ? 'upcoming' : 'past'}">
+              <div class="booking-info">
+                <div>
+                  <h3><i class="ri-user-3-fill"></i> ${escapeHtml(booking.tutor_name)}</h3>
+                  <p><b>Môn học:</b> ${escapeHtml(booking.course_name)}</p>
+                  <p><b>Thời gian:</b> <i class="ri-calendar-line"></i> ${bookingDate.toLocaleString('vi-VN')}</p>
+                  <p><b>Mã đặt:</b> ${booking.booking_id}</p>
+                  <p><b>Trạng thái:</b> ${status}</p>
+                  ${isUpcoming ? `<p style="color: #ff6b6b; font-weight: bold;"><i class="ri-alarm-line"></i> Sắp tới</p>` : ''}
+                </div>
+                <div style="margin-top: 10px;">
+                  ${canCancel ? `<button class="btn btn-small btn-danger" 
+                          onclick="cancelBooking('${booking.booking_id}')">
+                    <i class="ri-close-line"></i> Hủy
+                  </button>` : ''}
+                </div>
               </div>
             </div>
-          </div>
-        `;
-      });
+          `;
+        });
+      }
       html += `</div>`;
     }
 
@@ -604,20 +614,37 @@ async function loadNotifications() {
     } else {
       html += `<div class="notifications-list">`;
       data.data.forEach(notif => {
-        // Format timestamp
+        // Format timestamp - Add UTC+7 offset for Vietnamese timezone
         const createdDate = new Date(notif.created_at);
-        const dateStr = createdDate.toLocaleDateString('vi-VN');
-        const timeStr = createdDate.toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'});
+        const vietnamTime = new Date(createdDate.getTime() + 7 * 60 * 60 * 1000);
+        const dateStr = vietnamTime.toLocaleDateString('vi-VN');
+        const timeStr = vietnamTime.toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit', hour12: false});
         const formattedTime = `${dateStr} ${timeStr}`;
         
         // Extract details from related_data
         let details = '';
+        let statusBadge = '';
         if (notif.related_data) {
           if (notif.event_type === 'course_request' && notif.related_data.student_id) {
-            // Booking notification - show course and date
+            // Booking notification - show course and date with approval status
+            const status = notif.related_data.status;
+            const statusColors = {
+              'approved': '#4CAF50',
+              'rejected': '#F44336'
+            };
+            const statusTexts = {
+              'approved': '✅ Đã chấp nhận',
+              'rejected': '❌ Bị từ chối'
+            };
+            if (status && statusColors[status]) {
+              statusBadge = `<div style="display: inline-block; background-color: ${statusColors[status]}; color: white; padding: 4px 12px; border-radius: 4px; margin-top: 8px; font-weight: bold;">
+                ${statusTexts[status]}
+              </div>`;
+            }
             details = `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee; font-size: 0.9em; color: #666;">
               <strong>Khóa học:</strong> ${notif.related_data.course_name || 'N/A'}<br>
               <strong>Thời gian:</strong> ${notif.related_data.date_time || 'N/A'}
+              ${statusBadge}
             </div>`;
           } else if ((notif.event_type === 'schedule_create' || notif.event_type === 'schedule_update' || notif.event_type === 'schedule_delete') && notif.related_data.schedule_info) {
             // Schedule notification

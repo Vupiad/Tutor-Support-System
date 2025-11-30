@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tutor Dashboard</title>
+
+  <!-- existing global styles -->
+  <link rel="stylesheet" href="/static/css/style.css"> <!-- project đã có file này -->
+  <!-- dashboard specific styles -->
+  <link rel="stylesheet" href="/static/css/tutor.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+  <div class="app-root">
+    <aside class="sidebar">
+      <div class="user-box" onclick="toggleUserMenu()">
+        <div class="user-icon">
+            <i class="ri-user-3-fill"></i>
+        </div>
+        <div class="user-info">
+          <div class="user-name" id="sidebar-name">•••</div>
+          <div class="user-role" id="sidebar-role">Tutor</div> 
+        </div>
+      </div>
+    
+      <div class="logout-box" id="logout-box">
+        <button class="btn logout-btn" onclick="logoutNow()">Log Out</button>
+      </div>
+      <div class="brand">
+        <img src="/static/hcmut.png" class="brand-logo">
+      </div>
+      <nav class="nav">
+        <ul>
+          <li><a href="#" id="menu-home" onclick="setActiveMenu('home'); loadPage('home');">
+            <i class="ri-home-4-line"></i> Home</a></li>
+      
+          <li><a href="#" id="menu-students" onclick="setActiveMenu('students'); loadPage('students');">
+            <i class="ri-group-line"></i> Students</a></li>
+      
+          <li><a href="#" id="menu-event" onclick="setActiveMenu('event'); loadPage('event');">
+            <i class="ri-calendar-event-line"></i> Event</a></li>
+      
+          <li><a href="#" id="menu-notification" onclick="setActiveMenu('notification'); loadPage('notifications');">
+            <i class="ri-notification-3-line"></i> Notification</a></li>
+      
+          <li><a href="#" id="menu-document" onclick="setActiveMenu('document'); loadPage('document');">
+            <i class="ri-file-text-line"></i> Document</a></li>
+        </ul>
+      </nav>
+      
+    </aside>
+
+    <main class="content" id="content">
+      <!-- content will be injected here by static/tutor.js -->
+      <div class="placeholder">
+        <h2>Welcome, Tutor</h2>
+        <p>Chọn menu bên trái để bắt đầu.</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="/static/js/auth.js"></script> <!-- giữ auth nếu project dùng -->
+  <script src="/static/js/tutor.js"></script>
+</body>
+</html>

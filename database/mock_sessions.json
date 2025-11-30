@@ -54,6 +54,17 @@
       "created_at": "2025-11-27T07:06:36.837343+00:00",
       "last_activity": "2025-11-27T07:06:36.837343+00:00",
       "expires_at": null
+    },
+    {
+      "session_id": "5d347808-c00d-4c07-992e-d4749eea39cd",
+      "sso_id": "LECTURER_001",
+      "username": "tutor1",
+      "role": "tutor",
+      "email": "tutor1@hcmut.edu.vn",
+      "display_name": "Phạm Thị Tú",
+      "created_at": "2025-11-29T06:56:10.801947+00:00",
+      "last_activity": "2025-11-29T06:56:10.801996+00:00",
+      "expires_at": null
     }
   ]
 }

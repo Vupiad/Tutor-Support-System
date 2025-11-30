@@ -1,201 +1,164 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify, make_response
-from app.modules.auth.connectors import sso, role_map, datacore, session_store
+# app/modules/auth/routes.py
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify
+from app.modules.auth.connectors import sso, role_map, datacore  # your mock connectors
 
 auth_bp = Blueprint('auth', __name__)
 
-
+# ---------- GET login page (form) ----------
 @auth_bp.route('/login', methods=['GET'])
 def login_get():
-    """Render a simple login page where user picks role (student/tutor) and provides credentials."""
+    # render the HTML form page (for browser)
     return render_template('auth_login.html')
 
 
+# ---------- POST login (form or JSON) ----------
 @auth_bp.route('/login', methods=['POST'])
 def login_post():
     """
-    Unified login endpoint that supports both form-based and JSON requests.
-    
-    Flow:
-    1. Authenticate with HCMUT_SSO (mock_sso.json) using username/password.
-    2. Get SSO ID and check role in mock_role_map.json.
-    3. Verify selected role matches mapped role.
-    4. Fetch user profile from mock_datacore.json.
-    5. Create session in mock_sessions.json.
-    6. Return session or JSON response based on Accept header.
+    Unified login for form submission (HTML) and JSON API.
+    Stores user info in Flask session (server-side or cookie-signed).
     """
-    
-    # Support both form and JSON request bodies
-    if request.is_json:
-        data = request.get_json()
-        username = data.get('username')
-        password = data.get('password')
-        selected_role = data.get('role')
+    # Support both JSON and form requests
+    if request.is_json or (request.content_type and 'application/json' in str(request.content_type)):
+        data = request.get_json(silent=True) or {}
     else:
-        username = request.form.get('username')
-        password = request.form.get('password')
-        selected_role = request.form.get('role')
+        data = request.form.to_dict()
 
-    # Validate inputs
+    username = data.get('username')
+    password = data.get('password')
+    selected_role = data.get('role')
+
     if not (username and password and selected_role):
         if request.is_json:
-            return jsonify({'error': 'Missing username, password, or role'}), 400
-        flash('Please provide username, password, and role', 'danger')
+            return jsonify({'status': 'error', 'message': 'Missing username/password/role', 'data': None}), 400
+        flash('Please provide username, password and role', 'danger')
         return redirect(url_for('auth.login_get'))
 
-    # Step 1: Authenticate with SSO
+    # Step 1: authenticate SSO (mock)
     sso_user = sso.authenticate(username, password)
     if not sso_user:
         if request.is_json:
-            return jsonify({'error': 'Invalid credentials'}), 401
+            return jsonify({'status': 'error', 'message': 'Invalid credentials', 'data': None}), 401
         flash('Invalid credentials', 'danger')
         return redirect(url_for('auth.login_get'))
 
     sso_id = sso_user.get('id')
 
-    # Step 2: Get role from role map
+    # Step 2: role map
     mapped_role = role_map.get_role(sso_id)
     if not mapped_role:
         if request.is_json:
-            return jsonify({'error': 'User role not found in system'}), 403
+            return jsonify({'status': 'error', 'message': 'User role not found', 'data': None}), 403
         flash('User role not found in system', 'danger')
         return redirect(url_for('auth.login_get'))
 
-    # Step 3: Verify selected role matches mapped role
+    # verify selected role matches mapped role
     if selected_role != mapped_role:
         if request.is_json:
-            return jsonify({'error': f'Selected role "{selected_role}" does not match user role "{mapped_role}"'}), 403
-        flash(f'Selected role does not match your assigned role', 'danger')
+            return jsonify({'status': 'error', 'message': 'Selected role mismatch', 'data': None}), 403
+        flash('Selected role does not match your assigned role', 'danger')
         return redirect(url_for('auth.login_get'))
 
-    # Step 4: Fetch user profile from Datacore
+    # Step 3: fetch full profile from datacore
     profile = datacore.get_user_profile(sso_id)
     if not profile:
         if request.is_json:
-            return jsonify({'error': 'User profile not found in datacore'}), 404
+            return jsonify({'status': 'error', 'message': 'Profile not found', 'data': None}), 404
         flash('User profile not found', 'danger')
         return redirect(url_for('auth.login_get'))
 
-    # Step 5: Create session
-    session_id = session_store.create_session(
-        sso_id=sso_id,
-        username=username,
-        role=mapped_role,
-        email=sso_user.get('email'),
-        display_name=profile.get('name')
-    )
+    # Step 4: set Flask session (Flask will sign session cookie)
+    session.clear()
+    session['user_id'] = sso_id
+    session['username'] = username
+    session['role'] = mapped_role
+    session['email'] = sso_user.get('email')
+    session['display_name'] = profile.get('name')
 
-    # Update SSO last login
+    # Mark session permanent (optional)
+    # session.permanent = True
+
+    # Update last login in mock SSO
     sso.update_last_login(sso_id)
 
     # Prepare user info for response
     user_info = {
-        'sso_id': sso_id,
+        'user_id': sso_id,
         'username': username,
         'email': sso_user.get('email'),
         'display_name': profile.get('name'),
         'role': mapped_role,
-        'session_id': session_id,
         'faculty': profile.get('faculty'),
-        'department': profile.get('department'),
-        'profile': profile  # Full profile data
+        'department': profile.get('department')
     }
 
-    # Step 6: Return response (set session_id as HttpOnly cookie)
-    
-    
+    # Return response
     if request.is_json:
-    # API response
-        resp = make_response(jsonify({
-            'success': True,
-            'user': user_info,
-            'session': {
-                'type': 'cookie_managed'
-            }
-        }), 200)
-    else:
-    # Form response → redirect sau login
-        if mapped_role == "tutor":
-            resp = make_response(redirect("/tutor"))
-        else:
-            resp = make_response(redirect("/student"))
+        return jsonify({'status': 'success', 'message': 'Logged in', 'data': user_info}), 200
 
-    
-    # Set session_id as HttpOnly cookie (client cannot access via JS, sent with every request)
-    resp.set_cookie(
-        'session_id',
-        session_id,
-        httponly=True,
-        secure=False,  # Set to True in production (HTTPS only)
-        samesite='Lax',
-        max_age=3600  # 1 hour
-    )
-    
-    return resp
+    # If form login, redirect to dashboard page (browser)
+    return redirect('/tutor')
 
 
+# ---------- POST logout ----------
 @auth_bp.route('/logout', methods=['POST'])
 def logout():
-    """Logout: invalidate session."""
-    session_id = session.get('session_id')
-    if session_id:
-        session_store.invalidate_session(session_id)
-    
+    """Clear Flask session and return JSON or redirect."""
     session.clear()
-    
     if request.is_json:
-        return jsonify({'success': True, 'message': 'Logged out'}), 200
-    
-    flash('Logged out', 'info')
+        return jsonify({'status': 'success', 'message': 'Logged out', 'data': None}), 200
+    # if form, redirect to login page
     return redirect(url_for('auth.login_get'))
 
 
+# ---------- GET current user ----------
 @auth_bp.route('/me', methods=['GET'])
 def get_current_user():
     """
-    Get current user info from session_id cookie.
-    Protected endpoint: requires valid session_id cookie.
+    Return current user from Flask session.
+    JSON format:
+    { status: 'success'|'error', message: ..., data: {...} }
     """
-    session_id = request.cookies.get('session_id')
-    if not session_id:
-        return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
-    
-    session_record = session_store.get_session(session_id)
-    if not session_record:
-        return jsonify({'error': 'Invalid or expired session'}), 401
-    
-    # Return user info from session record
+    if 'user_id' not in session:
+        return jsonify({'status': 'error', 'message': 'Not authenticated', 'data': None}), 401
+
     user_info = {
-        'sso_id': session_record.get('sso_id'),
-        'username': session_record.get('username'),
-        'email': session_record.get('email'),
-        'display_name': session_record.get('display_name'),
-        'role': session_record.get('role')
+        'user_id': session.get('user_id'),
+        'username': session.get('username'),
+        'email': session.get('email'),
+        'display_name': session.get('display_name'),
+        'role': session.get('role')
     }
-    
-    return jsonify(user_info), 200
+
+    return jsonify({'status': 'success', 'message': 'User info retrieved', 'data': user_info}), 200
 
 
-def require_session(f):
-    """Decorator to protect routes that require a valid session_id cookie."""
+# ---------- Decorators ----------
+def auth_required(f):
     from functools import wraps
-    
     @wraps(f)
-    def decorated_function(*args, **kwargs):
-        session_id = request.cookies.get('session_id')
-        if not session_id:
+    def decorated(*args, **kwargs):
+        if 'user_id' not in session:
             if request.is_json:
-                return jsonify({'error': 'Not authenticated - missing session_id cookie'}), 401
+                return jsonify({'status': 'error', 'message': 'Not authenticated', 'data': None}), 401
             return redirect(url_for('auth.login_get'))
-        
-        session_record = session_store.get_session(session_id)
-        if not session_record:
-            if request.is_json:
-                return jsonify({'error': 'Invalid or expired session'}), 401
-            flash('Session expired', 'warning')
-            return redirect(url_for('auth.login_get'))
-        
-        # Make session info available to the route handler
-        request.user = session_record
         return f(*args, **kwargs)
-    
-    return decorated_function
+    return decorated
+
+
+def role_required(required_role):
+    def decorator(f):
+        from functools import wraps
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            if 'user_id' not in session:
+                if request.is_json:
+                    return jsonify({'status': 'error', 'message': 'Not authenticated', 'data': None}), 401
+                return redirect(url_for('auth.login_get'))
+            if session.get('role') != required_role:
+                if request.is_json:
+                    return jsonify({'status': 'error', 'message': 'Forbidden', 'data': None}), 403
+                return "Forbidden", 403
+            return f(*args, **kwargs)
+        return decorated
+    return decorator

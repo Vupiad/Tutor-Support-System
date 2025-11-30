@@ -1,6 +1,6 @@
 /**
  * Auth UI Interactions
- * Handles form validation, role switching, and feedback animations
+ * Handles form validation, role dropdown, and feedback animations
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -8,11 +8,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Form validation
   const loginForm = document.querySelector('form');
+  const usernameInput = document.querySelector('input[name="username"]');
+  const passwordInput = document.querySelector('input[name="password"]');
+  const roleSelect = document.querySelector('select[name="role"]');
+
   if (loginForm) {
     loginForm.addEventListener('submit', function(e) {
-      const username = document.querySelector('input[name="username"]')?.value;
-      const password = document.querySelector('input[name="password"]')?.value;
-      const role = document.querySelector('input[name="role"]:checked')?.value;
+      const username = usernameInput?.value;
+      const password = passwordInput?.value;
+      const role = roleSelect?.value;
 
       if (!username || !password || !role) {
         e.preventDefault();
@@ -22,13 +26,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Real-time role selection indicator
-  const roleRadios = document.querySelectorAll('input[name="role"]');
-  roleRadios.forEach(radio => {
-    radio.addEventListener('change', function() {
+  // Handle role dropdown change
+  if (roleSelect) {
+    roleSelect.addEventListener('change', function() {
       updateRoleIndicator(this.value);
     });
-  });
+    // Initialize role indicator
+    updateRoleIndicator(roleSelect.value);
+  }
 
   // Auto-focus first input
   const firstInput = document.querySelector('input[type="text"], input[type="password"]');
@@ -37,20 +42,28 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+/**
+ * Update role indicator when role is selected
+ */
 function updateRoleIndicator(role) {
   const indicator = document.getElementById('role-indicator');
   if (indicator) {
-    indicator.textContent = role.charAt(0).toUpperCase() + role.slice(1);
+    indicator.textContent = role;
     indicator.className = 'role-badge role-' + role;
   }
+  console.log('Role selected:', role);
 }
 
-// Logout confirmation
+/**
+ * Show confirmation dialog before logging out
+ */
 function confirmLogout() {
   return confirm('Are you sure you want to log out?');
 }
 
-// Copy to clipboard helper
+/**
+ * Copy text to clipboard
+ */
 function copyToClipboard(text) {
   navigator.clipboard.writeText(text).then(() => {
     alert('Copied to clipboard!');
@@ -59,7 +72,9 @@ function copyToClipboard(text) {
   });
 }
 
-// Show/hide password toggle
+/**
+ * Toggle password visibility
+ */
 function togglePasswordVisibility(inputId) {
   const input = document.getElementById(inputId);
   if (input) {

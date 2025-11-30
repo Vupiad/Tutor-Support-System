@@ -152,7 +152,7 @@ TutorSupportSystem/
 
 6. **Open in browser**
    ```
-   http://127.0.0.1:5000/api/v1/auth/login
+   http://127.0.0.1:5000/auth/login
    ```
 
 ### Demo Credentials
@@ -173,7 +173,7 @@ TutorSupportSystem/
 
 #### 1. **Login (Form-based)**
 ```
-POST /api/v1/auth/login
+POST /auth/login
 Content-Type: application/x-www-form-urlencoded
 
 username=student1&password=studentpass&role=student
@@ -193,7 +193,7 @@ Set-Cookie: session_id=<uuid>; HttpOnly; Secure; SameSite=Lax; Max-Age=3600
 
 #### 2. **Login (JSON API)**
 ```
-POST /api/v1/auth/login
+POST /auth/login
 Content-Type: application/json
 
 {
@@ -232,7 +232,7 @@ Set-Cookie: session_id=<uuid>; HttpOnly; Secure; SameSite=Lax; Max-Age=3600
 
 #### 3. **Get Current User**
 ```
-GET /api/v1/auth/me
+GET /auth/me
 Cookie: session_id=<uuid>
 ```
 
@@ -258,7 +258,7 @@ Cookie: session_id=<uuid>
 
 #### 4. **Logout**
 ```
-POST /api/v1/auth/logout
+POST /auth/logout
 Cookie: session_id=<uuid>
 ```
 

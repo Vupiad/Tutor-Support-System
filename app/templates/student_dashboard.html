@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student Dashboard</title>
+
+  <!-- Global styles -->
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- Student dashboard specific styles -->
+  <link rel="stylesheet" href="/static/css/student.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+  <div class="app-root">
+    <aside class="sidebar">
+      <div class="user-box" onclick="toggleUserMenu()">
+        <div class="user-icon">
+            <i class="ri-user-3-fill"></i>
+        </div>
+        <div class="user-info">
+          <div class="user-name" id="sidebar-name">•••</div>
+          <div class="user-role" id="sidebar-role">Student</div> 
+        </div>
+      </div>
+    
+      <div class="logout-box" id="logout-box">
+        <button class="btn logout-btn" onclick="logoutNow()">Log Out</button>
+      </div>
+      <div class="brand">
+        <img src="/static/hcmut.png" class="brand-logo">
+      </div>
+      <nav class="nav">
+        <ul>
+          <li><a href="#" id="menu-home" onclick="setActiveMenu('home'); loadPage('home');">
+            <i class="ri-home-4-line"></i> Home</a></li>
+      
+          <li><a href="#" id="menu-my-tutors" onclick="setActiveMenu('my-tutors'); loadPage('my-tutors');">
+            <i class="ri-user-follow-line"></i> My Tutors</a></li>
+      
+          <li><a href="#" id="menu-document" onclick="setActiveMenu('document'); loadPage('document');">
+            <i class="ri-file-text-line"></i> Document</a></li>
+      
+          <li><a href="#" id="menu-calendar" onclick="setActiveMenu('calendar'); loadPage('calendar');">
+            <i class="ri-calendar-line"></i> Calendar</a></li>
+      
+          <li><a href="#" id="menu-notifications" onclick="setActiveMenu('notifications'); loadPage('notifications');">
+            <i class="ri-notification-3-line"></i> 
+            <span>Notification</span>
+            <span id="unread-count" class="badge" style="display: none;">0</span>
+          </a></li>
+        </ul>
+      </nav>
+      
+    </aside>
+
+    <main class="content" id="content">
+      <!-- content will be injected here by static/student.js -->
+      <div class="placeholder">
+        <h2>Welcome, Student</h2>
+        <p>Chọn menu bên trái để bắt đầu.</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="/static/js/auth.js"></script>
+  <script src="/static/js/student.js"></script>
+</body>
+</html>

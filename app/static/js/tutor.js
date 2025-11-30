@@ -68,7 +68,7 @@ async function loadHome() {
 async function loadEvent() {
   try {
     // 1. get current user
-    const meRes = await fetch("/api/v1/auth/me", { credentials: "include" });
+    const meRes = await fetch("/auth/me", { credentials: "include" });
     const me = await meRes.json();
 
     if (!meRes.ok || !me.data) {
@@ -140,7 +140,7 @@ function showAddSlotForm() {
 
 async function submitAddSlot() {
   try {
-    const tutorId = (await fetch('/api/v1/auth/me', { credentials: 'include' }).then(r=>r.json())).data.user_id;
+    const tutorId = (await fetch('/auth/me', { credentials: 'include' }).then(r=>r.json())).data.user_id;
     const start = document.getElementById('slot_start').value;
     const end = document.getElementById('slot_end').value;
     await fetch(`/schedule/${encodeURIComponent(tutorId)}/slot/new`, {
@@ -158,7 +158,7 @@ async function submitAddSlot() {
 
 async function deleteSlot(slotId) {
   try {
-    const tutorId = (await fetch('/api/v1/auth/me', { credentials: 'include' }).then(r=>r.json())).data.user_id;
+    const tutorId = (await fetch('/auth/me', { credentials: 'include' }).then(r=>r.json())).data.user_id;
     await fetch(`/schedule/${encodeURIComponent(tutorId)}/slot/${encodeURIComponent(slotId)}`, {
       method: 'DELETE',
       credentials: 'include'
@@ -233,7 +233,7 @@ function toggleStudentDetail(index) {
 async function loadNotifications() {
   try {
     // 1. Lấy user hiện tại
-    const meRes = await fetch("/api/v1/auth/me", { credentials: "include" });
+    const meRes = await fetch("/auth/me", { credentials: "include" });
     const meJson = await meRes.json();
 
     if (!meRes.ok || !meJson.data) {
@@ -336,7 +336,7 @@ function loadDocument() {
 // ---------- User info / logout ----------
 async function loadUserInfo() {
   try {
-    const res = await fetch('/api/v1/auth/me', { credentials: 'include' });
+    const res = await fetch('/auth/me', { credentials: 'include' });
     if (!res.ok) return; // not logged in
 
     const json = await res.json();
@@ -353,12 +353,12 @@ async function loadUserInfo() {
 
 async function logoutNow() {
   try {
-    await fetch('/api/v1/auth/logout', { method: 'POST', credentials: 'include' });
+    await fetch('/auth/logout', { method: 'POST', credentials: 'include' });
   } catch (err) {
     console.warn('Logout request failed', err);
   } finally {
     // go to login HTML page
-    window.location.href = '/api/v1/auth/login';
+    window.location.href = '/auth/login';
   }
 }
 

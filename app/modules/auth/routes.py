@@ -97,7 +97,12 @@ def login_post():
         return jsonify({'status': 'success', 'message': 'Logged in', 'data': user_info}), 200
 
     # If form login, redirect to dashboard page (browser)
-    return redirect('/tutor')
+    if mapped_role == 'student':
+        return redirect('/student')
+    elif mapped_role == 'tutor':
+        return redirect('/tutor')
+    else:
+        return redirect('/tutor')
 
 
 # ---------- POST logout ----------

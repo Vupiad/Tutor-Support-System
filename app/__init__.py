@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,redirect, url_for
 from .Config import Config
 from .extensions import db, ma
 
@@ -41,5 +41,12 @@ def create_app(config_class=Config):
     @app.route("/tutor")
     def tutor_dashboard_page():
         return render_template("tutor_dashboard.html")
+
+    @app.route("/student")
+    def student_dashboard_page():
+        return render_template("student_dashboard.html")
+    @app.route("/")
+    def index():
+        return redirect(url_for("auth.login_get"))
 
     return app

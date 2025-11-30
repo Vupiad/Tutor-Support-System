@@ -1,73 +1,83 @@
 {% extends "base.html" %}
 
-{% block title %}Login - TutorSupport{% endblock %}
+{% block title %}Đăng Nhập - TutorSupport{% endblock %}
 
 {% block content %}
-<div class="card">
-  <h1>Sign In</h1>
-  
-  <!-- Flash Messages -->
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      {% for cat, msg in messages %}
-        <div class="alert alert-{{ cat }}">
-          {{ msg }}
-        </div>
-      {% endfor %}
-    {% endif %}
-  {% endwith %}
+<div class="login-container">
+  <!-- Left Side: Form -->
+  <div class="login-form-section">
+    <div class="form-header">
+      <h1>TUTOR SUPPORT SYSTEM</h1>
+      <h2>ĐĂNG NHẬP</h2>
+    </div>
 
-  <form action="{{ url_for('auth.login_post') }}" method="post" class="login-form">
-    
-    <!-- Role Selection -->
-    <div class="form-group">
-      <label>Login as:</label>
-      <div class="radio-group">
-        <div class="radio-option">
-          <input type="radio" id="role-student" name="role" value="student" checked>
-          <label for="role-student">Student</label>
-        </div>
-        <div class="radio-option">
-          <input type="radio" id="role-tutor" name="role" value="tutor">
-          <label for="role-tutor">Tutor</label>
-        </div>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for cat, msg in messages %}
+          <div class="alert alert-{{ cat }}">
+            {{ msg }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('auth.login_post') }}" method="post" class="login-form">
+      
+      <!-- Role Selection Dropdown -->
+      <div class="form-group">
+        <label for="role">Bạn là:</label>
+        <select id="role" name="role" required>
+          <option value="" disabled selected>Sinh viên</option>
+          <option value="student">Sinh viên</option>
+          <option value="tutor">Giảng viên</option>
+        </select>
       </div>
+
+      <!-- Username -->
+      <div class="form-group">
+        <label for="username">Tên đăng nhập</label>
+        <input 
+          id="username" 
+          name="username" 
+          type="text" 
+          placeholder="" 
+          required
+          autofocus
+        >
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Mật khẩu</label>
+        <input 
+          id="password" 
+          name="password" 
+          type="password" 
+          placeholder="" 
+          required
+        >
+      </div>
+
+      <!-- Forgot Password Link -->
+      
+      <!-- Submit Button -->
+      <button type="submit" class="btn-login">ĐĂNG NHẬP</button>
+    </form>
+
+    <!-- Footer / Dev Info -->
+    <div class="footer">
+      <p><strong>Demo Credentials:</strong></p>
+      <p>Student: <code>student1</code> / <code>studentpass</code></p>
+      <p>Tutor: <code>tutor1</code> / <code>tutorpass</code></p>
     </div>
+  </div>
 
-    <!-- Username -->
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input 
-        id="username" 
-        name="username" 
-        type="text" 
-        placeholder="Enter your username" 
-        required
-        autofocus
-      >
+  <!-- Right Side: Building Image -->
+  <div class="login-image-section">
+    <div class="building-image">
+      <img src="{{ url_for('static', filename='images/hcmut_building.png') }}" alt="HCMUT Building" class="building-photo">
     </div>
-
-    <!-- Password -->
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input 
-        id="password" 
-        name="password" 
-        type="password" 
-        placeholder="Enter your password" 
-        required
-      >
-    </div>
-
-    <!-- Submit Button -->
-    <button type="submit" class="btn">Sign In</button>
-  </form>
-
-  <!-- Footer / Dev Info -->
-  <div class="footer">
-    <p><strong>Demo Credentials:</strong></p>
-    <p>Student: <code>student1</code> / <code>studentpass</code></p>
-    <p>Tutor: <code>tutor1</code> / <code>tutorpass</code></p>
   </div>
 </div>
 {% endblock %}

@@ -25,8 +25,7 @@ def create_app(config_class=Config):
 
     # 2. Register Blueprints
     from app.modules.auth.routes import auth_bp
-    app.register_blueprint(auth_bp, url_prefix='/api/v1/auth')
-
+    app.register_blueprint(auth_bp, url_prefix='/auth')
     from app.modules.schedule.scheduleRoutes import schedule_bp
     app.register_blueprint(schedule_bp, url_prefix='/schedule')
 

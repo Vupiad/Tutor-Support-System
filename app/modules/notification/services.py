@@ -132,6 +132,38 @@ class NotificationService:
             notifications.append(notif)
         return notifications
     
+    def notify_booking_created(self, student_id, tutor_id, booking_info):
+        """Notify tutor when student books a session"""
+        return self.send_event_notification(
+            recipient_id=tutor_id,
+            recipient_type=RecipientType.TUTOR.value,
+            event_type=EventType.COURSE_REQUEST.value,
+            title="Buổi học mới được đặt",
+            message=f"Sinh viên {booking_info.get('student_name', 'Unknown')} đã đặt buổi học {booking_info.get('course_name', '')} vào {booking_info.get('date_time', '')}",
+            sender_id=student_id,
+            related_data={
+                "student_id": student_id,
+                "course_name": booking_info.get('course_name'),
+                "date_time": booking_info.get('date_time'),
+                "slot_end": booking_info.get('slot_end')
+            }
+        )
+    
+    def notify_schedule_deletion_to_student(self, student_id, tutor_name, schedule_info):
+        """Notify student when tutor cancels a free slot (might have bookings on it)"""
+        return self.send_event_notification(
+            recipient_id=student_id,
+            recipient_type=RecipientType.STUDENT.value,
+            event_type=EventType.SCHEDULE_DELETE.value,
+            title="Lịch rảnh bị hủy",
+            message=f"Gia sư {tutor_name} đã hủy lịch rảnh: {schedule_info.get('time', '')}",
+            sender_id="SYSTEM",
+            related_data={
+                "tutor_name": tutor_name,
+                "schedule_info": schedule_info
+            }
+        )
+    
     def get_user_notifications(self, user_id, limit=20, skip=0):
         notifications = self._load_notifications()
         user_notifs = [n for n in notifications if n['recipient_id'] == user_id]

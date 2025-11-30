@@ -5,6 +5,7 @@
       "tutor_id": "LECTURER_001",
       "course_name": "CSC101",
       "date_time": "2025-12-01T09:00:00Z",
+      "location": "H6-608",
       "status": "scheduled",
       "student_count": 2,
       "duration_minutes": 60
@@ -14,6 +15,7 @@
       "tutor_id": "LECTURER_001",
       "course_name": "CSC102",
       "date_time": "2025-12-02T14:00:00Z",
+      "location": "H6-301",
       "status": "scheduled",
       "student_count": 1,
       "duration_minutes": 60
@@ -23,6 +25,7 @@
       "tutor_id": "LECTURER_001",
       "course_name": "CSC201",
       "date_time": "2025-11-28T10:00:00Z",
+      "location": "H6-402",
       "status": "completed",
       "student_count": 3,
       "duration_minutes": 90
@@ -32,6 +35,7 @@
       "tutor_id": "LECTURER_002",
       "course_name": "MATH101",
       "date_time": "2025-12-01T11:00:00Z",
+      "location": "H6-708",
       "status": "scheduled",
       "student_count": 2,
       "duration_minutes": 60
@@ -41,6 +45,7 @@
       "tutor_id": "LECTURER_002",
       "course_name": "MATH102",
       "date_time": "2025-12-03T15:00:00Z",
+      "location": "H6-608",
       "status": "scheduled",
       "student_count": 1,
       "duration_minutes": 60

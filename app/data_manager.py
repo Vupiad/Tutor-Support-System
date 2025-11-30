@@ -339,3 +339,120 @@ class ScheduleManager:
                     break
         
         return available_tutors
+
+
+class StudentBookingManager:
+    """Manager for mock_student_bookings.json operations."""
+
+    @staticmethod
+    def get_all_bookings() -> List[Dict]:
+        """Get all student bookings."""
+        data = MockDataManager.load_json('mock_student_bookings.json')
+        return data.get('bookings', [])
+
+    @staticmethod
+    def get_bookings_by_student(student_id: str) -> List[Dict]:
+        """
+        Get all bookings for a specific student.
+        
+        Args:
+            student_id: ID of the student
+            
+        Returns:
+            List of bookings belonging to the student.
+        """
+        all_bookings = StudentBookingManager.get_all_bookings()
+        return [b for b in all_bookings if b.get('student_id') == student_id]
+
+    @staticmethod
+    def get_booking_by_id(booking_id: str) -> Optional[Dict]:
+        """Get a specific booking by booking ID."""
+        all_bookings = StudentBookingManager.get_all_bookings()
+        for booking in all_bookings:
+            if booking.get('booking_id') == booking_id:
+                return booking
+        return None
+
+    @staticmethod
+    def create_booking(student_id: str, tutor_id: str, session_id: str, 
+                      course_name: str, tutor_name: str, date_time: str,
+                      status: str = 'confirmed') -> Optional[str]:
+        """
+        Create a new booking.
+        
+        Args:
+            student_id: ID of the student
+            tutor_id: ID of the tutor
+            session_id: ID of the session
+            course_name: Name of the course
+            tutor_name: Name of the tutor
+            date_time: Session date and time (ISO format)
+            status: Booking status (confirmed, pending, cancelled)
+            
+        Returns:
+            Booking ID if successful, None otherwise.
+        """
+        data = MockDataManager.load_json('mock_student_bookings.json')
+        
+        # Check if student already booked this session
+        for booking in data.get('bookings', []):
+            if (booking['student_id'] == student_id and 
+                booking['session_id'] == session_id):
+                return None  # Already booked
+        
+        # Generate new booking ID
+        existing_ids = [b.get('booking_id', 'BK000') for b in data.get('bookings', [])]
+        max_num = max([int(id.replace('BK', '')) for id in existing_ids if id.startswith('BK')], default=0)
+        new_booking_id = f"BK{max_num + 1:03d}"
+        
+        new_booking = {
+            'booking_id': new_booking_id,
+            'student_id': student_id,
+            'tutor_id': tutor_id,
+            'session_id': session_id,
+            'course_name': course_name,
+            'tutor_name': tutor_name,
+            'date_time': date_time,
+            'status': status,
+            'booked_at': datetime.now(timezone.utc).isoformat()
+        }
+        
+        data.get('bookings', []).append(new_booking)
+        if MockDataManager.save_json('mock_student_bookings.json', data):
+            return new_booking_id
+        return None
+
+    @staticmethod
+    def cancel_booking(booking_id: str) -> bool:
+        """
+        Cancel a booking by setting its status to 'cancelled'.
+        
+        Args:
+            booking_id: ID of the booking to cancel
+            
+        Returns:
+            True if successful, False otherwise.
+        """
+        data = MockDataManager.load_json('mock_student_bookings.json')
+        
+        for booking in data.get('bookings', []):
+            if booking.get('booking_id') == booking_id:
+                booking['status'] = 'cancelled'
+                return MockDataManager.save_json('mock_student_bookings.json', data)
+        
+        return False
+
+    @staticmethod
+    def get_bookings_by_tutor(tutor_id: str) -> List[Dict]:
+        """
+        Get all bookings for a specific tutor (students who booked with this tutor).
+        
+        Args:
+            tutor_id: ID of the tutor
+            
+        Returns:
+            List of bookings for the tutor.
+        """
+        all_bookings = StudentBookingManager.get_all_bookings()
+        return [b for b in all_bookings if b.get('tutor_id') == tutor_id and b.get('status') != 'cancelled']
+

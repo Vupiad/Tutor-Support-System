@@ -13,8 +13,8 @@ function loadPage(page) {
   switch(page) {
     case "home": loadHome(); break;
     case "my-tutors": loadMyTutors(); break;
-    case "document": loadDocument(); break;
     case "calendar": loadCalendar(); break;
+    case "document": loadDocument(); break;
     case "notifications": loadNotifications(); break;
     default: loadHome(); break;
   }
@@ -101,6 +101,9 @@ async function loadMyTutors() {
           <button class="btn btn-primary" onclick="searchTutors()">
             <i class="ri-search-line"></i> Tìm Kiếm
           </button>
+          <button class="btn btn-secondary" onclick="clearSearch()" style="display: none;" id="clear-search-btn">
+            <i class="ri-close-line"></i> Xóa Tìm Kiếm
+          </button>
         </div>
         <div id="search-results"></div>
       </div>
@@ -109,8 +112,8 @@ async function loadMyTutors() {
     if (!data.data || !data.data.tutors || data.data.tutors.length === 0) {
       html += `<div class="card alert alert-info">Bạn chưa có gia sư nào</div>`;
     } else {
-      html += `<h3 style="margin-top: 30px; margin-bottom: 20px;">Danh Sách Gia Sư</h3>`;
-      html += `<div class="tutors-list">`;
+      html += `<h3 style="margin-top: 30px; margin-bottom: 20px;" id="tutors-list-title">Danh Sách Gia Sư</h3>`;
+      html += `<div class="tutors-list" id="tutors-list">`;
       data.data.tutors.forEach(tutor => {
         html += `
           <div class="tutor-card">
@@ -129,6 +132,10 @@ async function loadMyTutors() {
             <div class="tutor-info">
               <p><b>Các Môn Dạy:</b> ${tutor.teaching_courses.join(', ') || 'N/A'}</p>
             </div>
+            <button class="btn btn-info" 
+                    onclick="viewTutorDetail('${escapeHtml(tutor.tutor_id)}')">
+              <i class="ri-eye-line"></i> Xem Chi Tiết
+            </button>
           </div>
         `;
       });
@@ -160,11 +167,18 @@ async function searchTutors() {
     );
 
     const resultsDiv = document.getElementById('search-results');
+    const tutorsList = document.getElementById('tutors-list');
+    const tutorsListTitle = document.getElementById('tutors-list-title');
+    const clearBtn = document.getElementById('clear-search-btn');
     
     if (!res.ok) {
       resultsDiv.innerHTML = `<div class="card alert alert-warning">
         Không tìm thấy gia sư cho môn học này
       </div>`;
+      // Hide original list
+      if (tutorsList) tutorsList.style.display = 'none';
+      if (tutorsListTitle) tutorsListTitle.style.display = 'none';
+      if (clearBtn) clearBtn.style.display = 'inline-block';
       return;
     }
 
@@ -174,6 +188,10 @@ async function searchTutors() {
       resultsDiv.innerHTML = `<div class="card alert alert-warning">
         Không có gia sư nào dạy môn ${escapeHtml(courseName)}
       </div>`;
+      // Hide original list
+      if (tutorsList) tutorsList.style.display = 'none';
+      if (tutorsListTitle) tutorsListTitle.style.display = 'none';
+      if (clearBtn) clearBtn.style.display = 'inline-block';
       return;
     }
 
@@ -201,7 +219,7 @@ async function searchTutors() {
             <p><b>Môn dạy:</b> ${tutor.subjects.join(', ') || 'N/A'}</p>
           </div>
           <button class="btn btn-info" 
-                  onclick="viewTutorDetail('${escapeHtml(tutor.tutor_id)}')">
+                  onclick="window.previousPage='search'; viewTutorDetail('${escapeHtml(tutor.tutor_id)}')">
             <i class="ri-eye-line"></i> Xem Chi Tiết
           </button>
         </div>
@@ -209,12 +227,71 @@ async function searchTutors() {
     });
 
     resultsDiv.innerHTML = html;
+    
+    // Hide original list when search results are shown
+    if (tutorsList) tutorsList.style.display = 'none';
+    if (tutorsListTitle) tutorsListTitle.style.display = 'none';
+    if (clearBtn) clearBtn.style.display = 'inline-block';
   } catch (err) {
     console.error(err);
     document.getElementById('search-results').innerHTML = 
       `<div class="card alert alert-danger">Lỗi: ${err.message}</div>`;
   }
 }
+
+// Clear search and show original list
+function clearSearch() {
+  const searchInput = document.getElementById('search_course');
+  const resultsDiv = document.getElementById('search-results');
+  const tutorsList = document.getElementById('tutors-list');
+  const tutorsListTitle = document.getElementById('tutors-list-title');
+  const clearBtn = document.getElementById('clear-search-btn');
+  
+  // Clear search input
+  searchInput.value = '';
+  
+  // Clear search results
+  resultsDiv.innerHTML = '';
+  
+  // Show original list
+  if (tutorsList) tutorsList.style.display = 'grid';
+  if (tutorsListTitle) tutorsListTitle.style.display = 'block';
+  if (clearBtn) clearBtn.style.display = 'none';
+  
+  // Reset previous page tracking
+  window.previousPage = null;
+}
+
+// Back button handler for tutor detail view
+function goBackFromTutorDetail() {
+  // Check if user came from search results or original list
+  if (window.previousPage === 'search') {
+    // Show search results again
+    const searchInput = document.getElementById('search_course');
+    const resultsDiv = document.getElementById('search-results');
+    const tutorsList = document.getElementById('tutors-list');
+    const tutorsListTitle = document.getElementById('tutors-list-title');
+    const clearBtn = document.getElementById('clear-search-btn');
+    
+    if (tutorsList) tutorsList.style.display = 'none';
+    if (tutorsListTitle) tutorsListTitle.style.display = 'none';
+    if (resultsDiv) resultsDiv.style.display = 'block';
+    if (clearBtn) clearBtn.style.display = 'inline-block';
+    
+    // Switch back to main content area showing search results
+    const mainContent = document.getElementById('main-content');
+    if (mainContent && mainContent.innerHTML.includes('search-results')) {
+      // Already in the right state
+    }
+  } else {
+    // Go back to original My Tutors list
+    loadMyTutors();
+  }
+  
+  // Clear tracking
+  window.previousPage = null;
+}
+
 
 // 🔗 API 2: GET /api/student/tutors/<tutor_id>
 async function viewTutorDetail(tutorId) {
@@ -260,7 +337,7 @@ async function viewTutorDetail(tutorId) {
 
     let html = `
       <div style="margin-bottom: 20px;">
-        <button class="btn btn-secondary" onclick="loadFindTutors()" style="margin-bottom: 10px;">
+        <button class="btn btn-secondary" onclick="goBackFromTutorDetail()" style="margin-bottom: 10px;">
           <i class="ri-arrow-left-line"></i> Quay Lại
         </button>
       </div>
@@ -283,9 +360,114 @@ async function viewTutorDetail(tutorId) {
   }
 }
 
-// Helper function for booking
+// Helper function for booking - show confirmation modal
 async function bookSlot(tutorId, slotId) {
-  alert('Tính năng đặt lịch sẽ được cập nhật sớm!');
+  try {
+    // Get current user and tutor details
+    const meRes = await fetch('/auth/me', { credentials: 'include' });
+    if (!meRes.ok) {
+      alert('Bạn chưa đăng nhập');
+      return;
+    }
+    const meJson = await meRes.json();
+    const studentId = meJson.data.user_id;
+
+    // Get tutor details to find session
+    const tutorRes = await fetch(
+      `/api/student/tutors/${encodeURIComponent(tutorId)}`,
+      { credentials: 'include' }
+    );
+    if (!tutorRes.ok) {
+      alert('Không tìm thấy thông tin gia sư');
+      return;
+    }
+    const tutorData = await tutorRes.json();
+    const tutor = tutorData.data;
+    
+    // Find the slot in available_slots
+    const slot = tutor.available_slots.find(s => s.id == slotId);
+    if (!slot) {
+      alert('Không tìm thấy lịch học này');
+      return;
+    }
+
+    // Store booking info globally for confirmation
+    window.pendingBooking = {
+      session_id: `TS${slot.id}`,
+      tutor_id: tutorId,
+      course_name: tutor.teaching_courses[0] || 'Unknown',
+      tutor_name: tutor.tutor_name,
+      date_time: slot.start,
+      slot_info: slot
+    };
+
+    // Show confirmation modal
+    const modalBody = document.getElementById('modal-body');
+    const slotDate = new Date(slot.start);
+    modalBody.innerHTML = `
+      <p><b>Gia sư:</b> ${escapeHtml(tutor.tutor_name)}</p>
+      <p><b>Môn học:</b> ${escapeHtml(tutor.teaching_courses[0] || 'N/A')}</p>
+      <p><b>Thời gian:</b> ${slotDate.toLocaleString('vi-VN')}</p>
+      <p><b>Chuyên ngành:</b> ${escapeHtml(tutor.specialization)}</p>
+      <p><b>Đánh giá:</b> ⭐ ${tutor.rating || 0}</p>
+      <hr>
+      <p style="color: #666; font-size: 14px;">Bạn có chắc chắn muốn đăng ký buổi học này?</p>
+    `;
+
+    const modal = document.getElementById('booking-modal');
+    modal.style.display = 'flex';
+  } catch (err) {
+    console.error('Booking error:', err);
+    alert('Lỗi chuẩn bị đặt lịch: ' + err.message);
+  }
+}
+
+// Confirm booking and send request
+async function confirmBooking() {
+  const booking = window.pendingBooking;
+  if (!booking) {
+    alert('Không có thông tin đặt lịch');
+    return;
+  }
+
+  try {
+    const bookingRes = await fetch('/api/student/sessions/book', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({
+        tutor_id: booking.tutor_id,
+        course_name: booking.course_name,
+        slot_start: booking.date_time,
+        slot_end: booking.slot_info.end
+      })
+    });
+
+    const bookingJson = await bookingRes.json();
+
+    if (!bookingRes.ok) {
+      alert('Lỗi: ' + bookingJson.message);
+      return;
+    }
+
+    // Close modal and show success message
+    closeBookingModal();
+    alert('✅ Đặt lịch thành công! Bạn có thể xem chi tiết trong Calendar.');
+    console.log('Booking confirmed:', bookingJson.data);
+    
+    // Reload My Tutors to refresh
+    loadMyTutors();
+  } catch (err) {
+    console.error('Confirmation error:', err);
+    alert('Lỗi xác nhận đặt lịch: ' + err.message);
+  }
+}
+
+// Close booking modal
+function closeBookingModal() {
+  const modal = document.getElementById('booking-modal');
+  modal.style.display = 'none';
+  window.pendingBooking = null;
 }
 
 // ---------- DOCUMENT ----------
@@ -298,14 +480,94 @@ function loadDocument() {
   `);
 }
 
+// Cancel booking function
+async function cancelBooking(bookingId) {
+  if (!confirm('Bạn có chắc chắn muốn hủy buổi học này?')) {
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/student/sessions/cancel/${encodeURIComponent(bookingId)}`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      alert('Lỗi: ' + (data.message || 'Không thể hủy buổi học'));
+      return;
+    }
+
+    alert('✅ Đã hủy buổi học');
+    loadCalendar(); // Reload calendar
+  } catch (err) {
+    console.error(err);
+    alert('Lỗi: ' + err.message);
+  }
+}
+
 // ---------- CALENDAR ----------
-function loadCalendar() {
-  setContent(`
-    <h2><i class="ri-calendar-line"></i> Lịch Học</h2>
-    <div class="card alert alert-info">
-      <i class="ri-information-line"></i> Tính năng lịch học đang được phát triển…
-    </div>
-  `);
+async function loadCalendar() {
+  try {
+    const res = await fetch('/api/student/sessions/my-bookings', {
+      credentials: 'include'
+    });
+
+    if (!res.ok) {
+      setContent(`<div class="card alert alert-danger">Lỗi lấy danh sách buổi học (mã ${res.status})</div>`);
+      return;
+    }
+
+    const data = await res.json();
+    let html = `
+      <h2><i class="ri-calendar-check-line"></i> Lịch Học Của Tôi</h2>
+    `;
+
+    if (!data.data || !data.data.bookings || data.data.bookings.length === 0) {
+      html += `<div class="card alert alert-info">
+        <i class="ri-information-line"></i> Bạn chưa đăng ký buổi học nào
+      </div>`;
+    } else {
+      html += `<div class="bookings-list">`;
+      
+      // Sort bookings by date
+      const bookings = data.data.bookings.sort((a, b) => 
+        new Date(a.date_time) - new Date(b.date_time)
+      );
+      
+      bookings.forEach(booking => {
+        const bookingDate = new Date(booking.date_time);
+        const status = booking.status === 'confirmed' ? '✅ Xác nhận' : '⏳ ' + booking.status;
+        const isUpcoming = bookingDate > new Date();
+        
+        html += `
+          <div class="booking-card card ${isUpcoming ? 'upcoming' : 'past'}">
+            <div class="booking-info">
+              <div>
+                <h3><i class="ri-user-3-fill"></i> ${escapeHtml(booking.tutor_name)}</h3>
+                <p><b>Môn học:</b> ${escapeHtml(booking.course_name)}</p>
+                <p><b>Thời gian:</b> <i class="ri-calendar-line"></i> ${bookingDate.toLocaleString('vi-VN')}</p>
+                <p><b>Mã đặt:</b> ${booking.booking_id}</p>
+                ${isUpcoming ? `<p style="color: #ff6b6b; font-weight: bold;"><i class="ri-alarm-line"></i> Sắp tới</p>` : ''}
+              </div>
+              <div style="margin-top: 10px;">
+                <button class="btn btn-small btn-danger" 
+                        onclick="cancelBooking('${booking.booking_id}')">
+                  <i class="ri-close-line"></i> Hủy
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+    }
+
+    setContent(html);
+  } catch (err) {
+    console.error(err);
+    setContent(`<div class="card alert alert-danger">Lỗi: ${err.message}</div>`);
+  }
 }
 
 // ---------- NOTIFICATIONS ----------
@@ -335,34 +597,51 @@ async function loadNotifications() {
     const data = await res.json();
     let html = `<h2><i class="ri-notification-line"></i> Thông Báo</h2>`;
 
-    if (!data.notifications || data.notifications.length === 0) {
+    if (!data.data || data.data.length === 0) {
       html += `<div class="card alert alert-info">
         <i class="ri-inbox-line"></i> Bạn không có thông báo nào
       </div>`;
     } else {
       html += `<div class="notifications-list">`;
-      data.notifications.forEach(notif => {
-        const isRead = notif.read_at;
+      data.data.forEach(notif => {
+        // Format timestamp
+        const createdDate = new Date(notif.created_at);
+        const dateStr = createdDate.toLocaleDateString('vi-VN');
+        const timeStr = createdDate.toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit'});
+        const formattedTime = `${dateStr} ${timeStr}`;
+        
+        // Extract details from related_data
+        let details = '';
+        if (notif.related_data) {
+          if (notif.event_type === 'course_request' && notif.related_data.student_id) {
+            // Booking notification - show course and date
+            details = `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee; font-size: 0.9em; color: #666;">
+              <strong>Khóa học:</strong> ${notif.related_data.course_name || 'N/A'}<br>
+              <strong>Thời gian:</strong> ${notif.related_data.date_time || 'N/A'}
+            </div>`;
+          } else if ((notif.event_type === 'schedule_create' || notif.event_type === 'schedule_update' || notif.event_type === 'schedule_delete') && notif.related_data.schedule_info) {
+            // Schedule notification
+            details = `<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee; font-size: 0.9em; color: #666;">
+              <strong>Lịch:</strong> ${notif.related_data.schedule_info.time || 'N/A'}<br>
+              <strong>Ngày:</strong> ${notif.related_data.schedule_info.date || 'N/A'}
+            </div>`;
+          }
+        }
+        
         html += `
-          <div class="notification-item ${isRead ? 'read' : 'unread'}">
-            <div class="notif-content">
-              <div class="notif-title">${escapeHtml(notif.title)}</div>
-              <div class="notif-message">${escapeHtml(notif.message)}</div>
-              <div class="notif-time">
-                <i class="ri-time-line"></i> ${new Date(notif.created_at).toLocaleString('vi-VN')}
-              </div>
+          <div class="card notif-item ${!notif.is_read ? 'notif-unread' : ''}">
+            <div class="notif-header">
+              <h3>${escapeHtml(notif.title)}</h3>
+              <small>${formattedTime}</small>
             </div>
+
+            <p>${escapeHtml(notif.message)}</p>
+            ${details}
+
             <div class="notif-actions">
-              ${!isRead ? `
-                <button class="btn btn-small" 
-                        onclick="markNotificationAsRead('${notif.notification_id}')">
-                  <i class="ri-check-line"></i> Đánh dấu đã đọc
-                </button>
-              ` : ''}
-              <button class="btn btn-small btn-danger" 
-                      onclick="deleteNotification('${notif.notification_id}')">
-                <i class="ri-delete-bin-line"></i> Xóa
-              </button>
+              ${!notif.is_read ? `<button class="btn small" onclick="markNotificationAsRead('${notif.id}')">Đánh dấu đã đọc</button>` : ''}
+              
+              <button class="btn small danger" onclick="deleteNotification('${notif.id}')">Xoá</button>
             </div>
           </div>
         `;
@@ -377,7 +656,7 @@ async function loadNotifications() {
   }
 }
 
-// 🔗 API 7: PUT /notification/<notification_id>/read
+// Mark notification as read
 async function markNotificationAsRead(notificationId) {
   try {
     const res = await fetch(
@@ -400,7 +679,7 @@ async function markNotificationAsRead(notificationId) {
   }
 }
 
-// 🔗 API 8: DELETE /notification/<notification_id>
+// Delete notification
 async function deleteNotification(notificationId) {
   if (!confirm('Bạn có chắc chắn muốn xóa thông báo này?')) return;
 
@@ -486,8 +765,7 @@ function toggleUserMenu() {
     logoutBox.style.display = logoutBox.style.display === 'none' ? 'block' : 'none';
   }
 }
-
-// small helper
+// Helper function to escape HTML
 function escapeHtml(unsafe) {
   if (!unsafe) return '';
   return String(unsafe)
@@ -504,3 +782,5 @@ document.addEventListener("DOMContentLoaded", () => {
   loadUserInfo();
   updateUnreadNotificationCount();
 });
+
+

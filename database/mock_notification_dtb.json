@@ -1,5 +1,88 @@
 {
-  "notifications": [],
+  "notifications": [
+    {
+      "id": "notif_8acfd550",
+      "recipient_id": "SE2025001",
+      "recipient_type": "student",
+      "sender_id": "LECTURER_001",
+      "title": "Schedule deleted",
+      "message": "Teacher has just delete schedule: 2025-12-01T09:00:00Z - 2025-12-01T10:00:00Z",
+      "type": "event",
+      "event_type": "schedule_delete",
+      "related_data": {
+        "tutor_id": "LECTURER_001",
+        "schedule_id": 101,
+        "schedule_info": {
+          "time": "2025-12-01T09:00:00Z - 2025-12-01T10:00:00Z",
+          "date": "2025-12-01"
+        }
+      },
+      "is_read": true,
+      "created_at": "2025-11-30T10:06:26.978067",
+      "updated_at": "2025-11-30T10:32:27.507487"
+    },
+    {
+      "id": "notif_0fe7ae20",
+      "recipient_id": "SE2025001",
+      "recipient_type": "student",
+      "sender_id": "LECTURER_001",
+      "title": "Schedule deleted",
+      "message": "Teacher has just delete schedule: 2025-12-01T14:00:00Z - 2025-12-01T15:00:00Z",
+      "type": "event",
+      "event_type": "schedule_delete",
+      "related_data": {
+        "tutor_id": "LECTURER_001",
+        "schedule_id": 102,
+        "schedule_info": {
+          "time": "2025-12-01T14:00:00Z - 2025-12-01T15:00:00Z",
+          "date": "2025-12-01"
+        }
+      },
+      "is_read": true,
+      "created_at": "2025-11-30T10:08:59.845954",
+      "updated_at": "2025-11-30T10:32:27.507501"
+    },
+    {
+      "id": "notif_d7b364ea",
+      "recipient_id": "SE2025001",
+      "recipient_type": "student",
+      "sender_id": "LECTURER_001",
+      "title": "Schedule created",
+      "message": "Teacher has just create schedule: 2025-12-01T18:00 - 2025-12-01T23:30",
+      "type": "event",
+      "event_type": "schedule_create",
+      "related_data": {
+        "tutor_id": "LECTURER_001",
+        "schedule_id": 202,
+        "schedule_info": {
+          "time": "2025-12-01T18:00 - 2025-12-01T23:30",
+          "date": "2025-12-01"
+        }
+      },
+      "is_read": true,
+      "created_at": "2025-11-30T10:16:34.750236",
+      "updated_at": "2025-11-30T10:32:27.507504"
+    },
+    {
+      "id": "notif_749f83ed",
+      "recipient_id": "LECTURER_001",
+      "recipient_type": "tutor",
+      "sender_id": "SE2025001",
+      "title": "Bu\u1ed5i h\u1ecdc m\u1edbi \u0111\u01b0\u1ee3c \u0111\u1eb7t",
+      "message": "Sinh vi\u00ean Nguy\u1ec5n V\u0103n An \u0111\u00e3 \u0111\u1eb7t bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-12-01T18:00:00Z",
+      "type": "event",
+      "event_type": "course_request",
+      "related_data": {
+        "student_id": "SE2025001",
+        "course_name": "CSC101",
+        "date_time": "2025-12-01T18:00:00Z",
+        "slot_end": "2025-12-01T23:30:00Z"
+      },
+      "is_read": false,
+      "created_at": "2025-11-30T11:03:51.739020",
+      "updated_at": "2025-11-30T11:03:51.739023"
+    }
+  ],
   "enrollments": [
     {
       "id": 1,
@@ -9,4 +92,3 @@
     }
   ]
 }
-

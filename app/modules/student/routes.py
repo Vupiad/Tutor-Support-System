@@ -4,10 +4,12 @@ Requires authentication and 'student' role.
 """
 
 import logging
+import json
+from datetime import datetime
 from flask import Blueprint, jsonify, session, request
 from app.modules.auth.routes import auth_required, role_required
 from app.data_manager import (
-    DatacoreManager, ScheduleManager, AssignmentManager
+    DatacoreManager, ScheduleManager, AssignmentManager, StudentBookingManager, TutorSessionManager
 )
 
 logger = logging.getLogger(__name__)
@@ -259,3 +261,230 @@ def get_tutors_for_my_courses():
             'message': 'Internal server error',
             'data': None
         }), 500
+
+
+@student_bp.route('/student/sessions/book', methods=['POST'])
+@auth_required
+@role_required('student')
+def book_tutoring_session():
+    """
+    POST /api/student/sessions/book
+    
+    Book a tutoring session with a tutor.
+    Requires: authentication, student role
+    
+    Request Body (JSON):
+        {
+            "tutor_id": "LECTURER_001",
+            "course_name": "CSC101",
+            "slot_start": "2025-12-01T09:00:00Z",
+            "slot_end": "2025-12-01T10:00:00Z"
+        }
+    
+    Response (201):
+        {
+            "status": "success",
+            "message": "Session booked successfully",
+            "data": {
+                "booking_id": "BK003",
+                "tutor_name": "Phạm Thị Tú",
+                "course_name": "CSC101",
+                "date_time": "2025-12-01T09:00:00Z",
+                "status": "confirmed"
+            }
+        }
+    """
+    try:
+        data = request.get_json(silent=True) or {}
+        student_id = session.get('user_id')
+        tutor_id = data.get('tutor_id')
+        course_name = data.get('course_name')
+        slot_start = data.get('slot_start')
+        slot_end = data.get('slot_end')
+        
+        if not tutor_id or not course_name or not slot_start:
+            logger.warning(f"Missing required parameters for booking")
+            return jsonify({
+                'status': 'error',
+                'message': 'Missing required parameters: tutor_id, course_name, slot_start',
+                'data': None
+            }), 400
+        
+        # Get tutor profile
+        tutor_profile = DatacoreManager.get_tutor_by_id(tutor_id)
+        if not tutor_profile:
+            return jsonify({
+                'status': 'error',
+                'message': 'Tutor not found',
+                'data': None
+            }), 404
+        
+        # Create booking using StudentBookingManager
+        booking_id = StudentBookingManager.create_booking(
+            student_id=student_id,
+            tutor_id=tutor_id,
+            session_id=f"SL{int(datetime.now().timestamp())}",  # Generate unique ID
+            course_name=course_name,
+            tutor_name=tutor_profile.get('name'),
+            date_time=slot_start
+        )
+        
+        if not booking_id:
+            return jsonify({
+                'status': 'error',
+                'message': 'You have already booked this slot or booking failed',
+                'data': None
+            }), 409
+        
+        logger.info(f"Student {student_id} booked slot with tutor {tutor_id}")
+        
+        # Send notification to tutor
+        from app.modules.notification.services import NotificationService
+        notif_service = NotificationService()
+        try:
+            notif_service.notify_booking_created(
+                student_id=student_id,
+                tutor_id=tutor_id,
+                booking_info={
+                    "student_name": DatacoreManager.get_user_profile(student_id).get('name'),
+                    "course_name": course_name,
+                    "date_time": slot_start,
+                    "slot_end": slot_end
+                }
+            )
+        except Exception as e:
+            logger.error(f"Failed to send notification: {e}")
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Session booked successfully',
+            'data': {
+                'booking_id': booking_id,
+                'tutor_name': tutor_profile.get('name'),
+                'course_name': course_name,
+                'date_time': slot_start,
+                'status': 'confirmed'
+            }
+        }), 201
+        
+    except Exception as e:
+        logger.error(f"Error booking session: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': 'Internal server error',
+            'data': None
+        }), 500
+
+
+@student_bp.route('/student/sessions/cancel/<booking_id>', methods=['POST'])
+@auth_required
+@role_required('student')
+def cancel_booking(booking_id):
+    """
+    POST /api/student/sessions/cancel/<booking_id>
+    
+    Cancel a student's booking.
+    Requires: authentication, student role
+    
+    Response (200):
+        {
+            "status": "success",
+            "message": "Booking cancelled successfully"
+        }
+    """
+    try:
+        student_id = session.get('user_id')
+        
+        # Get booking to verify it belongs to student
+        booking = StudentBookingManager.get_booking_by_id(booking_id)
+        if not booking:
+            return jsonify({
+                'status': 'error',
+                'message': 'Booking not found',
+                'data': None
+            }), 404
+        
+        if booking.get('student_id') != student_id:
+            return jsonify({
+                'status': 'error',
+                'message': 'This booking does not belong to you',
+                'data': None
+            }), 403
+        
+        # Cancel booking
+        StudentBookingManager.cancel_booking(booking_id)
+        
+        logger.info(f"Student {student_id} cancelled booking {booking_id}")
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Booking cancelled successfully'
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error cancelling booking: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': 'Internal server error',
+            'data': None
+        }), 500
+
+
+@student_bp.route('/student/sessions/my-bookings', methods=['GET'])
+@auth_required
+@role_required('student')
+def get_student_bookings():
+    """
+    GET /api/student/sessions/my-bookings
+    
+    Get list of sessions the student has booked.
+    Requires: authentication, student role
+    
+    Response (200):
+        {
+            "status": "success",
+            "message": "Bookings retrieved",
+            "data": {
+                "student_id": "SE2025001",
+                "booking_count": 2,
+                "bookings": [
+                    {
+                        "booking_id": "BK001",
+                        "session_id": "TS001",
+                        "tutor_name": "Phạm Thị Tú",
+                        "course_name": "CSC101",
+                        "date_time": "2025-12-01T09:00:00Z",
+                        "status": "confirmed",
+                        "booked_at": "2025-11-27T08:00:00Z"
+                    },
+                    ...
+                ]
+            }
+        }
+    """
+    try:
+        student_id = session.get('user_id')
+        
+        # Get bookings using StudentBookingManager
+        student_bookings = StudentBookingManager.get_bookings_by_student(student_id)
+        
+        logger.info(f"Retrieved {len(student_bookings)} bookings for student {student_id}")
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Bookings retrieved successfully',
+            'data': {
+                'student_id': student_id,
+                'booking_count': len(student_bookings),
+                'bookings': student_bookings
+            }
+        }), 200
+        
+    except Exception as e:
+        logger.error(f"Error retrieving student bookings: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': 'Internal server error',
+            'data': None
+        }), 500
+

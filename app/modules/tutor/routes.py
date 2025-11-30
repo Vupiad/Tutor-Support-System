@@ -90,7 +90,7 @@ def get_tutor_students():
     """
     GET /api/tutor/students
     
-    Get list of students assigned to the authenticated tutor.
+    Get list of students (from datacore).
     Requires: authentication, tutor role
     
     Response (200):
@@ -103,13 +103,14 @@ def get_tutor_students():
                 "total_students": 2,
                 "students": [
                     {
-                        "assignment_id": "ASN001",
+                        "id": "SE2025001",
+                        "name": "Nguyễn Văn An",
                         "student_id": "SE2025001",
-                        "student_name": "Nguyễn Văn An",
-                        "course_name": "CSC101",
-                        "class_name": "SE-K2024-1",
-                        "start_date": "2025-11-20",
-                        "rating": 4.5
+                        "email": "student1@hcmut.edu.vn",
+                        "phone": "+84-9-xxx-xxxx",
+                        "faculty": "Computer Science",
+                        "department": "Software Engineering",
+                        "courses": ["CSC101", "CSC102", "CSC201"]
                     },
                     ...
                 ]
@@ -129,10 +130,10 @@ def get_tutor_students():
                 'data': None
             }), 404
         
-        # Get assignments for this tutor
-        assignments = AssignmentManager.get_assignments_by_tutor(tutor_id)
+        # Get all students from datacore
+        all_students = DatacoreManager.get_all_students()
         
-        logger.info(f"Retrieved {len(assignments)} students for tutor {tutor_id}")
+        logger.info(f"Retrieved {len(all_students)} students for tutor {tutor_id}")
         
         return jsonify({
             'status': 'success',
@@ -140,8 +141,8 @@ def get_tutor_students():
             'data': {
                 'tutor_id': tutor_id,
                 'tutor_name': tutor_profile.get('name'),
-                'total_students': len(assignments),
-                'students': assignments
+                'total_students': len(all_students),
+                'students': all_students
             }
         }), 200
         

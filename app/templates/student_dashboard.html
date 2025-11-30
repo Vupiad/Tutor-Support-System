@@ -38,11 +38,11 @@
           <li><a href="#" id="menu-my-tutors" onclick="setActiveMenu('my-tutors'); loadPage('my-tutors');">
             <i class="ri-user-follow-line"></i> My Tutors</a></li>
       
-          <li><a href="#" id="menu-document" onclick="setActiveMenu('document'); loadPage('document');">
-            <i class="ri-file-text-line"></i> Document</a></li>
-      
           <li><a href="#" id="menu-calendar" onclick="setActiveMenu('calendar'); loadPage('calendar');">
             <i class="ri-calendar-line"></i> Calendar</a></li>
+      
+          <li><a href="#" id="menu-document" onclick="setActiveMenu('document'); loadPage('document');">
+            <i class="ri-file-text-line"></i> Document</a></li>
       
           <li><a href="#" id="menu-notifications" onclick="setActiveMenu('notifications'); loadPage('notifications');">
             <i class="ri-notification-3-line"></i> 
@@ -61,9 +61,27 @@
         <p>Chọn menu bên trái để bắt đầu.</p>
       </div>
     </main>
+
+    <!-- Booking Confirmation Modal -->
+    <div id="booking-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Xác Nhận Đặt Lịch Học</h2>
+          <button class="close-btn" onclick="closeBookingModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modal-body">
+          <!-- Content will be filled by JS -->
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" onclick="closeBookingModal()">Hủy</button>
+          <button class="btn btn-primary" onclick="confirmBooking()">Xác Nhận Đặt Lịch</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="/static/js/auth.js"></script>
   <script src="/static/js/student.js"></script>
 </body>
 </html>
+

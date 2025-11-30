@@ -1,6 +1,6 @@
 import json
 from flask import Blueprint, Flask, jsonify, request, abort, session
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from app.modules.schedule.scheduleConnectors import schedulesData
 # Using Flask session instead of session_store
@@ -60,79 +60,98 @@ def createFreetime(tutor_id):
     print (tutor_id)
     """Implements createFreetime(start, end) for a hardcoded MOCK_TUTOR_ID."""
     
-    
-    # Validate request using Flask session
-    if 'user_id' not in session:
-        return jsonify({'error': 'Not authenticated'}), 401
-    session_record = {
-        'sso_id': session.get('user_id'),
-        'username': session.get('username'),
-        'email': session.get('email'),
-        'display_name': session.get('display_name'),
-        'role': session.get('role')
-    }
-    print(session_record)
-    # if session_record['sso_id'] != tutor_id:
-    #     return jsonify({'error': 'Youre not allowed to get from this user'}), 401
-    
-    
-    
-    # Begin
-    
-    start_str = request.args.get('start')
-    end_str = request.args.get('end')
+    try:
+        # Validate request using Flask session
+        if 'user_id' not in session:
+            return jsonify({'error': 'Not authenticated'}), 401
+        session_record = {
+            'sso_id': session.get('user_id'),
+            'username': session.get('username'),
+            'email': session.get('email'),
+            'display_name': session.get('display_name'),
+            'role': session.get('role')
+        }
+        print(session_record)
+        # if session_record['sso_id'] != tutor_id:
+        #     return jsonify({'error': 'Youre not allowed to get from this user'}), 401
+        
+        
+        
+        # Begin
+        # Get start/end from JSON body or query parameters
+        data = request.get_json() if request.is_json else {}
+        print(f"Request data: {data}")
+        print(f"Request args: {request.args}")
+        start_str = data.get('start') or request.args.get('start')
+        end_str = data.get('end') or request.args.get('end')
+        print(f"Start: {start_str}, End: {end_str}")
 
-    if not start_str or not end_str:
-        return jsonify({"error": "Missing 'start' or 'end' query parameters."}), 400
-    
-    start_dt, end_dt, error = validate_times(start_str, end_str)
-    if error:
-        return jsonify({"error": error}), 400
-    
-    schedules = schedulesData.data
-    
-    # 1. Ensure the tutor's schedule structure exists
-    if tutor_id not in schedules:
-        schedules[tutor_id] = {"tutor_id": MOCK_TUTOR_ID, "slots": []}
+        if not start_str or not end_str:
+            return jsonify({"error": "Missing 'start' or 'end' in request body or query parameters."}), 400
+        
+        start_dt, end_dt, error = validate_times(start_str, end_str)
+        if error:
+            return jsonify({"error": error}), 400
+        
+        schedules = schedulesData.data
+        
+        # 1. Ensure the tutor's schedule structure exists
+        if tutor_id not in schedules:
+            schedules[tutor_id] = {"tutor_id": MOCK_TUTOR_ID, "slots": []}
 
-    tutor_slots = schedules[tutor_id]['slots']
+        tutor_slots = schedules[tutor_id]['slots']
 
-    # 2. Check for overlaps
-    for slot in tutor_slots:
-        slot_start = datetime.fromisoformat(slot['start'].replace('Z', '+00:00'))
-        slot_end = datetime.fromisoformat(slot['end'].replace('Z', '+00:00'))
-        if (start_dt < slot_end and end_dt > slot_start):
-             return jsonify({"error": "New free time overlaps with an existing slot."}), 409
+        # 2. Check for overlaps
+        for slot in tutor_slots:
+            slot_start = datetime.fromisoformat(slot['start'].replace('Z', '+00:00'))
+            slot_end = datetime.fromisoformat(slot['end'].replace('Z', '+00:00'))
+            if (start_dt < slot_end and end_dt > slot_start):
+                 return jsonify({"error": "New free time overlaps with an existing slot."}), 409
 
-    # 3. Create the new slot
-    new_slot = {
-        "id": generate_new_id(schedules),
-        "start": start_str,
-        "end": end_str
-    }
-    tutor_slots.append(new_slot)
-    schedulesData._save()
+        # 3. Create the new slot
+        # Normalize datetime strings to ISO 8601 with Z
+        start_normalized = start_dt.isoformat() if start_dt.tzinfo else start_dt.replace(tzinfo=timezone.utc).isoformat()
+        if not start_normalized.endswith('Z'):
+            start_normalized = start_normalized.replace('+00:00', 'Z')
+        
+        end_normalized = end_dt.isoformat() if end_dt.tzinfo else end_dt.replace(tzinfo=timezone.utc).isoformat()
+        if not end_normalized.endswith('Z'):
+            end_normalized = end_normalized.replace('+00:00', 'Z')
+        
+        new_slot = {
+            "id": generate_new_id(schedules),
+            "start": start_normalized,
+            "end": end_normalized
+        }
+        tutor_slots.append(new_slot)
+        schedulesData._save()
 
-    #### notification add ####
-    student_ids = get_students_for_tutor(tutor_id)
-    if student_ids:
-        notif_service.notify_schedule_created(
-            tutor_id=tutor_id,
-            student_ids=student_ids,
-            schedule_id=new_slot['id'],
-            schedule_info={
-                "time": f"{start_str} - {end_str}",
-                "date": start_str.split('T')[0]
-            }
-        )
-        print(f" Sent schedule creation notifications to {len(student_ids)} students")
-    #### notification add ####
+        #### notification add ####
+        student_ids = get_students_for_tutor(tutor_id)
+        if student_ids:
+            notif_service.notify_schedule_created(
+                tutor_id=tutor_id,
+                student_ids=student_ids,
+                schedule_id=new_slot['id'],
+                schedule_info={
+                    "time": f"{start_str} - {end_str}",
+                    "date": start_str.split('T')[0]
+                }
+            )
+            print(f" Sent schedule creation notifications to {len(student_ids)} students")
+        #### notification add ####
+        
+        
+        # Return the newly created slot, including the implicit tutor_id
+        response = new_slot.copy()
+        response['tutor_id'] = tutor_id
+        return jsonify(response), 201
     
-    
-    # Return the newly created slot, including the implicit tutor_id
-    response = new_slot.copy()
-    response['tutor_id'] = tutor_id
-    return jsonify(response), 201
+    except Exception as e:
+        print(f"Error in createFreetime: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
 
 
@@ -319,24 +338,43 @@ def deleteFreetime(tutor_id, slot_id):
     deleted_slot = tutor_slots.pop(slot_index_to_delete)
         
     schedulesData._save()
-    #  GỬI THÔNG BÁO CHO STUDENT
-    student_ids = get_students_for_tutor(tutor_id)
-    if student_ids:
-        notif_service.notify_schedule_deleted(
-            tutor_id=tutor_id,
-            student_ids=student_ids,
-            schedule_id=slot_id_int,
-            schedule_info={
-                "time": f"{deleted_slot_info['start']} - {deleted_slot_info['end']}",
-                "date": deleted_slot_info['start'].split('T')[0]
-            }
-        )
-        print(f"Sent schedule deletion notifications to {len(student_ids)} students")
     
-    return jsonify({"message": "Free time slot deleted successfully."}), 200
-    
-    
-    
+    # Notify students who booked slots on this schedule
+    try:
+        from app.data_manager import StudentBookingManager, DatacoreManager
+        from app.modules.notification.services import NotificationService
+        
+        notif_service = NotificationService()
+        tutor_profile = DatacoreManager.get_user_profile(tutor_id)
+        tutor_name = tutor_profile.get('name', 'Unknown') if tutor_profile else 'Unknown'
+        
+        # Get all bookings and find students who had bookings in this slot
+        all_bookings = StudentBookingManager.get_all_bookings()
+        affected_students = set()
+        
+        for booking in all_bookings:
+            # Check if booking time overlaps with deleted slot
+            if booking.get('tutor_id') == tutor_id and booking.get('status') == 'confirmed':
+                booking_time = booking.get('date_time', '')
+                slot_start = deleted_slot_info.get('start', '')
+                if booking_time >= slot_start:
+                    affected_students.add(booking['student_id'])
+        
+        # Send notification to each affected student
+        for student_id in affected_students:
+            notif_service.notify_schedule_deletion_to_student(
+                student_id=student_id,
+                tutor_name=tutor_name,
+                schedule_info={
+                    "time": f"{deleted_slot_info['start']} - {deleted_slot_info['end']}",
+                    "date": deleted_slot_info['start'].split('T')[0]
+                }
+            )
+        
+        if affected_students:
+            print(f"Sent deletion notifications to {len(affected_students)} students")
+    except Exception as e:
+        print(f"Error sending notifications: {e}")
     
     return jsonify({"message": "Free time slot deleted successfully."}), 200
 

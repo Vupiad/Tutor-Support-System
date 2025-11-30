@@ -1,0 +1,59 @@
+{
+  "bookings": [
+    {
+      "booking_id": "BK001",
+      "student_id": "SE2025001",
+      "tutor_id": "LECTURER_001",
+      "session_id": "TS001",
+      "course_name": "CSC101",
+      "tutor_name": "Phạm Thị Tú",
+      "date_time": "2025-12-01T09:00:00Z",
+      "status": "cancelled",
+      "booked_at": "2025-11-27T08:00:00Z"
+    },
+    {
+      "booking_id": "BK002",
+      "student_id": "SE2025001",
+      "tutor_id": "LECTURER_001",
+      "session_id": "TS002",
+      "course_name": "CSC102",
+      "tutor_name": "Phạm Thị Tú",
+      "date_time": "2025-12-02T14:00:00Z",
+      "status": "cancelled",
+      "booked_at": "2025-11-27T08:05:00Z"
+    },
+    {
+      "booking_id": "BK003",
+      "student_id": "SE2025001",
+      "tutor_id": "LECTURER_001",
+      "session_id": "SL1764498610",
+      "course_name": "CSC101",
+      "tutor_name": "Phạm Thị Tú",
+      "date_time": "2025-12-01T18:00:00Z",
+      "status": "cancelled",
+      "booked_at": "2025-11-30T10:30:10.422515+00:00"
+    },
+    {
+      "booking_id": "BK004",
+      "student_id": "SE2025001",
+      "tutor_id": "LECTURER_001",
+      "session_id": "SL1764500445",
+      "course_name": "CSC101",
+      "tutor_name": "Phạm Thị Tú",
+      "date_time": "2025-12-01T18:00:00Z",
+      "status": "cancelled",
+      "booked_at": "2025-11-30T11:00:45.236794+00:00"
+    },
+    {
+      "booking_id": "BK005",
+      "student_id": "SE2025001",
+      "tutor_id": "LECTURER_001",
+      "session_id": "SL1764500631",
+      "course_name": "CSC101",
+      "tutor_name": "Phạm Thị Tú",
+      "date_time": "2025-12-01T18:00:00Z",
+      "status": "confirmed",
+      "booked_at": "2025-11-30T11:03:51.737074+00:00"
+    }
+  ]
+}

@@ -1,26 +1,6 @@
 {
   "notifications": [
     {
-      "id": "notif_2c47260c",
-      "recipient_id": "LECTURER_001",
-      "recipient_type": "tutor",
-      "sender_id": "SE2025001",
-      "title": "Bu\u1ed5i h\u1ecdc m\u1edbi \u0111\u01b0\u1ee3c \u0111\u1eb7t",
-      "message": "Sinh vi\u00ean Nguy\u1ec5n V\u0103n An \u0111\u00e3 \u0111\u1eb7t bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-12-01T18:00:00Z",
-      "type": "event",
-      "event_type": "course_request",
-      "related_data": {
-        "student_id": "SE2025001",
-        "booking_id": "BK011",
-        "course_name": "CSC101",
-        "date_time": "2025-12-01T18:00:00Z",
-        "slot_end": "2025-12-01T23:30:00Z"
-      },
-      "is_read": true,
-      "created_at": "2025-11-30T14:16:58.724960",
-      "updated_at": "2025-11-30T15:00:13.619873"
-    },
-    {
       "id": "notif_32931d03",
       "recipient_id": "SE2025001",
       "recipient_type": "student",
@@ -80,26 +60,6 @@
       "is_read": true,
       "created_at": "2025-11-30T14:48:26.452875",
       "updated_at": "2025-11-30T15:01:06.430215"
-    },
-    {
-      "id": "notif_a8d14c98",
-      "recipient_id": "LECTURER_001",
-      "recipient_type": "tutor",
-      "sender_id": "SE2025001",
-      "title": "Bu\u1ed5i h\u1ecdc m\u1edbi \u0111\u01b0\u1ee3c \u0111\u1eb7t",
-      "message": "Sinh vi\u00ean Nguy\u1ec5n V\u0103n An \u0111\u00e3 \u0111\u1eb7t bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-11-06T12:39:00Z",
-      "type": "event",
-      "event_type": "course_request",
-      "related_data": {
-        "student_id": "SE2025001",
-        "booking_id": "BK023",
-        "course_name": "CSC101",
-        "date_time": "2025-11-06T12:39:00Z",
-        "slot_end": "2025-11-06T15:44:00Z"
-      },
-      "is_read": true,
-      "created_at": "2025-11-30T14:49:13.481874",
-      "updated_at": "2025-11-30T15:00:13.619886"
     },
     {
       "id": "notif_d0d8d5d5",

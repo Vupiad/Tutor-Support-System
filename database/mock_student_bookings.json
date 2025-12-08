@@ -239,7 +239,7 @@
       "course_name": "CSC101",
       "tutor_name": "Phạm Thị Tú",
       "date_time": "2025-12-01T18:00:00Z",
-      "status": "confirmed",
+      "status": "cancelled",
       "booked_at": "2025-11-30T14:25:17.057556+00:00"
     },
     {
@@ -274,6 +274,50 @@
       "date_time": "2025-11-06T12:39:00Z",
       "status": "pending",
       "booked_at": "2025-12-05T15:04:00.822397+00:00"
+    },
+    {
+      "booking_id": "BK026",
+      "student_id": "SE2025001",
+      "tutor_id": "LECTURER_001",
+      "session_id": "SL1765079250",
+      "course_name": "CSC101",
+      "tutor_name": "Phạm Thị Tú",
+      "date_time": "2025-11-06T12:39:00Z",
+      "status": "rejected",
+      "booked_at": "2025-12-07T03:47:30.799243+00:00"
+    },
+    {
+      "booking_id": "BK027",
+      "student_id": "SE2025001",
+      "tutor_id": "LECTURER_001",
+      "session_id": "SL1765081149",
+      "course_name": "CSC101",
+      "tutor_name": "Phạm Thị Tú",
+      "date_time": "2025-11-06T12:39:00Z",
+      "status": "confirmed",
+      "booked_at": "2025-12-07T04:19:09.039844+00:00"
+    },
+    {
+      "booking_id": "BK028",
+      "student_id": "SE2025001",
+      "tutor_id": "LECTURER_001",
+      "session_id": "SL1765081805",
+      "course_name": "CSC101",
+      "tutor_name": "Phạm Thị Tú",
+      "date_time": "2025-11-04T14:47:00Z",
+      "status": "rejected",
+      "booked_at": "2025-12-07T04:30:05.565599+00:00"
+    },
+    {
+      "booking_id": "BK029",
+      "student_id": "SE2025001",
+      "tutor_id": "LECTURER_001",
+      "session_id": "SL1765206554",
+      "course_name": "CSC101",
+      "tutor_name": "Phạm Thị Tú",
+      "date_time": "2025-12-10T06:51:00Z",
+      "status": "pending",
+      "booked_at": "2025-12-08T15:09:14.422927+00:00"
     }
   ]
 }

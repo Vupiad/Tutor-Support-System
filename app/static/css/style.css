@@ -160,7 +160,7 @@ select {
 
 button,
 .btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #098cbc;
   color: white;
   padding: 12px 24px;
   border: none;
@@ -198,7 +198,7 @@ button.btn-secondary:hover {
 }
 
 .forgot-password a {
-  color: #667eea;
+  color: #098cbc;
   text-decoration: none;
   font-size: 12px;
   font-weight: 500;
@@ -206,7 +206,7 @@ button.btn-secondary:hover {
 }
 
 .forgot-password a:hover {
-  color: #764ba2;
+  color: #098cbc;
   text-decoration: underline;
 }
 

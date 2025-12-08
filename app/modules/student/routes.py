@@ -472,6 +472,34 @@ def approve_booking(booking_id):
         
         logger.info(f"Tutor {tutor_id} approved booking {booking_id}")
         
+        # Mark the original booking notification (for this tutor) as read
+        try:
+            from app.modules.notification.services import NotificationService
+            notif_service = NotificationService()
+            # find tutor notifications related to this booking and mark as read
+            tutor_notifs = notif_service.get_user_notifications(tutor_id, limit=200)
+            for n in tutor_notifs:
+                rd = n.get('related_data') or {}
+                if rd.get('booking_id') == booking_id:
+                    notif_service.mark_notification_as_read(n.get('id'))
+        except Exception:
+            logger.exception('Failed to mark booking notification as read for tutor')
+
+        # Create a scheduled session for the tutor so it appears in sessions list
+        try:
+            from app.data_manager import TutorSessionManager
+            # Use booking info to create a session
+            TutorSessionManager.create_session(
+                tutor_id=tutor_id,
+                course_name=booking.get('course_name', 'Unknown'),
+                date_time=booking.get('date_time'),
+                status='scheduled',
+                student_count=1,
+                duration_minutes=booking.get('duration_minutes', 60) or 60
+            )
+        except Exception:
+            logger.exception('Failed to create tutor session after approval')
+
         # Send notification to student
         from app.modules.notification.services import NotificationService
         notif_service = NotificationService()
@@ -545,7 +573,19 @@ def reject_booking(booking_id):
         
         logger.info(f"Tutor {tutor_id} rejected booking {booking_id}")
         
-        # Send notification to student
+        # Mark the original booking notification (for this tutor) as read
+        try:
+            from app.modules.notification.services import NotificationService
+            notif_service = NotificationService()
+            tutor_notifs = notif_service.get_user_notifications(tutor_id, limit=200)
+            for n in tutor_notifs:
+                rd = n.get('related_data') or {}
+                if rd.get('booking_id') == booking_id:
+                    notif_service.mark_notification_as_read(n.get('id'))
+        except Exception:
+            logger.exception('Failed to mark booking notification as read for tutor')
+
+        # Send notification to student about rejection
         from app.modules.notification.services import NotificationService
         notif_service = NotificationService()
         try:

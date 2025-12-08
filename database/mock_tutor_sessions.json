@@ -4,7 +4,7 @@
       "session_id": "TS001",
       "tutor_id": "LECTURER_001",
       "course_name": "CSC101",
-      "date_time": "2025-12-01T09:00:00Z",
+      "date_time": "2025-12-01T09:00:00.000Z",
       "location": "H6-608",
       "status": "scheduled",
       "student_count": 2,
@@ -46,6 +46,25 @@
       "course_name": "MATH102",
       "date_time": "2025-12-03T15:00:00Z",
       "location": "H6-608",
+      "status": "scheduled",
+      "student_count": 1,
+      "duration_minutes": 60
+    },
+    {
+      "session_id": "TS006",
+      "tutor_id": "LECTURER_001",
+      "course_name": "CSC101",
+      "date_time": "2025-12-19T14:47:00.000Z",
+      "status": "scheduled",
+      "student_count": 1,
+      "duration_minutes": 60,
+      "location": "H3-306"
+    },
+    {
+      "session_id": "TS007",
+      "tutor_id": "LECTURER_001",
+      "course_name": "CSC101",
+      "date_time": "2025-11-04T14:47:00Z",
       "status": "scheduled",
       "student_count": 1,
       "duration_minutes": 60

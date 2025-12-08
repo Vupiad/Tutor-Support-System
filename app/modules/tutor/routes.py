@@ -4,7 +4,7 @@ Requires authentication and 'tutor' role.
 """
 
 import logging
-from flask import Blueprint, jsonify, session
+from flask import Blueprint, jsonify, session, request
 from app.modules.auth.routes import auth_required, role_required
 from app.data_manager import (
     TutorSessionManager, AssignmentManager, DatacoreManager
@@ -81,6 +81,63 @@ def get_tutor_sessions():
             'message': 'Internal server error',
             'data': None
         }), 500
+
+
+@tutor_bp.route('/tutor/session/<session_id>', methods=['PUT'])
+@auth_required
+@role_required('tutor')
+def update_tutor_session(session_id):
+    """Update a tutor session's details (date_time, location, duration_minutes, course_name)
+
+    Expects JSON body with fields to update.
+    Sends notifications to students who have bookings for this session (confirmed/pending).
+    """
+    try:
+        tutor_id = session.get('user_id')
+        if not tutor_id:
+            return jsonify({'status': 'error', 'message': 'Not authenticated', 'data': None}), 401
+
+        data = request.get_json() or {}
+        allowed = {'date_time', 'location', 'duration_minutes', 'course_name'}
+        updates = {k: v for k, v in data.items() if k in allowed}
+        if not updates:
+            return jsonify({'status': 'error', 'message': 'No valid fields to update', 'data': None}), 400
+
+        updated = TutorSessionManager.update_session(session_id, updates)
+        if not updated:
+            return jsonify({'status': 'error', 'message': 'Session not found or update failed', 'data': None}), 404
+
+        # Notify affected students (bookings tied to this session)
+        from app.data_manager import StudentBookingManager
+        from app.modules.notification.services import NotificationService
+
+        bookings = StudentBookingManager.get_all_bookings()
+        affected_students = set()
+        for b in bookings:
+            if b.get('session_id') == session_id and b.get('status') in ('confirmed', 'pending'):
+                affected_students.add(b.get('student_id'))
+
+        notif_service = NotificationService()
+        tutor_profile = DatacoreManager.get_user_profile(tutor_id)
+        tutor_name = tutor_profile.get('name') if tutor_profile else 'Tutor'
+
+        if affected_students:
+            # Use notify_schedule_updated to create standardized event notifications
+            notif_service.notify_schedule_updated(
+                tutor_id=tutor_id,
+                student_ids=list(affected_students),
+                schedule_id=session_id,
+                old_info={},
+                new_info={
+                    'time': updates.get('date_time', updated.get('date_time')),
+                    'location': updates.get('location', updated.get('location'))
+                }
+            )
+
+        return jsonify({'status': 'success', 'message': 'Session updated', 'data': updated}), 200
+    except Exception as e:
+        logger.error(f"Error updating session: {e}")
+        return jsonify({'status': 'error', 'message': str(e), 'data': None}), 500
 
 
 @tutor_bp.route('/tutor/students', methods=['GET'])

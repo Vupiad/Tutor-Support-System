@@ -205,6 +205,27 @@ class TutorSessionManager:
         data.get('sessions', []).append(new_session)
         return MockDataManager.save_json('mock_tutor_sessions.json', data)
 
+    @staticmethod
+    def update_session(session_id: str, updates: Dict) -> Optional[Dict]:
+        """Update a tutor session by session_id with fields from updates dict.
+
+        Returns the updated session dict or None if not found.
+        """
+        data = MockDataManager.load_json('mock_tutor_sessions.json')
+        sessions = data.get('sessions', [])
+        for i, s in enumerate(sessions):
+            if s.get('session_id') == session_id:
+                # Apply allowed updates
+                allowed = {'date_time', 'location', 'status', 'duration_minutes', 'course_name'}
+                for k, v in updates.items():
+                    if k in allowed:
+                        s[k] = v
+                sessions[i] = s
+                data['sessions'] = sessions
+                success = MockDataManager.save_json('mock_tutor_sessions.json', data)
+                return s if success else None
+        return None
+
 
 class AssignmentManager:
     """Manager for mock_assignments.json operations."""

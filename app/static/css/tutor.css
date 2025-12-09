@@ -96,6 +96,9 @@ html, body {
   padding: 40px 60px;
   background: #fafbff;
   min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 100vh;
 }
 
 /* ==========================
@@ -993,6 +996,29 @@ html, body {
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
   margin-top: 20px;
+  max-height: calc(100vh - 400px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 12px;
+}
+
+.students-grid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.students-grid::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.students-grid::-webkit-scrollbar-thumb {
+  background: #098cbc;
+  border-radius: 10px;
+}
+
+.students-grid::-webkit-scrollbar-thumb:hover {
+  background: #098cbc;
+  opacity: 0.8;
 }
 
 .student-card {

@@ -3,47 +3,47 @@
     {
       "session_id": "TS001",
       "tutor_id": "LECTURER_001",
-      "course_name": "CSC101",
+      "course_name": "[CO2017] - Hệ điều hành",
       "date_time": "2025-12-01T09:00:00.000Z",
       "location": "H6-608",
       "status": "scheduled",
-      "student_count": 2,
+      "student_count": 0,
       "duration_minutes": 60
     },
     {
       "session_id": "TS002",
       "tutor_id": "LECTURER_001",
-      "course_name": "CSC102",
+      "course_name": "[CO2039] - Lập trình nâng cao",
       "date_time": "2025-12-02T14:00:00Z",
       "location": "H6-301",
       "status": "scheduled",
-      "student_count": 1,
+      "student_count": 0,
       "duration_minutes": 60
     },
     {
       "session_id": "TS003",
       "tutor_id": "LECTURER_001",
-      "course_name": "CSC201",
+      "course_name": "[CO3031] - Phân tích và Thiết kế Giải Thuật",
       "date_time": "2025-11-28T10:00:00Z",
       "location": "H6-402",
       "status": "completed",
-      "student_count": 3,
+      "student_count": 1,
       "duration_minutes": 90
     },
     {
       "session_id": "TS004",
       "tutor_id": "LECTURER_002",
-      "course_name": "MATH101",
+      "course_name": "[CO3029] - Khai phá Dữ liệu",
       "date_time": "2025-12-01T11:00:00Z",
       "location": "H6-708",
       "status": "scheduled",
-      "student_count": 2,
+      "student_count": 1,
       "duration_minutes": 60
     },
     {
       "session_id": "TS005",
       "tutor_id": "LECTURER_002",
-      "course_name": "MATH102",
+      "course_name": "[CO3005] - Nguyên lý Ngôn ngữ Lập trình",
       "date_time": "2025-12-03T15:00:00Z",
       "location": "H6-608",
       "status": "scheduled",
@@ -53,7 +53,7 @@
     {
       "session_id": "TS006",
       "tutor_id": "LECTURER_001",
-      "course_name": "CSC101",
+      "course_name": "[CO2017] - Hệ điều hành",
       "date_time": "2025-12-19T14:47:00.000Z",
       "status": "scheduled",
       "student_count": 1,
@@ -63,37 +63,61 @@
     {
       "session_id": "TS007",
       "tutor_id": "LECTURER_001",
-      "course_name": "CSC101",
-      "date_time": "2025-11-04T14:47:00Z",
+      "course_name": "[CO2017] - Hệ điều hành",
+      "date_time": "2025-12-10T09:30:00Z",
       "status": "scheduled",
       "student_count": 1,
-      "duration_minutes": 60
+      "duration_minutes": 60,
+      "location": "H3-306"
     },
     {
       "session_id": "TS008",
-      "tutor_id": "LECTURER_001",
-      "course_name": "CSC101",
-      "date_time": "2025-12-10T06:51:00Z",
+      "tutor_id": "LECTURER_003",
+      "course_name": "[CO3049] - Lập trình Web",
+      "date_time": "2025-12-10T10:00:00Z",
+      "location": "H6-302",
       "status": "scheduled",
       "student_count": 1,
-      "duration_minutes": 60
+      "duration_minutes": 90
     },
     {
       "session_id": "TS009",
-      "tutor_id": "LECTURER_001",
-      "course_name": "CSC101",
-      "date_time": "2025-12-10T06:51:00Z",
+      "tutor_id": "LECTURER_004",
+      "course_name": "[CO3065] - Công nghệ Phần mềm Nâng cao",
+      "date_time": "2025-12-10T14:30:00Z",
+      "location": "H6-501",
       "status": "scheduled",
-      "student_count": 1,
+      "student_count": 2,
       "duration_minutes": 60
     },
     {
       "session_id": "TS010",
-      "tutor_id": "LECTURER_001",
-      "course_name": "CSC101",
-      "date_time": "2025-12-10T06:51:00Z",
+      "tutor_id": "LECTURER_006",
+      "course_name": "[CO3021] - Hệ Quản trị Cơ sở Dữ Liệu",
+      "date_time": "2025-12-13T08:00:00.000Z",
+      "location": "H6-205",
       "status": "scheduled",
       "student_count": 1,
+      "duration_minutes": 120
+    },
+    {
+      "session_id": "TS011",
+      "tutor_id": "LECTURER_008",
+      "course_name": "[CO3093] - Mạng máy tính",
+      "date_time": "2025-12-10T13:00:00Z",
+      "location": "H6-101",
+      "status": "scheduled",
+      "student_count": 3,
+      "duration_minutes": 90
+    },
+    {
+      "session_id": "TS012",
+      "tutor_id": "LECTURER_011",
+      "course_name": "[CO3047] - Mạng máy tính nâng cao",
+      "date_time": "2025-12-13T09:00:00Z",
+      "location": "H6-405",
+      "status": "scheduled",
+      "student_count": 2,
       "duration_minutes": 60
     }
   ]

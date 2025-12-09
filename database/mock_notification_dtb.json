@@ -241,6 +241,66 @@
       "is_read": false,
       "created_at": "2025-12-09T15:16:41.775715",
       "updated_at": "2025-12-09T15:16:41.775719"
+    },
+    {
+      "id": "notif_2a200fda",
+      "recipient_id": "LECTURER_007",
+      "recipient_type": "tutor",
+      "sender_id": "SE2025001",
+      "title": "Bu\u1ed5i h\u1ecdc m\u1edbi \u0111\u01b0\u1ee3c \u0111\u1eb7t",
+      "message": "Sinh vi\u00ean Nguy\u1ec5n V\u0103n An \u0111\u00e3 \u0111\u1eb7t bu\u1ed5i h\u1ecdc [CO2039] - L\u1eadp tr\u00ecnh n\u00e2ng cao v\u00e0o 2025-12-13T14:00:00Z",
+      "type": "event",
+      "event_type": "course_request",
+      "related_data": {
+        "student_id": "SE2025001",
+        "booking_id": "BK025",
+        "course_name": "[CO2039] - L\u1eadp tr\u00ecnh n\u00e2ng cao",
+        "date_time": "2025-12-13T14:00:00Z",
+        "slot_end": "2025-12-13T16:00:00Z"
+      },
+      "is_read": false,
+      "created_at": "2025-12-09T15:58:51.576836",
+      "updated_at": "2025-12-09T15:58:51.576840"
+    },
+    {
+      "id": "notif_baa69caf",
+      "recipient_id": "LECTURER_004",
+      "recipient_type": "tutor",
+      "sender_id": "SE2025001",
+      "title": "Bu\u1ed5i h\u1ecdc m\u1edbi \u0111\u01b0\u1ee3c \u0111\u1eb7t",
+      "message": "Sinh vi\u00ean Nguy\u1ec5n V\u0103n An \u0111\u00e3 \u0111\u1eb7t bu\u1ed5i h\u1ecdc [CO2017] - H\u1ec7 \u0111i\u1ec1u h\u00e0nh v\u00e0o 2025-12-10T14:00:00Z",
+      "type": "event",
+      "event_type": "course_request",
+      "related_data": {
+        "student_id": "SE2025001",
+        "booking_id": "BK026",
+        "course_name": "[CO2017] - H\u1ec7 \u0111i\u1ec1u h\u00e0nh",
+        "date_time": "2025-12-10T14:00:00Z",
+        "slot_end": "2025-12-10T16:00:00Z"
+      },
+      "is_read": false,
+      "created_at": "2025-12-09T15:58:55.741335",
+      "updated_at": "2025-12-09T15:58:55.741339"
+    },
+    {
+      "id": "notif_878cba0b",
+      "recipient_id": "LECTURER_002",
+      "recipient_type": "tutor",
+      "sender_id": "SE2025001",
+      "title": "Bu\u1ed5i h\u1ecdc m\u1edbi \u0111\u01b0\u1ee3c \u0111\u1eb7t",
+      "message": "Sinh vi\u00ean Nguy\u1ec5n V\u0103n An \u0111\u00e3 \u0111\u1eb7t bu\u1ed5i h\u1ecdc [CO3005] - Nguy\u00ean l\u00fd Ng\u00f4n ng\u1eef L\u1eadp tr\u00ecnh v\u00e0o 2025-12-01T11:00:00Z",
+      "type": "event",
+      "event_type": "course_request",
+      "related_data": {
+        "student_id": "SE2025001",
+        "booking_id": "BK027",
+        "course_name": "[CO3005] - Nguy\u00ean l\u00fd Ng\u00f4n ng\u1eef L\u1eadp tr\u00ecnh",
+        "date_time": "2025-12-01T11:00:00Z",
+        "slot_end": "2025-12-01T12:00:00Z"
+      },
+      "is_read": false,
+      "created_at": "2025-12-09T18:44:10.383559",
+      "updated_at": "2025-12-09T18:44:10.383561"
     }
   ],
   "enrollments": [

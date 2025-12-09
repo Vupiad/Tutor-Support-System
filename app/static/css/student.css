@@ -84,6 +84,91 @@
 }
 
 /* ==========================
+   TUTORS LIST CONTAINER
+========================== */
+.tutors-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  max-height: calc(100vh - 400px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 12px;
+}
+
+.tutors-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tutors-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.tutors-list::-webkit-scrollbar-thumb {
+  background: #098cbc;
+  border-radius: 10px;
+}
+
+.tutors-list::-webkit-scrollbar-thumb:hover {
+  background: #098cbc;
+  opacity: 0.8;
+}
+
+/* ==========================
+   TUTOR DETAIL CARD
+========================== */
+.tutor-detail-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e8e8e8;
+}
+
+.detail-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 30px 140px 1fr;
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #098cbc;
+  font-size: 18px;
+  width: 30px;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.detail-value {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+/* ==========================
    SEARCH SECTION
 ========================== */
 .search-section {

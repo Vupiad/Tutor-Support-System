@@ -9,7 +9,7 @@
    WELCOME SECTION
 ========================== */
 .welcome-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #098cbc;
   color: white;
   border-radius: 20px;
   padding: 40px;
@@ -61,12 +61,12 @@
 .action-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
-  border-color: #667eea;
+  border-color: #098cbc;
 }
 
 .action-card i {
   font-size: 40px;
-  color: #667eea;
+  color: #098cbc;
   margin-bottom: 15px;
   display: block;
 }
@@ -107,12 +107,12 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #098cbc;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .btn-primary {
-  background: #667eea;
+  background: #098cbc;
   color: white;
   padding: 12px 24px;
   border: none;
@@ -123,7 +123,7 @@
 }
 
 .btn-primary:hover {
-  background: #5568d3;
+  background: #098cbc;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
 }
@@ -150,7 +150,7 @@
 
 .tutor-card:hover {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  border-color: #667eea;
+  border-color: #098cbc;
 }
 
 .tutor-header {
@@ -163,7 +163,7 @@
 .tutor-avatar {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #098cbc;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -264,7 +264,7 @@
 
 .slot-item {
   background: #f8f9fb;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #098cbc;
   padding: 16px;
   border-radius: 8px;
   display: flex;
@@ -284,7 +284,7 @@
 }
 
 .slot-item i {
-  color: #667eea;
+  color: #098cbc;
   margin-right: 6px;
 }
 
@@ -299,12 +299,12 @@
 }
 
 .btn-info {
-  background: #667eea;
+  background: #098cbc;
   color: white;
 }
 
 .btn-info:hover {
-  background: #5568d3;
+  background: #098cbc;
 }
 
 .btn-success {
@@ -358,12 +358,12 @@
 }
 
 .bookings-list::-webkit-scrollbar-thumb {
-  background: #667eea;
+  background: #098cbc;
   border-radius: 10px;
 }
 
 .bookings-list::-webkit-scrollbar-thumb:hover {
-  background: #5568d3;
+  background: #098cbc;
 }
 
 .booking-card {
@@ -424,8 +424,8 @@
 
 .alert-info {
   background: #e3f2fd;
-  color: #1565c0;
-  border-left: 4px solid #1976d2;
+  color: #098cbc;
+  border-left: 4px solid #098cbc;
 }
 
 .alert-warning {
@@ -510,7 +510,7 @@
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #098cbc;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -524,7 +524,7 @@
   font-weight: 600;
   color: #333;
   padding: 16px 0;
-  border-bottom: 2px solid #667eea;
+  border-bottom: 2px solid #098cbc;
   margin-bottom: 16px;
 }
 
@@ -554,7 +554,7 @@
 }
 
 .notif-title-wrapper h2 i {
-  color: #667eea;
+  color: #098cbc;
 }
 
 .notif-count-badge {
@@ -563,7 +563,7 @@
   justify-content: center;
   min-width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, #667eea, #5568d3);
+  background: #098cbc;
   color: white;
   border-radius: 8px;
   font-weight: bold;
@@ -579,7 +579,7 @@
 
 .btn-mark-all {
   margin-bottom: 20px;
-  background: linear-gradient(135deg, #667eea, #5568d3);
+  background: #098cbc;
   color: white;
   border: none;
   padding: 12px 20px;
@@ -677,13 +677,13 @@
 .notif-indicator {
   width: 4px;
   flex-shrink: 0;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #098cbc;
   transition: border-color 0.3s ease;
 }
 
 .notif-item.notif-unread .notif-indicator {
-  border-left-color: #667eea;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(102, 126, 234, 0.05));
+  border-left-color: #098cbc;
+  background: #098cbc;
 }
 
 .notif-item.notif-read .notif-indicator {
@@ -736,7 +736,7 @@
   display: inline-block;
   font-size: 12px;
   background: #f0f4ff;
-  color: #667eea;
+  color: #098cbc;
   padding: 4px 8px;
   border-radius: 4px;
   font-weight: 600;
@@ -755,14 +755,17 @@
   color: #555;
   margin: 0 0 12px 0;
   line-height: 1.5;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
+
 
 .notif-details {
   background: #f8f9fa;
   padding: 12px;
   border-radius: 8px;
   margin: 12px 0;
-  border-left: 3px solid #667eea;
+  border-left: 3px solid #098cbc;
 }
 
 .detail-item {
@@ -787,7 +790,7 @@
 }
 
 .detail-label i {
-  color: #667eea;
+  color: #098cbc;
 }
 
 .detail-value {
@@ -838,7 +841,7 @@
 }
 
 .btn-approve {
-  background: linear-gradient(135deg, #667eea, #667eea);
+  background: #098cbc;
   color: white;
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
 }
@@ -861,7 +864,7 @@
 
 .btn-action {
   background: transparent;
-  color: #667eea;
+  color: #098cbc;
   border: 1px solid #e0e6f6;
   padding: 8px 14px;
   font-size: 13px;
@@ -876,7 +879,7 @@
 
 .btn-action:hover {
   background: #f0f4ff;
-  border-color: #667eea;
+  border-color: #098cbc;
   color: #2c3e50;
 }
 
@@ -957,7 +960,7 @@
    DETAIL CARD
 ========================== */
 .tutor-detail-card {
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: #ffffff;
   padding: 24px;
   border-radius: 12px;
   margin: 20px 0;
@@ -976,7 +979,7 @@
 }
 
 .detail-info b {
-  color: #667eea;
+  color: #098cbc;
   font-weight: 600;
 }
 
@@ -1096,7 +1099,7 @@
    BOOKING CARD STYLES
 ========================== */
 .booking-card {
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #098cbc;
   margin-bottom: 15px;
   position: relative;
   transition: all 0.3s ease;
@@ -1157,3 +1160,352 @@
   color: #2e7d32;
 }
 
+/* ==========================
+   ANIMATION FOR NOTIFICATIONS
+========================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add animation to notification items */
+.notif-item {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* Stagger animation for multiple items */
+.notif-item:nth-child(1) { animation-delay: 0.05s; }
+.notif-item:nth-child(2) { animation-delay: 0.1s; }
+.notif-item:nth-child(3) { animation-delay: 0.15s; }
+.notif-item:nth-child(4) { animation-delay: 0.2s; }
+.notif-item:nth-child(5) { animation-delay: 0.25s; }
+.notif-item:nth-child(n+6) { animation-delay: 0.3s; }
+
+/* Enhanced interaction for notification items */
+.notif-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.notif-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.notif-item:hover::before {
+  left: 100%;
+}
+
+/* ==========================
+   NOTIFICATION TOAST
+========================== */
+
+.notification-toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: white;
+  padding: 16px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  max-width: 400px;
+}
+
+.notification-toast.notification-success {
+  border-left: 4px solid #2ecc71;
+}
+
+.notification-toast.notification-success i {
+  color: #2ecc71;
+}
+
+.notification-toast.notification-error {
+  border-left: 4px solid #e74c3c;
+}
+
+.notification-toast.notification-error i {
+  color: #e74c3c;
+}
+
+.notification-toast.notification-info {
+  border-left: 4px solid #098cbc;
+}
+
+.notification-toast.notification-info i {
+  color: #098cbc;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toast-content i {
+  font-size: 18px;
+}
+
+/* ==========================
+   CONFIRM MODAL
+========================== */
+
+.confirm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.confirm-modal {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 90%;
+  overflow: hidden;
+}
+
+.confirm-modal-header {
+  background: #098cbc;
+  color: white;
+  padding: 24px;
+  border-bottom: none;
+}
+
+.confirm-modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.confirm-modal-body {
+  padding: 24px;
+  color: #555;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.confirm-modal-body p {
+  margin: 0;
+}
+
+.confirm-modal-footer {
+  padding: 20px 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  border-top: 1px solid #f0f0f0;
+}
+
+.confirm-modal .btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.confirm-modal .btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.confirm-modal .btn-secondary:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.confirm-modal .btn-danger {
+  background: #e74c3c;
+  color: white;
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+}
+
+.confirm-modal .btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(231, 76, 60, 0.4);
+}
+
+/* ==========================
+   NOTIFICATION DETAILS
+========================== */
+.notif-details {
+  margin-top: 16px;
+  padding: 16px;
+  background: #f8f9ff;
+  border-radius: 12px;
+  border-left: 4px solid #098cbc;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.detail-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: #098cbc;
+  min-width: 100px;
+}
+
+.detail-label i {
+  font-size: 16px;
+}
+
+.detail-value {
+  color: #333;
+  font-weight: 500;
+  flex: 1;
+}
+
+/* ==========================
+   RESPONSIVE
+========================== */
+
+@media (max-width: 768px) {
+  .notification-toast {
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    max-width: none;
+  }
+
+  .confirm-modal {
+    width: 95%;
+  }
+}
+
+.student-notifications-page .notif-item {
+  background: white !important;
+}
+
+.student-notifications-page .notif-details {
+  background: #f8f9ff !important;
+  border-left: 4px solid #098cbc !important;
+}
+
+.student-notifications-page .notif-type {
+  background: #eef2ff !important;
+  color: #098cbc!important;
+}
+
+.student-notifications-page .notif-indicator {
+  min-width: 4px;
+}
+
+/* FORCE notification details to always show */
+.notif-details {
+  display: block !important;
+  opacity: 1 !important;
+  height: auto !important;
+  padding: 16px !important;
+  background: #f8f9ff !important;
+  border-left: 4px solid #098cbc !important;
+}
+
+/* hiển thị từng dòng detail */
+.notif-details .detail-item {
+  display: flex !important;
+  margin-bottom: 6px !important;
+}
+
+/* màu tiêu đề detail */
+.notif-details .detail-label {
+  font-weight: 600 !important;
+  color: #098cbc !important;
+}
+
+/* hiển thị badge trạng thái */
+.status-badge {
+  display: inline-flex !important;
+  padding: 8px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+.status-approved {
+  background: #d4edda !important;
+  color: #155724 !important;
+}
+
+.status-rejected {
+  background: #f8d7da !important;
+  color: #721c24 !important;
+}
+
+/* ======= FIX NOTIFICATION CONTENT BEING HIDDEN ======= */
+
+.notif-item {
+  display: block !important;
+  padding: 16px !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.notif-content {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.notif-text-main,
+.notif-message,
+.notif-details,
+.notif-actions {
+  display: block !important;
+}
+
+.notif-details {
+  height: auto !important;
+  opacity: 1 !important;
+  padding: 16px !important;
+}
+
+.student-notifications-page {
+  overflow-x: hidden;
+}
+
+.notif-list {
+    overflow-x: hidden !important;
+}

@@ -584,166 +584,195 @@ async function loadCalendar() {
 // 🔗 API 5: GET /notification/user/<user_id>
 async function loadNotifications() {
   try {
-    const meRes = await fetch('/auth/me', { credentials: 'include' });
-    if (!meRes.ok) {
-      setContent(`<div class="card">Bạn chưa đăng nhập</div>`);
-      return;
-    }
+    console.log(">>> LOAD NOTIFICATIONS VERSION FIXED <<<");
+
+    const meRes = await fetch("/auth/me", { credentials: "include" });
     const meJson = await meRes.json();
-    const userId = meJson.data.user_id;
 
-    const res = await fetch(
-      `/notification/user/${encodeURIComponent(userId)}`,
-      { credentials: 'include' }
-    );
-
-    if (!res.ok) {
-      setContent(`<div class="card alert alert-danger">
-        Lỗi lấy thông báo (mã ${res.status})
-      </div>`);
+    if (!meRes.ok || !meJson.data) {
+      setContent(`<div class="card alert alert-danger">Bạn chưa đăng nhập.</div>`);
       return;
     }
 
-    const data = await res.json();
-    const unreadCount = data.data ? data.data.filter(n => !n.is_read).length : 0;
+    const userId = meJson.data.user_id;
+    const notifRes = await fetch(`/notification/user/${userId}`, { credentials: "include" });
+    const notifJson = await notifRes.json();
+    console.log("======== RAW API RESPONSE ========");
+    console.log("notifJson:", notifJson);
+    console.log("notifJson.data:", notifJson.data);
+    console.log("notifJson.unread_count:", notifJson.unread_count);
+    console.log("==================================");
 
-    // 3. Render HTML
+    if (!notifRes.ok) {
+      setContent(`<div class="card alert alert-danger">Không tải được thông báo.</div>`);
+      return;
+    }
+
+    const notifications = notifJson.data || [];
+    const unreadCount =
+      notifJson.unread_count !== undefined
+        ? notifJson.unread_count
+        : notifications.filter(n => !n.is_read).length;
+
+    console.log("Notifications loaded:", notifications);
+
     let html = `
-      <div class="notif-header-section">
-        <div class="notif-title-wrapper">
-          <h2><i class="ri-notification-3-line"></i> Thông báo</h2>
-          <span class="notif-count-badge">${unreadCount}</span>
+      <div class="student-notifications-page">
+
+        <div class="notif-header-section">
+          <div class="notif-title-wrapper">
+            <h2><i class="ri-notification-3-line"></i> Thông báo</h2>
+            <span class="notif-count-badge">${unreadCount}</span>
+          </div>
+          <p class="notif-subtitle">Bạn có <b>${unreadCount}</b> thông báo chưa đọc</p>
         </div>
-        <p class="notif-subtitle">Bạn có <b>${unreadCount}</b> thông báo chưa đọc</p>
-      </div>
 
-      ${unreadCount > 0 ? `
-        <button class="btn btn-mark-all" onclick="markAllNotificationsAsRead('${userId}')">
-          <i class="ri-check-double-line"></i> Đánh dấu tất cả là đã đọc
-        </button>
-      ` : ''}
+        ${unreadCount > 0 ? `
+          <button class="btn btn-mark-all" onclick="markAllNotificationsAsRead('${userId}')">
+            <i class="ri-check-double-line"></i> Đánh dấu tất cả là đã đọc
+          </button>` 
+        : ""}
 
-      <div class="notif-list">
+        <div class="notif-list">
     `;
 
-    if (!data.data || data.data.length === 0) {
-      html += `<div class="notif-empty">
-        <div class="empty-icon"><i class="ri-inbox-line"></i></div>
-        <p class="empty-text">Không có thông báo nào</p>
-        <p class="empty-subtext">Bạn đang cập nhật tất cả!</p>
-      </div>`;
+    if (notifications.length === 0) {
+      html += `
+        <div class="notif-empty">
+          <div class="empty-icon"><i class="ri-inbox-line"></i></div>
+          <p class="empty-text">Không có thông báo nào</p>
+          <p class="empty-subtext">Bạn đang cập nhật tất cả!</p>
+        </div>`;
     } else {
-      data.data.forEach(notif => {
-        // Format timestamp - Add UTC+7 offset for Vietnamese timezone
-        const createdDate = new Date(notif.created_at);
-        const vietnamTime = new Date(createdDate.getTime() + 7 * 60 * 60 * 1000);
-        const dateStr = vietnamTime.toLocaleDateString('vi-VN');
-        const timeStr = vietnamTime.toLocaleTimeString('vi-VN', {hour: '2-digit', minute: '2-digit', hour12: false});
-        const formattedTime = `${dateStr} ${timeStr}`;
-        
-        // Get icon and color based on event type
-        let iconClass = 'ri-notification-2-line';
-        let accentColor = '#667eea';
-        let eventTypeLabel = '';
-        
-        if (notif.event_type === 'course_request') {
-          iconClass = 'ri-user-add-line';
-          accentColor = '#667eea';
-          eventTypeLabel = 'Đơn đặt lịch';
-        } else if (notif.event_type === 'schedule_create' || notif.event_type === 'schedule_update' || notif.event_type === 'schedule_delete') {
-          iconClass = 'ri-calendar-line';
-          accentColor = '#2ecc71';
-          eventTypeLabel = 'Cập nhật lịch';
-        }
-        
-        // Extract details from related_data
-        let details = '';
-        let statusBadge = '';
-        if (notif.related_data) {
-          if (notif.event_type === 'course_request' && notif.related_data.student_id) {
-            // Booking notification - show course, tutor name, date with approval status
-            const tutorName = notif.related_data.tutor_name || 'N/A';
-            const courseName = notif.related_data.course_name || 'N/A';
-            const dateTime = notif.related_data.date_time || 'N/A';
-            
-            details = `<div class="notif-details">
-              <div class="detail-item">
-                <span class="detail-label"><i class="ri-user-line"></i> Giảng viên:</span>
-                <span class="detail-value">${tutorName}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label"><i class="ri-book-open-line"></i> Khóa học:</span>
-                <span class="detail-value">${courseName}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label"><i class="ri-time-line"></i> Thời gian:</span>
-                <span class="detail-value">${dateTime}</span>
-              </div>
-            </div>`;
-            
-            // Check if booking has approval/rejection status
-            const hasApprovedInTitle = notif.title.includes('chấp nhận') || notif.title.includes('được chấp nhận');
-            const hasRejectedInTitle = notif.title.includes('từ chối') || notif.title.includes('bị từ chối');
-            
-            if (hasApprovedInTitle) {
-              statusBadge = `<span class="status-badge status-approved">
-                <i class="ri-check-fill"></i> Đã chấp nhận
-              </span>`;
-            } else if (hasRejectedInTitle) {
-              statusBadge = `<span class="status-badge status-rejected">
-                <i class="ri-close-fill"></i> Đã từ chối
-              </span>`;
-            }
-          } else if ((notif.event_type === 'schedule_create' || notif.event_type === 'schedule_update' || notif.event_type === 'schedule_delete') && notif.related_data.schedule_info) {
-            // Schedule notification
-            details = `<div class="notif-details">
-              <div class="detail-item">
-                <span class="detail-label"><i class="ri-calendar-event-line"></i> Ngày:</span>
-                <span class="detail-value">${notif.related_data.schedule_info.date || 'N/A'}</span>
-              </div>
-              <div class="detail-item">
-                <span class="detail-label"><i class="ri-time-line"></i> Giờ:</span>
-                <span class="detail-value">${notif.related_data.schedule_info.time || 'N/A'}</span>
-              </div>
-            </div>`;
-          }
-        }
-        
-        html += `
-          <div class="notif-item ${!notif.is_read ? 'notif-unread' : 'notif-read'}">
-            <div class="notif-indicator" style="border-left-color: ${accentColor};"></div>
-            
-            <div class="notif-content">
-              <div class="notif-top">
-                <div class="notif-icon" style="color: ${accentColor};">
-                  <i class="${iconClass}"></i>
-                </div>
-                <div class="notif-text-main">
-                  <h4 class="notif-title">${escapeHtml(notif.title)}</h4>
-                  ${eventTypeLabel ? `<span class="notif-type">${eventTypeLabel}</span>` : ''}
-                </div>
-                <div class="notif-time">${formattedTime}</div>
-              </div>
+      notifications.forEach((n) => {
 
-              <p class="notif-message">${escapeHtml(notif.message)}</p>
-              ${details}
-              ${statusBadge}
+  console.log("Render fixed notification:", n);
+let formattedSchedule = "";
 
-              <div class="notif-actions">
-                ${!notif.is_read ? `<button class="btn-action btn-mark-read" onclick="markNotificationAsRead('${notif.id}')"><i class="ri-check-line"></i> Đánh dấu đã đọc</button>` : ''}
-                <button class="btn-action btn-delete" onclick="deleteNotification('${notif.id}')"><i class="ri-delete-bin-line"></i> Xoá</button>
-              </div>
-            </div>
-          </div>
-        `;
+if (
+  (n.event_type === "schedule_create" ||
+   n.event_type === "schedule_update" ||
+   n.event_type === "schedule_delete") &&
+  n.message &&
+  n.message.includes("T")
+) {
+  const parts = n.message.match(/(\d{4}-\d{2}-\d{2}T[^ ]+)/g);
+
+  if (parts && parts.length >= 2) {
+    const start = new Date(parts[0]);
+    const end = new Date(parts[1]);
+
+    const dateStr = start.toLocaleDateString("vi-VN");
+    const fmt = d =>
+      d.toLocaleTimeString("vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
       });
+
+    const startTime = fmt(start);
+    const endTime = fmt(end);
+
+    formattedSchedule = `${dateStr} • ${startTime} – ${endTime}`;
+    n.message = `Lịch học: ${formattedSchedule}`;
+  }
+}
+if (
+  (n.event_type === "course_request_approved" ||
+   n.event_type === "course_request_rejected" ||
+   n.event_type === "course_request") &&
+  n.message &&
+  n.message.includes("T")
+) {
+  const iso = n.message.match(/(\d{4}-\d{2}-\d{2}T[^ ]+)/);
+  if (iso) {
+    const dt = new Date(iso[1]);
+
+    const date = dt.toLocaleDateString("vi-VN");
+    const time = dt.toLocaleTimeString("vi-VN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    });
+    n.message = n.message.replace(
+      iso[1],
+      `${date} lúc ${time}`
+    );
+  }
+}
+
+  // Format created_at
+  const createdDate = new Date(n.created_at);
+  const vn = new Date(createdDate.getTime() + 7 * 3600 * 1000);
+  const timeStr =
+    vn.toLocaleDateString("vi-VN") + " " +
+    vn.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit", hour12: false });
+
+  // Default icon
+  let iconClass = "ri-notification-2-line";
+  let accentColor = "#098cbc";
+  let eventTypeLabel = n.event_type || "";
+
+  if (n.event_type === "course_request") {
+    iconClass = "ri-user-add-line";
+    accentColor = "#098cbc";
+    eventTypeLabel = "Đơn đặt lịch";
+  } else if (n.event_type === "schedule_create") {
+    iconClass = "ri-calendar-line";
+    accentColor = "#2ecc71";
+    eventTypeLabel = "Tạo lịch";
+  }
+
+  // Render basic info only (vì API không có related_data)
+  html += `
+    <div class="notif-item ${n.is_read ? "notif-read" : "notif-unread"}">
+
+      <div class="notif-indicator" style="border-left-color:${accentColor}"></div>
+
+      <div class="notif-content">
+
+        <div class="notif-top">
+          <div class="notif-icon" style="color:${accentColor}">
+            <i class="${iconClass}"></i>
+          </div>
+          <div class="notif-text-main">
+            <h4 class="notif-title">${n.title || "(Không có tiêu đề)"}</h4>
+            <span class="notif-type">${eventTypeLabel}</span>
+          </div>
+          <div class="notif-time">${timeStr}</div>
+        </div>
+
+        <p class="notif-message">${n.message || ""}</p>
+
+        <div class="notif-actions">
+          ${!n.is_read ? `
+            <button class="btn-action btn-mark-read" onclick="markNotificationRead('${n.id}')">
+              <i class="ri-check-line"></i> Đánh dấu đã đọc
+            </button>` : ""}
+
+          <button class="btn-action btn-delete" onclick="deleteNotification('${n.id}')">
+            <i class="ri-delete-bin-line"></i> Xóa
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  `;
+});
+
     }
 
-    html += `</div>`;
-    setContent(html);
-    
-    // Update unread count badge
-    updateUnreadNotificationCount();
+    // ĐÓNG notif-list
+html += `</div>`;
+html = `
+  <div class="student-notifications-page">
+      ${html}
+  </div>
+`;
+setContent(html);
+updateUnreadNotificationCount();
+
 
   } catch (err) {
     console.error(err);
@@ -751,58 +780,30 @@ async function loadNotifications() {
   }
 }
 
-// Mark notification as read
-async function markNotificationAsRead(notificationId) {
-  try {
-    const res = await fetch(
-      `/notification/${encodeURIComponent(notificationId)}/read`,
-      {
-        method: 'PUT',
-        credentials: 'include'
-      }
-    );
 
-    if (!res.ok) {
-      alert('Lỗi cập nhật thông báo');
-      return;
-    }
+async function markNotificationRead(id, userId) {
+  await fetch(`/notification/${id}/read`, {
+    method: "PUT",
+    credentials: "include"
+  });
 
-    loadNotifications();
-  } catch (err) {
-    console.error(err);
-    alert('Lỗi: ' + err.message);
-  }
+  loadNotifications(); // reload UI
 }
 
-// Delete notification
-async function deleteNotification(notificationId) {
-  if (!confirm('Bạn có chắc chắn muốn xóa thông báo này?')) return;
-
-  try {
-    const res = await fetch(
-      `/notification/${encodeURIComponent(notificationId)}`,
-      {
-        method: 'DELETE',
-        credentials: 'include'
-      }
-    );
-
-    if (!res.ok) {
-      alert('Lỗi xóa thông báo');
-      return;
-    }
-
-    loadNotifications();
-  } catch (err) {
-    console.error(err);
-    alert('Lỗi: ' + err.message);
-  }
-}
-
-// Mark all notifications as read
 async function markAllNotificationsAsRead(userId) {
   await fetch(`/notification/user/${userId}/read-all`, {
     method: "PUT",
+    credentials: "include"
+  });
+
+  loadNotifications();
+}
+
+async function deleteNotification(id, userId) {
+  if (!confirm("Bạn có chắc muốn xoá thông báo này?")) return;
+
+  await fetch(`/notification/${id}`, {
+    method: "DELETE",
     credentials: "include"
   });
 

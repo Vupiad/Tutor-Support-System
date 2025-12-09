@@ -998,12 +998,12 @@ async function loadNotifications() {
         
         // Get icon and color based on event type
         let iconClass = 'ri-notification-2-line';
-        let accentColor = '#4e85e5';
+        let accentColor = '#098cbc';
         let eventTypeLabel = '';
         
         if (n.event_type === 'course_request') {
           iconClass = 'ri-user-add-line';
-          accentColor = '#4e85e5';
+          accentColor = '#098cbc';
           eventTypeLabel = 'Đơn đặt lịch';
         } else if (n.event_type === 'schedule_create' || n.event_type === 'schedule_update' || n.event_type === 'schedule_delete') {
           iconClass = 'ri-calendar-line';

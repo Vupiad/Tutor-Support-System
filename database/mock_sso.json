@@ -2,35 +2,179 @@
   "users": [
     {
       "id": "SE2025001",
-      "username": "student1",
-      "password": "studentpass",
-      "email": "student1@hcmut.edu.vn",
-      "created_at": "2025-11-01T10:00:00Z",
-      "last_login": "2025-12-09T14:40:45.834824+00:00"
+      "username": "annguyen",
+      "password": "annguyen2025!",
+      "email": "annguyen@hcmut.edu.vn",
+      "created_at": "2025-09-01T10:00:00Z",
+      "last_login": "2025-12-09T13:44:18.913561+00:00"
     },
     {
       "id": "SE2025002",
-      "username": "student2",
-      "password": "studentpass2",
-      "email": "student2@hcmut.edu.vn",
-      "created_at": "2025-11-05T10:00:00Z",
-      "last_login": "2025-11-26T14:30:00Z"
+      "username": "binhvuiver",
+      "password": "binhvuiver2025!",
+      "email": "binhvuiver@hcmut.edu.vn",
+      "created_at": "2025-09-05T10:00:00Z",
+      "last_login": "2025-12-08T14:20:00Z"
+    },
+    {
+      "id": "CS2025003",
+      "username": "tuanleminh",
+      "password": "tuanleminh2025!",
+      "email": "tuanleminh@hcmut.edu.vn",
+      "created_at": "2025-09-02T10:00:00Z",
+      "last_login": "2025-12-08T11:30:00Z"
+    },
+    {
+      "id": "CS2025004",
+      "username": "anhxcybe",
+      "password": "anhxcybe2025!",
+      "email": "anhxcybe@hcmut.edu.vn",
+      "created_at": "2025-09-03T10:00:00Z",
+      "last_login": "2025-12-07T14:15:00Z"
+    },
+    {
+      "id": "CS2025005",
+      "username": "hoangvoit",
+      "password": "hoangvoit2025!",
+      "email": "hoangvoit@hcmut.edu.vn",
+      "created_at": "2025-09-04T10:00:00Z",
+      "last_login": "2025-12-06T09:45:00Z"
+    },
+    {
+      "id": "CS2025006",
+      "username": "hiendoan",
+      "password": "hiendoan2025!",
+      "email": "hiendoan@hcmut.edu.vn",
+      "created_at": "2025-09-05T10:00:00Z",
+      "last_login": "2025-12-05T16:20:00Z"
+    },
+    {
+      "id": "CS2025007",
+      "username": "hungakafaker",
+      "password": "hungakafaker2025!",
+      "email": "hungakafaker@hcmut.edu.vn",
+      "created_at": "2025-09-06T10:00:00Z",
+      "last_login": "2025-12-04T13:50:00Z"
+    },
+    {
+      "id": "CS2025008",
+      "username": "vannanhh",
+      "password": "vannanhh2025!",
+      "email": "vannanhh@hcmut.edu.vn",
+      "created_at": "2025-09-07T10:00:00Z",
+      "last_login": "2025-12-03T10:30:00Z"
+    },
+    {
+      "id": "CS2025009",
+      "username": "huongngo",
+      "password": "huongngo2025!",
+      "email": "huongngo@hcmut.edu.vn",
+      "created_at": "2025-09-08T10:00:00Z",
+      "last_login": "2025-12-02T15:05:00Z"
+    },
+    {
+      "id": "CS2025010",
+      "username": "soncao",
+      "password": "soncao2025!",
+      "email": "soncao@hcmut.edu.vn",
+      "created_at": "2025-09-09T10:00:00Z",
+      "last_login": "2025-12-01T12:40:00Z"
     },
     {
       "id": "LECTURER_001",
-      "username": "tutor1",
-      "password": "tutorpass",
-      "email": "tutor1@hcmut.edu.vn",
-      "created_at": "2025-10-15T09:00:00Z",
-      "last_login": "2025-12-09T14:31:03.558852+00:00"
+      "username": "bhthang",
+      "password": "bhthangGV2025!",
+      "email": "bhthang@hcmut.edu.vn",
+      "created_at": "2025-08-15T09:00:00Z",
+      "last_login": "2025-12-09T13:53:51.896968+00:00"
     },
     {
       "id": "LECTURER_002",
-      "username": "tutor2",
-      "password": "tutorpass2",
-      "email": "tutor2@hcmut.edu.vn",
-      "created_at": "2025-10-20T09:00:00Z",
-      "last_login": "2025-11-25T15:00:00Z"
+      "username": "qttho",
+      "password": "qtthoGV2025!",
+      "email": "qttho@hcmut.edu.vn",
+      "created_at": "2025-08-20T09:00:00Z",
+      "last_login": "2025-12-07T10:45:00Z"
+    },
+    {
+      "id": "LECTURER_003",
+      "username": "anhtt",
+      "password": "anhttGV2025!",
+      "email": "anhtt@hcmut.edu.vn",
+      "created_at": "2025-08-18T09:00:00Z",
+      "last_login": "2025-12-08T14:30:00Z"
+    },
+    {
+      "id": "LECTURER_004",
+      "username": "congn",
+      "password": "congnGV2025!",
+      "email": "congn@hcmut.edu.vn",
+      "created_at": "2025-08-22T09:00:00Z",
+      "last_login": "2025-12-07T11:00:00Z"
+    },
+    {
+      "id": "LECTURER_005",
+      "username": "thaiminh",
+      "password": "thaiminhGV2025!",
+      "email": "thaiminh@hcmut.edu.vn",
+      "created_at": "2025-08-25T09:00:00Z",
+      "last_login": "2025-12-06T16:20:00Z"
+    },
+    {
+      "id": "LECTURER_006",
+      "username": "thuanle",
+      "password": "thuanleGV2025!",
+      "email": "thuanle@hcmut.edu.vn",
+      "created_at": "2025-08-21T09:00:00Z",
+      "last_login": "2025-12-09T13:47:03.337235+00:00"
+    },
+    {
+      "id": "LECTURER_007",
+      "username": "caotri",
+      "password": "caotriGV2025!",
+      "email": "caotri@hcmut.edu.vn",
+      "created_at": "2025-08-23T09:00:00Z",
+      "last_login": "2025-12-09T10:50:03.217975+00:00"
+    },
+    {
+      "id": "LECTURER_008",
+      "username": "dangcse",
+      "password": "dangcseGV2025!",
+      "email": "dangcse11hcmut@hcmut.edu.vn",
+      "created_at": "2025-08-10T09:00:00Z",
+      "last_login": "2025-12-08T10:00:00Z"
+    },
+    {
+      "id": "LECTURER_009",
+      "username": "laiduy",
+      "password": "laiduyGV2025!",
+      "email": "nguyenleduy.lai@hcmut.edu.vn",
+      "created_at": "2025-08-12T09:00:00Z",
+      "last_login": "2025-12-09T12:01:09.389988+00:00"
+    },
+    {
+      "id": "LECTURER_010",
+      "username": "pduy",
+      "password": "pduyGV2025!",
+      "email": "pdnguyen@hcmut.edu.vn",
+      "created_at": "2025-08-14T09:00:00Z",
+      "last_login": "2025-12-08T10:45:00Z"
+    },
+    {
+      "id": "LECTURER_011",
+      "username": "cadat",
+      "password": "cadatGV2025!",
+      "email": "dat@hcmut.edu.vn",
+      "created_at": "2025-08-16T09:00:00Z",
+      "last_login": "2025-12-07T14:20:00Z"
+    },
+    {
+      "id": "LECTURER_012",
+      "username": "xuangiang",
+      "password": "xuangiangGV2025!",
+      "email": "xuangiang@hcmut.edu.vn",
+      "created_at": "2025-08-19T09:00:00Z",
+      "last_login": "2025-12-06T11:15:00Z"
     }
   ]
 }

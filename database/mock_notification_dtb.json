@@ -1,40 +1,19 @@
 {
   "notifications": [
     {
-      "id": "notif_16787329",
-      "recipient_id": "SE2025001",
-      "recipient_type": "student",
-      "sender_id": "LECTURER_001",
-      "title": "Schedule created",
-      "message": "Teacher has just create schedule: 2025-11-04T14:47:00.000Z - 2025-11-04T16:47:00.000Z",
-      "type": "event",
-      "event_type": "schedule_create",
-      "related_data": {
-        "tutor_id": "LECTURER_001",
-        "schedule_id": 205,
-        "schedule_info": {
-          "time": "2025-11-04T14:47:00.000Z - 2025-11-04T16:47:00.000Z",
-          "date": "2025-11-04"
-        }
-      },
-      "is_read": true,
-      "created_at": "2025-11-30T14:47:54.930283",
-      "updated_at": "2025-12-08T15:13:28.605223"
-    },
-    {
       "id": "notif_d0d8d5d5",
       "recipient_id": "SE2025001",
       "recipient_type": "student",
       "sender_id": "SYSTEM",
-      "title": "Bu\u1ed5i h\u1ecdc \u0111\u01b0\u1ee3c ch\u1ea5p nh\u1eadn \u2705",
-      "message": "Gia s\u01b0 Ph\u1ea1m Th\u1ecb T\u00fa \u0111\u00e3 ch\u1ea5p nh\u1eadn bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-11-06T12:39:00Z",
+      "title": "Buổi học được chấp nhận ",
+      "message": "Gia sư Bùi Hoài Thắng đã chấp nhận buổi học [CO2017] - Hệ điều hành vào 2025-12-10T09:30:00Z",
       "type": "event",
       "event_type": "course_request",
       "related_data": {
-        "tutor_name": "Ph\u1ea1m Th\u1ecb T\u00fa",
-        "course_name": "CSC101",
-        "date_time": "2025-11-06T12:39:00Z",
-        "booking_id": "BK023",
+        "tutor_name": "Bùi Hoài Thắng",
+        "course_name": "[CO2017] - Hệ điều hành",
+        "date_time": "2025-12-10T09:30:00Z",
+        "booking_id": "BK003",
         "status": "approved"
       },
       "is_read": true,
@@ -46,15 +25,15 @@
       "recipient_id": "SE2025001",
       "recipient_type": "student",
       "sender_id": "SYSTEM",
-      "title": "Bu\u1ed5i h\u1ecdc b\u1ecb t\u1eeb ch\u1ed1i \u274c",
-      "message": "Gia s\u01b0 Ph\u1ea1m Th\u1ecb T\u00fa \u0111\u00e3 t\u1eeb ch\u1ed1i bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-11-06T12:39:00Z",
+      "title": "Buổi học bị từ chối ",
+      "message": "Gia sư Bùi Hoài Thắng đã từ chối buổi học [CO2017] - Hệ điều hành vào 2025-11-06T12:39:00Z",
       "type": "event",
       "event_type": "course_request",
       "related_data": {
-        "tutor_name": "Ph\u1ea1m Th\u1ecb T\u00fa",
-        "course_name": "CSC101",
-        "date_time": "2025-11-06T12:39:00Z",
-        "booking_id": "BK026",
+        "tutor_name": "Bùi Hoài Thắng",
+        "course_name": "[CO2017] - Hệ điều hành",
+        "date_time": "2025-11-28T10:00:00Z",
+        "booking_id": "BK004",
         "status": "rejected"
       },
       "is_read": true,
@@ -62,193 +41,44 @@
       "updated_at": "2025-12-08T15:13:28.605254"
     },
     {
-      "id": "notif_abe00d50",
-      "recipient_id": "SE2025001",
-      "recipient_type": "student",
-      "sender_id": "SYSTEM",
-      "title": "Bu\u1ed5i h\u1ecdc b\u1ecb t\u1eeb ch\u1ed1i \u274c",
-      "message": "Gia s\u01b0 Ph\u1ea1m Th\u1ecb T\u00fa \u0111\u00e3 t\u1eeb ch\u1ed1i bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-11-06T12:39:00Z",
-      "type": "event",
-      "event_type": "course_request",
-      "related_data": {
-        "tutor_name": "Ph\u1ea1m Th\u1ecb T\u00fa",
-        "course_name": "CSC101",
-        "date_time": "2025-11-06T12:39:00Z",
-        "booking_id": "BK026",
-        "status": "rejected"
-      },
-      "is_read": true,
-      "created_at": "2025-12-07T04:19:42.641730",
-      "updated_at": "2025-12-08T15:13:28.605258"
-    },
-    {
-      "id": "notif_257cb8a7",
-      "recipient_id": "SE2025001",
-      "recipient_type": "student",
-      "sender_id": "SYSTEM",
-      "title": "Bu\u1ed5i h\u1ecdc \u0111\u01b0\u1ee3c ch\u1ea5p nh\u1eadn \u2705",
-      "message": "Gia s\u01b0 Ph\u1ea1m Th\u1ecb T\u00fa \u0111\u00e3 ch\u1ea5p nh\u1eadn bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-11-04T14:47:00Z",
-      "type": "event",
-      "event_type": "course_request",
-      "related_data": {
-        "tutor_name": "Ph\u1ea1m Th\u1ecb T\u00fa",
-        "course_name": "CSC101",
-        "date_time": "2025-11-04T14:47:00Z",
-        "booking_id": "BK028",
-        "status": "approved"
-      },
-      "is_read": true,
-      "created_at": "2025-12-07T04:30:40.436590",
-      "updated_at": "2025-12-08T15:13:28.605263"
-    },
-    {
-      "id": "notif_731622c0",
-      "recipient_id": "SE2025001",
-      "recipient_type": "student",
-      "sender_id": "LECTURER_001",
-      "title": "Schedule created",
-      "message": "Teacher has just create schedule: 2025-12-10T06:51:00.000Z - 2025-12-18T07:51:00.000Z",
-      "type": "event",
-      "event_type": "schedule_create",
-      "related_data": {
-        "tutor_id": "LECTURER_001",
-        "schedule_id": 206,
-        "schedule_info": {
-          "time": "2025-12-10T06:51:00.000Z - 2025-12-18T07:51:00.000Z",
-          "date": "2025-12-10"
-        }
-      },
-      "is_read": true,
-      "created_at": "2025-12-08T06:52:06.783940",
-      "updated_at": "2025-12-08T15:13:28.605267"
-    },
-    {
-      "id": "notif_dc098812",
-      "recipient_id": "SE2025001",
-      "recipient_type": "student",
-      "sender_id": "SYSTEM",
-      "title": "Bu\u1ed5i h\u1ecdc \u0111\u01b0\u1ee3c ch\u1ea5p nh\u1eadn \u2705",
-      "message": "Gia s\u01b0 Ph\u1ea1m Th\u1ecb T\u00fa \u0111\u00e3 ch\u1ea5p nh\u1eadn bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-11-04T14:47:00Z",
-      "type": "event",
-      "event_type": "course_request",
-      "related_data": {
-        "tutor_name": "Ph\u1ea1m Th\u1ecb T\u00fa",
-        "course_name": "CSC101",
-        "date_time": "2025-11-04T14:47:00Z",
-        "booking_id": "BK028",
-        "status": "approved"
-      },
-      "is_read": true,
-      "created_at": "2025-12-08T14:39:04.886859",
-      "updated_at": "2025-12-08T15:13:28.605272"
-    },
-    {
-      "id": "notif_0c9f514d",
-      "recipient_id": "SE2025001",
-      "recipient_type": "student",
-      "sender_id": "SYSTEM",
-      "title": "Bu\u1ed5i h\u1ecdc b\u1ecb t\u1eeb ch\u1ed1i \u274c",
-      "message": "Gia s\u01b0 Ph\u1ea1m Th\u1ecb T\u00fa \u0111\u00e3 t\u1eeb ch\u1ed1i bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-11-04T14:47:00Z",
-      "type": "event",
-      "event_type": "course_request",
-      "related_data": {
-        "tutor_name": "Ph\u1ea1m Th\u1ecb T\u00fa",
-        "course_name": "CSC101",
-        "date_time": "2025-11-04T14:47:00Z",
-        "booking_id": "BK028",
-        "status": "rejected"
-      },
-      "is_read": true,
-      "created_at": "2025-12-08T14:55:35.899295",
-      "updated_at": "2025-12-08T15:13:28.605276"
-    },
-    {
-      "id": "notif_e5efc738",
-      "recipient_id": "LECTURER_001",
+      "id": "notif_141d1edf",
+      "recipient_id": "LECTURER_006",
       "recipient_type": "tutor",
-      "sender_id": "SE2025001",
-      "title": "Bu\u1ed5i h\u1ecdc m\u1edbi \u0111\u01b0\u1ee3c \u0111\u1eb7t",
-      "message": "Sinh vi\u00ean Nguy\u1ec5n V\u0103n An \u0111\u00e3 \u0111\u1eb7t bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-12-10T06:51:00Z",
+      "sender_id": "CS2025010",
+      "title": "Buổi học mới được đặt",
+      "message": "Sinh viên Cao Thái Sơn đã đặt buổi học [CO3031] - Phân tích và Thiết kế Giải Thuật vào 2025-12-13T08:00:00.000Z",
       "type": "event",
       "event_type": "course_request",
       "related_data": {
-        "student_id": "SE2025001",
-        "booking_id": "BK029",
-        "course_name": "CSC101",
-        "date_time": "2025-12-10T06:51:00Z",
-        "slot_end": "2025-12-18T07:51:00Z"
+        "student_id": "CS2025010",
+        "booking_id": "BK007",
+        "course_name": "[CO3031] - Phân tích và Thiết kế Giải Thuật",
+        "date_time": "2025-12-13T08:00:00.000Z",
+        "slot_end": "2025-12-13T10:00:00Z"
       },
       "is_read": true,
-      "created_at": "2025-12-08T15:09:14.426797",
-      "updated_at": "2025-12-09T15:16:41.772253"
+      "created_at": "2025-12-09T11:24:48.940935",
+      "updated_at": "2025-12-09T12:06:00.613129"
     },
     {
-      "id": "notif_9a4e8d4c",
-      "recipient_id": "SE2025001",
-      "recipient_type": "student",
-      "sender_id": "SYSTEM",
-      "title": "Bu\u1ed5i h\u1ecdc \u0111\u01b0\u1ee3c ch\u1ea5p nh\u1eadn \u2705",
-      "message": "Gia s\u01b0 Ph\u1ea1m Th\u1ecb T\u00fa \u0111\u00e3 ch\u1ea5p nh\u1eadn bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-12-10T06:51:00Z",
+      "id": "notif_49a9105c",
+      "recipient_id": "LECTURER_003",
+      "recipient_type": "tutor",
+      "sender_id": "CS2025007",
+      "title": "Buổi học mới được đặt",
+      "message": "Sinh viên Trịnh Quốc Hùng đã đặt buổi học [CO3049] - Lập trình Web vào 2025-12-10T10:00:00Z",
       "type": "event",
       "event_type": "course_request",
       "related_data": {
-        "tutor_name": "Ph\u1ea1m Th\u1ecb T\u00fa",
-        "course_name": "CSC101",
-        "date_time": "2025-12-10T06:51:00Z",
-        "booking_id": "BK029",
-        "status": "approved"
+        "student_id": "CS2025007",
+        "booking_id": "BK006",
+        "course_name": "[CO3049] - Lập trình Web",
+        "date_time": "2025-12-10T10:00:00Z",
+        "slot_end": "2025-12-10T12:00:00Z"
       },
       "is_read": false,
-      "created_at": "2025-12-09T14:31:25.229251",
-      "updated_at": "2025-12-09T14:31:25.229257"
-    },
-    {
-      "id": "notif_90a4c4eb",
-      "recipient_id": "SE2025001",
-      "recipient_type": "student",
-      "sender_id": "SYSTEM",
-      "title": "Bu\u1ed5i h\u1ecdc \u0111\u01b0\u1ee3c ch\u1ea5p nh\u1eadn \u2705",
-      "message": "Gia s\u01b0 Ph\u1ea1m Th\u1ecb T\u00fa \u0111\u00e3 ch\u1ea5p nh\u1eadn bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-12-10T06:51:00Z",
-      "type": "event",
-      "event_type": "course_request",
-      "related_data": {
-        "tutor_name": "Ph\u1ea1m Th\u1ecb T\u00fa",
-        "course_name": "CSC101",
-        "date_time": "2025-12-10T06:51:00Z",
-        "booking_id": "BK029",
-        "status": "approved"
-      },
-      "is_read": false,
-      "created_at": "2025-12-09T14:31:30.627426",
-      "updated_at": "2025-12-09T14:31:30.627430"
-    },
-    {
-      "id": "notif_a95acd21",
-      "recipient_id": "SE2025001",
-      "recipient_type": "student",
-      "sender_id": "SYSTEM",
-      "title": "Bu\u1ed5i h\u1ecdc \u0111\u01b0\u1ee3c ch\u1ea5p nh\u1eadn \u2705",
-      "message": "Gia s\u01b0 Ph\u1ea1m Th\u1ecb T\u00fa \u0111\u00e3 ch\u1ea5p nh\u1eadn bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-12-10T06:51:00Z",
-      "type": "event",
-      "event_type": "course_request",
-      "related_data": {
-        "tutor_name": "Ph\u1ea1m Th\u1ecb T\u00fa",
-        "course_name": "CSC101",
-        "date_time": "2025-12-10T06:51:00Z",
-        "booking_id": "BK029",
-        "status": "approved"
-      },
-      "is_read": false,
-      "created_at": "2025-12-09T15:16:41.775715",
-      "updated_at": "2025-12-09T15:16:41.775719"
-    }
-  ],
-  "enrollments": [
-    {
-      "id": 1,
-      "student_id": "SE2025001",
-      "tutor_id": "LECTURER_001",
-      "course_id": "course_001"
+      "created_at": "2025-12-09T09:05:15.123456+00:00",
+      "updated_at": "2025-12-09T09:05:15.123456+00:00"
     }
   ]
 }

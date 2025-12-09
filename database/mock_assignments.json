@@ -5,7 +5,7 @@
       "tutor_id": "LECTURER_001",
       "student_id": "SE2025001",
       "student_name": "Nguyễn Văn An",
-      "course_name": "CSC101",
+      "course_name": "[CO2017] - Hệ điều hành",
       "class_name": "SE-K2024-1",
       "start_date": "2025-11-20",
       "rating": 4.5
@@ -15,7 +15,7 @@
       "tutor_id": "LECTURER_001",
       "student_id": "SE2025002",
       "student_name": "Trần Thị Bình",
-      "course_name": "CSC102",
+      "course_name": "[CO2039] - Lập trình nâng cao",
       "class_name": "SE-K2024-1",
       "start_date": "2025-11-22",
       "rating": 4.8
@@ -25,7 +25,7 @@
       "tutor_id": "LECTURER_001",
       "student_id": "SE2025001",
       "student_name": "Nguyễn Văn An",
-      "course_name": "CSC201",
+      "course_name": "[CO3031] - Phân tích và Thiết kế Giải Thuật",
       "class_name": "SE-K2024-2",
       "start_date": "2025-11-18",
       "rating": 4.3
@@ -35,7 +35,7 @@
       "tutor_id": "LECTURER_002",
       "student_id": "SE2025002",
       "student_name": "Trần Thị Bình",
-      "course_name": "MATH101",
+      "course_name": "[CO3029] - Khai phá Dữ liệu",
       "class_name": "SE-K2024-1",
       "start_date": "2025-11-20",
       "rating": 4.6
@@ -45,10 +45,140 @@
       "tutor_id": "LECTURER_002",
       "student_id": "SE2025001",
       "student_name": "Nguyễn Văn An",
-      "course_name": "MATH102",
+      "course_name": "[CO3031] - Phân tích và Thiết kế Giải Thuật",
       "class_name": "SE-K2024-1",
       "start_date": "2025-11-25",
       "rating": 4.2
+    },
+    {
+      "assignment_id": "ASN006",
+      "tutor_id": "LECTURER_003",
+      "student_id": "CS2025005",
+      "student_name": "Võ Huy Hoàng",
+      "course_name": "[CO3021] - Hệ Quản trị Cơ sở Dữ Liệu",
+      "class_name": "CS-K2024-2",
+      "start_date": "2025-11-15",
+      "rating": 4.7
+    },
+    {
+      "assignment_id": "ASN007",
+      "tutor_id": "LECTURER_003",
+      "student_id": "CS2025009",
+      "student_name": "Ngô Thị Hương",
+      "course_name": "[CO3049] - Lập trình Web",
+      "class_name": "CS-K2024-1",
+      "start_date": "2025-11-10",
+      "rating": 4.4
+    },
+    {
+      "assignment_id": "ASN008",
+      "tutor_id": "LECTURER_005",
+      "student_id": "CS2025008",
+      "student_name": "Hồ Thị Vân Anh",
+      "course_name": "[CO3093] - Mạng máy tính",
+      "class_name": "CS-K2024-2",
+      "start_date": "2025-11-12",
+      "rating": 4.3
+    },
+    {
+      "assignment_id": "ASN009",
+      "tutor_id": "LECTURER_007",
+      "student_id": "CS2025003",
+      "student_name": "Lê Minh Tuấn",
+      "course_name": "[CO3049] - Lập trình Web",
+      "class_name": "CS-K2024-2",
+      "start_date": "2025-11-08",
+      "rating": 4.8
+    },
+    {
+      "assignment_id": "ASN010",
+      "tutor_id": "LECTURER_006",
+      "student_id": "CS2025006",
+      "student_name": "Đoàn Thị Hiền",
+      "course_name": "[CO3021] - Hệ Quản trị Cơ sở Dữ Liệu",
+      "class_name": "CS-K2024-1",
+      "start_date": "2025-11-14",
+      "rating": 4.5
+    },
+    {
+      "assignment_id": "ASN011",
+      "tutor_id": "LECTURER_001",
+      "student_id": "CS2025004",
+      "student_name": "Phạm Hoàng Anh",
+      "course_name": "[CO3005] - Nguyên lý Ngôn ngữ Lập trình",
+      "class_name": "CS-K2024-1",
+      "start_date": "2025-11-16",
+      "rating": 4.7
+    },
+    {
+      "assignment_id": "ASN012",
+      "tutor_id": "LECTURER_002",
+      "student_id": "CS2025007",
+      "student_name": "Trịnh Quốc Hùng",
+      "course_name": "[CO3029] - Khai phá Dữ liệu",
+      "class_name": "CS-K2024-3",
+      "start_date": "2025-11-19",
+      "rating": 4.6
+    },
+    {
+      "assignment_id": "ASN013",
+      "tutor_id": "LECTURER_004",
+      "student_id": "CS2025010",
+      "student_name": "Cao Thái Sơn",
+      "course_name": "[CO3065] - Công nghệ Phần mềm Nâng cao",
+      "class_name": "CS-K2024-3",
+      "start_date": "2025-11-21",
+      "rating": 4.5
+    },
+    {
+      "assignment_id": "ASN014",
+      "tutor_id": "LECTURER_008",
+      "student_id": "CS2025008",
+      "student_name": "Hồ Thị Vân Anh",
+      "course_name": "[CO3093] - Mạng máy tính",
+      "class_name": "CS-K2024-2",
+      "start_date": "2025-11-23",
+      "rating": 4.4
+    },
+    {
+      "assignment_id": "ASN015",
+      "tutor_id": "LECTURER_009",
+      "student_id": "CS2025010",
+      "student_name": "Cao Thái Sơn",
+      "course_name": "[CO3093] - Mạng máy tính",
+      "class_name": "CS-K2024-3",
+      "start_date": "2025-11-25",
+      "rating": 4.5
+    },
+    {
+      "assignment_id": "ASN016",
+      "tutor_id": "LECTURER_010",
+      "student_id": "CS2025005",
+      "student_name": "Võ Huy Hoàng",
+      "course_name": "[CO3093] - Mạng máy tính",
+      "class_name": "CS-K2024-2",
+      "start_date": "2025-11-17",
+      "rating": 4.3
+    },
+    {
+      "assignment_id": "ASN017",
+      "tutor_id": "LECTURER_011",
+      "student_id": "CS2025007",
+      "student_name": "Trịnh Quốc Hùng",
+      "course_name": "[CO3093] - Mạng máy tính",
+      "class_name": "CS-K2024-3",
+      "start_date": "2025-11-19",
+      "rating": 4.6
+    },
+    {
+      "assignment_id": "ASN018",
+      "tutor_id": "LECTURER_012",
+      "student_id": "CS2025003",
+      "student_name": "Lê Minh Tuấn",
+      "course_name": "[CO3093] - Mạng máy tính",
+      "class_name": "CS-K2024-2",
+      "start_date": "2025-11-21",
+      "rating": 4.4
     }
   ]
 }

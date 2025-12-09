@@ -1,20 +1,26 @@
 {
   "mappings": [
-    {
-      "sso_id": "SE2025001",
-      "role": "student"
-    },
-    {
-      "sso_id": "SE2025002",
-      "role": "student"
-    },
-    {
-      "sso_id": "LECTURER_001",
-      "role": "tutor"
-    },
-    {
-      "sso_id": "LECTURER_002",
-      "role": "tutor"
-    }
+    {"sso_id": "SE2025001", "role": "student"},
+    {"sso_id": "SE2025002", "role": "student"},
+    {"sso_id": "CS2025003", "role": "student"},
+    {"sso_id": "CS2025004", "role": "student"},
+    {"sso_id": "CS2025005", "role": "student"},
+    {"sso_id": "CS2025006", "role": "student"},
+    {"sso_id": "CS2025007", "role": "student"},
+    {"sso_id": "CS2025008", "role": "student"},
+    {"sso_id": "CS2025009", "role": "student"},
+    {"sso_id": "CS2025010", "role": "student"},
+    {"sso_id": "LECTURER_001", "role": "tutor"},
+    {"sso_id": "LECTURER_002", "role": "tutor"},
+    {"sso_id": "LECTURER_003", "role": "tutor"},
+    {"sso_id": "LECTURER_004", "role": "tutor"},
+    {"sso_id": "LECTURER_005", "role": "tutor"},
+    {"sso_id": "LECTURER_006", "role": "tutor"},
+    {"sso_id": "LECTURER_007", "role": "tutor"},
+    {"sso_id": "LECTURER_008", "role": "tutor"},
+    {"sso_id": "LECTURER_009", "role": "tutor"},
+    {"sso_id": "LECTURER_010", "role": "tutor"},
+    {"sso_id": "LECTURER_011", "role": "tutor"},
+    {"sso_id": "LECTURER_012", "role": "tutor"}
   ]
 }

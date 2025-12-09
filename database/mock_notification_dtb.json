@@ -178,9 +178,69 @@
         "date_time": "2025-12-10T06:51:00Z",
         "slot_end": "2025-12-18T07:51:00Z"
       },
-      "is_read": false,
+      "is_read": true,
       "created_at": "2025-12-08T15:09:14.426797",
-      "updated_at": "2025-12-08T15:09:14.426803"
+      "updated_at": "2025-12-09T15:16:41.772253"
+    },
+    {
+      "id": "notif_9a4e8d4c",
+      "recipient_id": "SE2025001",
+      "recipient_type": "student",
+      "sender_id": "SYSTEM",
+      "title": "Bu\u1ed5i h\u1ecdc \u0111\u01b0\u1ee3c ch\u1ea5p nh\u1eadn \u2705",
+      "message": "Gia s\u01b0 Ph\u1ea1m Th\u1ecb T\u00fa \u0111\u00e3 ch\u1ea5p nh\u1eadn bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-12-10T06:51:00Z",
+      "type": "event",
+      "event_type": "course_request",
+      "related_data": {
+        "tutor_name": "Ph\u1ea1m Th\u1ecb T\u00fa",
+        "course_name": "CSC101",
+        "date_time": "2025-12-10T06:51:00Z",
+        "booking_id": "BK029",
+        "status": "approved"
+      },
+      "is_read": false,
+      "created_at": "2025-12-09T14:31:25.229251",
+      "updated_at": "2025-12-09T14:31:25.229257"
+    },
+    {
+      "id": "notif_90a4c4eb",
+      "recipient_id": "SE2025001",
+      "recipient_type": "student",
+      "sender_id": "SYSTEM",
+      "title": "Bu\u1ed5i h\u1ecdc \u0111\u01b0\u1ee3c ch\u1ea5p nh\u1eadn \u2705",
+      "message": "Gia s\u01b0 Ph\u1ea1m Th\u1ecb T\u00fa \u0111\u00e3 ch\u1ea5p nh\u1eadn bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-12-10T06:51:00Z",
+      "type": "event",
+      "event_type": "course_request",
+      "related_data": {
+        "tutor_name": "Ph\u1ea1m Th\u1ecb T\u00fa",
+        "course_name": "CSC101",
+        "date_time": "2025-12-10T06:51:00Z",
+        "booking_id": "BK029",
+        "status": "approved"
+      },
+      "is_read": false,
+      "created_at": "2025-12-09T14:31:30.627426",
+      "updated_at": "2025-12-09T14:31:30.627430"
+    },
+    {
+      "id": "notif_a95acd21",
+      "recipient_id": "SE2025001",
+      "recipient_type": "student",
+      "sender_id": "SYSTEM",
+      "title": "Bu\u1ed5i h\u1ecdc \u0111\u01b0\u1ee3c ch\u1ea5p nh\u1eadn \u2705",
+      "message": "Gia s\u01b0 Ph\u1ea1m Th\u1ecb T\u00fa \u0111\u00e3 ch\u1ea5p nh\u1eadn bu\u1ed5i h\u1ecdc CSC101 v\u00e0o 2025-12-10T06:51:00Z",
+      "type": "event",
+      "event_type": "course_request",
+      "related_data": {
+        "tutor_name": "Ph\u1ea1m Th\u1ecb T\u00fa",
+        "course_name": "CSC101",
+        "date_time": "2025-12-10T06:51:00Z",
+        "booking_id": "BK029",
+        "status": "approved"
+      },
+      "is_read": false,
+      "created_at": "2025-12-09T15:16:41.775715",
+      "updated_at": "2025-12-09T15:16:41.775719"
     }
   ],
   "enrollments": [

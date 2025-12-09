@@ -1010,6 +1010,61 @@ async function loadNotifications() {
           accentColor = '#2ecc71';
           eventTypeLabel = 'Cập nhật lịch';
         }
+
+        // Chuyển đổi định dạng ISO sang Việt Nam cho schedule notifications
+        if (
+          (n.event_type === "schedule_create" ||
+           n.event_type === "schedule_update" ||
+           n.event_type === "schedule_delete") &&
+          n.message &&
+          n.message.includes("T")
+        ) {
+          const parts = n.message.match(/(\d{4}-\d{2}-\d{2}T[^ ]+)/g);
+
+          if (parts && parts.length >= 2) {
+            const start = new Date(parts[0]);
+            const end = new Date(parts[1]);
+
+            const dateStr_sch = start.toLocaleDateString("vi-VN");
+            const fmt = d =>
+              d.toLocaleTimeString("vi-VN", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false
+              });
+
+            const startTime = fmt(start);
+            const endTime = fmt(end);
+
+            const formattedSchedule = `${dateStr_sch} • ${startTime} – ${endTime}`;
+            n.message = `Lịch học: ${formattedSchedule}`;
+          }
+        }
+
+        // Chuyển đổi định dạng ISO sang Việt Nam cho course request notifications
+        if (
+          (n.event_type === "course_request_approved" ||
+           n.event_type === "course_request_rejected" ||
+           n.event_type === "course_request") &&
+          n.message &&
+          n.message.includes("T")
+        ) {
+          const iso = n.message.match(/(\d{4}-\d{2}-\d{2}T[^ ]+)/);
+          if (iso) {
+            const dt = new Date(iso[1]);
+
+            const date = dt.toLocaleDateString("vi-VN");
+            const time = dt.toLocaleTimeString("vi-VN", {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: false
+            });
+            n.message = n.message.replace(
+              iso[1],
+              `${date} lúc ${time}`
+            );
+          }
+        }
         
         // Extract details from related_data
         let details = '';
@@ -1018,6 +1073,22 @@ async function loadNotifications() {
         if (n.related_data) {
           if (n.event_type === 'course_request' && n.related_data.student_id) {
             // Booking notification - show course and date
+            let formattedDateTime = n.related_data.date_time || 'N/A';
+            
+            // Chuyển đổi định dạng ISO sang Việt Nam nếu là ISO string
+            if (formattedDateTime && formattedDateTime.includes('T')) {
+              const dtObj = new Date(formattedDateTime);
+              if (!isNaN(dtObj.getTime())) {
+                const date = dtObj.toLocaleDateString("vi-VN");
+                const time = dtObj.toLocaleTimeString("vi-VN", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false
+                });
+                formattedDateTime = `${date} lúc ${time}`;
+              }
+            }
+            
             details = `<div class="notif-details">
               <div class="detail-item">
                 <span class="detail-label"><i class="ri-book-open-line"></i> Khóa học:</span>
@@ -1025,7 +1096,7 @@ async function loadNotifications() {
               </div>
               <div class="detail-item">
                 <span class="detail-label"><i class="ri-time-line"></i> Thời gian:</span>
-                <span class="detail-value">${n.related_data.date_time || 'N/A'}</span>
+                <span class="detail-value">${formattedDateTime}</span>
               </div>
             </div>`;
             

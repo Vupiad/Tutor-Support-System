@@ -68,6 +68,33 @@
       "status": "scheduled",
       "student_count": 1,
       "duration_minutes": 60
+    },
+    {
+      "session_id": "TS008",
+      "tutor_id": "LECTURER_001",
+      "course_name": "CSC101",
+      "date_time": "2025-12-10T06:51:00Z",
+      "status": "scheduled",
+      "student_count": 1,
+      "duration_minutes": 60
+    },
+    {
+      "session_id": "TS009",
+      "tutor_id": "LECTURER_001",
+      "course_name": "CSC101",
+      "date_time": "2025-12-10T06:51:00Z",
+      "status": "scheduled",
+      "student_count": 1,
+      "duration_minutes": 60
+    },
+    {
+      "session_id": "TS010",
+      "tutor_id": "LECTURER_001",
+      "course_name": "CSC101",
+      "date_time": "2025-12-10T06:51:00Z",
+      "status": "scheduled",
+      "student_count": 1,
+      "duration_minutes": 60
     }
   ]
 }

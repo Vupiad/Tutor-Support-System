@@ -344,11 +344,31 @@ async function viewTutorDetail(tutorId) {
       <h2>${escapeHtml(tutor.tutor_name)}</h2>
       <div class="tutor-detail-card">
         <div class="detail-info">
-          <p><b><i class="ri-mail-line"></i> Email:</b> ${escapeHtml(tutor.contact_email)}</p>
-          <p><b><i class="ri-medal-line"></i> Chuyên Ngành:</b> ${escapeHtml(tutor.specialization)}</p>
-          <p><b><i class="ri-star-line"></i> Đánh Giá:</b> ⭐ ${tutor.rating || 0}</p>
-          <p><b><i class="ri-bank-line"></i> Khoa:</b> ${escapeHtml(tutor.department || 'N/A')}</p>
-          <p><b><i class="ri-book-line"></i> Môn Dạy:</b> ${tutor.teaching_courses.join(', ') || 'N/A'}</p>
+          <div class="detail-row">
+            <span class="detail-icon"><i class="ri-mail-line"></i></span>
+            <span class="detail-label">Email</span>
+            <span class="detail-value">${escapeHtml(tutor.contact_email)}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon"><i class="ri-medal-line"></i></span>
+            <span class="detail-label">Chuyên Ngành</span>
+            <span class="detail-value">${escapeHtml(tutor.specialization)}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon"><i class="ri-star-line"></i></span>
+            <span class="detail-label">Đánh Giá</span>
+            <span class="detail-value">⭐ ${tutor.rating || 0}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon"><i class="ri-bank-line"></i></span>
+            <span class="detail-label">Khoa</span>
+            <span class="detail-value">${escapeHtml(tutor.department || 'N/A')}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-icon"><i class="ri-book-line"></i></span>
+            <span class="detail-label">Môn Dạy</span>
+            <span class="detail-value">${tutor.teaching_courses.join(', ') || 'N/A'}</span>
+          </div>
         </div>
       </div>
       ${slotsHtml}

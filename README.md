@@ -1,6 +1,6 @@
-# TutorSupport System
+# Tutor Support System
 
-A comprehensive tutor-student matching and session management platform built with Flask, designed for HCMUT (Ho Chi Minh University of Technology).
+A comprehensive tutor-student matching and session management platform built with Flask and semantic AI, designed for HCMUT (Ho Chi Minh University of Technology).
 
 ## 📋 Table of Contents
 
@@ -65,46 +65,81 @@ A comprehensive tutor-student matching and session management platform built wit
 ## 📁 Project Structure
 
 ```
-TutorSupportSystem/
+Tutor-Support-System/
 │
 ├── app/                              # Main Flask application
 │   ├── static/                       # Static assets (CSS, JS, images)
 │   │   ├── css/
-│   │   │   └── style.css            # Main stylesheet
+│   │   │   ├── style.css            # Main stylesheet
+│   │   │   ├── student.css          # Student dashboard styles
+│   │   │   └── tutor.css            # Tutor dashboard styles
+│   │   ├── images/
+│   │   │   └── generate_placeholder.py
 │   │   └── js/
-│   │       └── auth.js              # Auth interactions
+│   │       ├── auth.js              # Authentication interactions
+│   │       ├── student.js           # Student dashboard logic
+│   │       └── tutor.js             # Tutor dashboard logic
 │   │
 │   ├── templates/                    # HTML templates
-│   │   ├── base.html                # Base layout (extends)
+│   │   ├── base.html                # Base layout
 │   │   ├── auth_login.html          # Login page
-│   │   └── login_success.html       # Success page
+│   │   ├── login_success.html       # Success page
+│   │   ├── student_dashboard.html   # Student dashboard
+│   │   └── tutor_dashboard.html     # Tutor dashboard
 │   │
 │   ├── modules/                      # Feature modules
 │   │   ├── auth/                    # Authentication
-│   │   │   ├── routes.py            # Login/logout endpoints
-│   │   │   ├── connectors.py        # SSO, datacore, session stores
+│   │   │   ├── routes.py            # Login/logout/profile endpoints
+│   │   │   ├── connectors.py        # SSO, datacore, role map
+│   │   │   ├── models.py            # Data models
+│   │   │   ├── services.py          # Business logic
 │   │   │   └── __init__.py
-│   │   ├── session/                 # Session management (future)
-│   │   └── notification/            # Notifications (future)
+│   │   │
+│   │   ├── student/                 # Student module
+│   │   │   ├── routes.py            # Student endpoints
+│   │   │   ├── tutorSearchService.py# Semantic tutor search
+│   │   │   └── __init__.py
+│   │   │
+│   │   ├── tutor/                   # Tutor module
+│   │   │   ├── routes.py            # Tutor endpoints
+│   │   │   └── __init__.py
+│   │   │
+│   │   ├── session/                 # Session management
+│   │   │   └── routes.py
+│   │   │
+│   │   ├── schedule/                # Schedule management
+│   │   │   ├── scheduleConnectors.py
+│   │   │   └── scheduleRoutes.py
+│   │   │
+│   │   ├── notification/            # Notifications
+│   │   │   ├── routes.py
+│   │   │   ├── models.py
+│   │   │   ├── services.py
+│   │   │   └── __init__.py
+│   │   │
+│   │   └── userdata/                # User data
+│   │       └── routes.py
 │   │
-│   ├── __init__.py                  # Flask app factory
-│   ├── Config.py                    # Configuration
-│   └── extensions.py                # Flask extensions (db, etc)
+│   ├── __init__.py                  # Flask app factory (create_app)
+│   ├── Config.py                    # Configuration settings
+│   ├── extensions.py                # Flask extensions
+│   └── data_manager.py              # Mock data management
 │
-├── database/                         # Mock data files
+├── database/                         # Mock data files (JSON)
 │   ├── mock_sso.json               # SSO credentials & user IDs
 │   ├── mock_role_map.json          # ID to role mapping
 │   ├── mock_datacore.json          # User profiles
-│   ├── mock_sessions.json          # Active sessions
-│   └── mock_db.json                # Legacy (deprecated)
+│   ├── mock_sessions.json          # Session bookings
+│   ├── mock_tutor_sessions.json    # Tutor sessions
+│   ├── mock_schedule.json          # Schedule data
+│   ├── mock_assignments.json       # Assignment data
+│   ├── mock_student_bookings.json  # Student booking history
+│   ├── mock_notification_dtb.json  # Notifications
+│   └── mock_db.json                # Legacy data
 │
-├── run.py                           # Entry point
+├── run.py                           # Application entry point
 ├── requirements.txt                 # Python dependencies
-│
-├── README.md                        # This file
-├── STATIC_FILES_GUIDE.md           # Guide for CSS/JS usage
-│
-└── .git/                            # Git repository
+└── README.md                        # This file
 ```
 
 ## 🚀 Getting Started
@@ -112,32 +147,33 @@ TutorSupportSystem/
 ### Prerequisites
 
 - Python 3.8+
-- Flask 2.0+
+- Flask 3.1.2 (with async support)
 - pip (Python package manager)
+- Virtual environment
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd TutorSupportSystem
+   cd Tutor-Support-System
    ```
 
 2. **Create virtual environment**
    ```bash
-   python -m venv .venv
+   python -m venv venv
    ```
 
 3. **Activate virtual environment**
    
    **Windows (PowerShell):**
    ```powershell
-   .\.venv\Scripts\Activate.ps1
+   .\venv\Scripts\Activate.ps1
    ```
    
    **Linux/Mac:**
    ```bash
-   source .venv/bin/activate
+   source venv/bin/activate
    ```
 
 4. **Install dependencies**
@@ -149,6 +185,241 @@ TutorSupportSystem/
    ```bash
    python run.py
    ```
+   
+   The application will be available at `http://127.0.0.1:5000`
+
+### Dependencies
+
+Key packages installed via requirements.txt:
+- **Flask[async]==3.1.2** - Web framework with async support
+- **Flask-Marshmallow==1.3.0** - Serialization library
+- **sentence-transformers** - Semantic search for tutor matching
+- **scikit-learn** - Machine learning utilities
+- **numpy** - Numerical computing
+
+### Demo Credentials
+
+**Student Account:**
+- Username: `annguyen`
+- Password: `annguyen2025!`
+- Role: Student
+
+**Tutor Account:**
+- Username: `qttho`
+- Password: `qtthoGV2025!`
+- Role: Tutor
+
+## 🔧 Key Features & Implementation
+
+### 1. **Semantic Tutor Search**
+- Uses `sentence-transformers` library with the `all-MiniLM-L6-v2` model
+- Converts course names/subjects into semantic embeddings
+- Matches against tutor specializations using cosine similarity
+- Returns top-k most relevant tutors
+
+**Endpoint:**
+```
+GET /api/student/tutors/search?course_name=<course_name>
+```
+
+### 2. **Async Route Handlers**
+- Routes use Python async/await for better performance
+- Decorators `@auth_required` and `@role_required` support both sync and async functions
+- Requires Flask[async] package
+
+### 3. **Authentication & Authorization**
+- Multi-role system: Student, Tutor, Admin
+- Session-based authentication with Flask sessions
+- Role-based access control (RBAC) with `@role_required` decorator
+- Integration with mock SSO, role map, and datacore systems
+
+### 4. **Mock Data Management**
+- All data stored in JSON files in `/database` folder
+- `DatacoreManager` provides unified access to mock data
+- Easy to replace with real database later
+
+## 📡 API Documentation
+
+### Authentication Endpoints
+
+#### 1. **Login (JSON API)**
+```
+POST /auth/login
+Content-Type: application/json
+
+{
+  "username": "tutor1",
+  "password": "tutorpass",
+  "role": "tutor"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "status": "success",
+  "message": "Logged in",
+  "data": {
+    "user_id": "LECTURER_001",
+    "username": "tutor1",
+    "email": "tutor1@hcmut.edu.vn",
+    "display_name": "Phạm Thị Tú",
+    "role": "tutor",
+    "faculty": "Computer Science",
+    "department": "Software Engineering"
+  }
+}
+```
+
+**Response (401 Unauthorized):**
+```json
+{
+  "status": "error",
+  "message": "Invalid credentials",
+  "data": null
+}
+```
+
+---
+
+### Student Endpoints
+
+#### 1. **Search Tutors by Course**
+```
+GET /api/student/tutors/search?course_name=<course_name>
+Authorization: Required (Student role)
+```
+
+**Query Parameters:**
+- `course_name` (required): Course name or code to search for
+
+**Response (200 OK):**
+```json
+{
+  "status": "success",
+  "message": "Found 3 tutors for course \"computer science\"",
+  "data": {
+    "course_name": "computer science",
+    "tutor_count": 3,
+    "tutors": [
+      {
+        "tutor_id": "LECTURER_001",
+        "tutor_name": "Phạm Thị Tú",
+        "specialization": "M.Sc. in Computer Science",
+        "subjects": ["CSC101", "CSC102", "CSC201"],
+        "rating": 4.8,
+        "email": "tutor1@hcmut.edu.vn",
+        "similarity_score": 0.95
+      }
+    ]
+  }
+}
+```
+
+**Response (400 Bad Request):**
+```json
+{
+  "status": "error",
+  "message": "Missing required parameter: course_name",
+  "data": null
+}
+```
+
+**Response (401 Unauthorized):**
+```json
+{
+  "status": "error",
+  "message": "Not authenticated",
+  "data": null
+}
+```
+
+---
+
+## 🛠️ Development Guide
+
+### Adding a New Module
+
+1. Create a new folder in `app/modules/<module_name>`
+2. Create `__init__.py`, `routes.py`, `models.py`, `services.py`
+3. Register the blueprint in `app/__init__.py` (create_app function)
+4. Import and add to Flask app: `app.register_blueprint(module_bp)`
+
+### Working with Async Routes
+
+```python
+from flask import Blueprint, jsonify, request
+
+bp = Blueprint('example', __name__)
+
+@bp.route('/async-endpoint', methods=['GET'])
+async def async_route():
+    # This function runs asynchronously
+    result = await some_async_operation()
+    return jsonify({'data': result})
+```
+
+### Authentication
+
+Use decorators to protect routes:
+
+```python
+from app.modules.auth.routes import auth_required, role_required
+
+@bp.route('/protected')
+@auth_required  # Requires login
+@role_required('student')  # Requires student role
+async def protected_route():
+    return jsonify({'message': 'Protected data'})
+```
+
+### Accessing Mock Data
+
+```python
+from app.data_manager import DatacoreManager, ScheduleManager
+
+# Get all tutors
+tutors = DatacoreManager.get_all_tutors()
+
+# Get student profile
+profile = DatacoreManager.get_user_profile(user_id)
+```
+
+## 📚 Mock Data Files
+
+All mock data is stored in JSON files:
+
+- **mock_sso.json** - User credentials and authentication
+- **mock_role_map.json** - Maps user IDs to roles
+- **mock_datacore.json** - User profiles and detailed info
+- **mock_sessions.json** - Active tutor-student sessions
+- **mock_schedule.json** - Schedule/availability data
+- **mock_tutor_sessions.json** - Tutor session history
+- **mock_student_bookings.json** - Student booking records
+- **mock_assignments.json** - Course assignments
+- **mock_notification_dtb.json** - Notification logs
+
+## 🐛 Troubleshooting
+
+### Import Errors
+If you see `ModuleNotFoundError`, make sure:
+- You're using relative imports in module files: `from . import module_name`
+- Python path includes the project root
+
+### Async/Await Errors
+```
+RuntimeError: Install Flask with the 'async' extra
+```
+Solution: `pip install flask[async]`
+
+### Session Not Preserved
+- Ensure cookies are enabled in your browser
+- Check Flask session settings in `Config.py`
+- Verify `auth_required` decorator is applied to the route
+
+## 📝 License
+
+This project is part of HCMUT SE2025 assignment.
 
 6. **Open in browser**
    ```

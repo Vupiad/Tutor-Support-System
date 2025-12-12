@@ -141,29 +141,57 @@ def get_current_user():
 # ---------- Decorators ----------
 def auth_required(f):
     from functools import wraps
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        if 'user_id' not in session:
-            if request.is_json:
-                return jsonify({'status': 'error', 'message': 'Not authenticated', 'data': None}), 401
-            return redirect(url_for('auth.login_get'))
-        return f(*args, **kwargs)
-    return decorated
+    import asyncio
+    
+    if asyncio.iscoroutinefunction(f):
+        @wraps(f)
+        async def async_decorated(*args, **kwargs):
+            if 'user_id' not in session:
+                if request.is_json:
+                    return jsonify({'status': 'error', 'message': 'Not authenticated', 'data': None}), 401
+                return redirect(url_for('auth.login_get'))
+            return await f(*args, **kwargs)
+        return async_decorated
+    else:
+        @wraps(f)
+        def sync_decorated(*args, **kwargs):
+            if 'user_id' not in session:
+                if request.is_json:
+                    return jsonify({'status': 'error', 'message': 'Not authenticated', 'data': None}), 401
+                return redirect(url_for('auth.login_get'))
+            return f(*args, **kwargs)
+        return sync_decorated
 
 
 def role_required(required_role):
     def decorator(f):
         from functools import wraps
-        @wraps(f)
-        def decorated(*args, **kwargs):
-            if 'user_id' not in session:
-                if request.is_json:
-                    return jsonify({'status': 'error', 'message': 'Not authenticated', 'data': None}), 401
-                return redirect(url_for('auth.login_get'))
-            if session.get('role') != required_role:
-                if request.is_json:
-                    return jsonify({'status': 'error', 'message': 'Forbidden', 'data': None}), 403
-                return "Forbidden", 403
-            return f(*args, **kwargs)
-        return decorated
+        import asyncio
+        
+        if asyncio.iscoroutinefunction(f):
+            @wraps(f)
+            async def async_decorated(*args, **kwargs):
+                if 'user_id' not in session:
+                    if request.is_json:
+                        return jsonify({'status': 'error', 'message': 'Not authenticated', 'data': None}), 401
+                    return redirect(url_for('auth.login_get'))
+                if session.get('role') != required_role:
+                    if request.is_json:
+                        return jsonify({'status': 'error', 'message': 'Forbidden', 'data': None}), 403
+                    return "Forbidden", 403
+                return await f(*args, **kwargs)
+            return async_decorated
+        else:
+            @wraps(f)
+            def sync_decorated(*args, **kwargs):
+                if 'user_id' not in session:
+                    if request.is_json:
+                        return jsonify({'status': 'error', 'message': 'Not authenticated', 'data': None}), 401
+                    return redirect(url_for('auth.login_get'))
+                if session.get('role') != required_role:
+                    if request.is_json:
+                        return jsonify({'status': 'error', 'message': 'Forbidden', 'data': None}), 403
+                    return "Forbidden", 403
+                return f(*args, **kwargs)
+            return sync_decorated
     return decorator

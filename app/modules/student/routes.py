@@ -11,6 +11,7 @@ from app.modules.auth.routes import auth_required, role_required
 from app.data_manager import (
     DatacoreManager, ScheduleManager, AssignmentManager, StudentBookingManager, TutorSessionManager
 )
+from . import tutorSearchService
 
 logger = logging.getLogger(__name__)
 
@@ -20,9 +21,9 @@ student_bp = Blueprint('student', __name__, url_prefix='/api')
 @student_bp.route('/student/tutors/search', methods=['GET'])
 @auth_required
 @role_required('student')
-def search_tutors_by_course():
+async def search_tutors_by_semantic():
     """
-    GET /api/student/tutors/search?course_name=CSC101
+    GET /api/student/tutors/search?course_name=<course_name>
     
     Search for tutors by course name.
     Requires: authentication, student role
@@ -62,8 +63,7 @@ def search_tutors_by_course():
             }), 400
         
         # Find tutors teaching this course
-        tutors = DatacoreManager.find_tutors_by_course(course_name)
-        
+        tutors = await tutorSearchService.search_tutors_by_meaning(course_name, top_k=5)
         # Format response
         tutors_data = []
         for tutor in tutors:

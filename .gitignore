@@ -1,6 +1,57 @@
-.idea
-.venv/*
-__pycache__/.DS_Store
-app/.DS_Store
+# Virtual Environment
+venv/
+.venv/
+ENV/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.Python
+
+# IDE & Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 .DS_Store
-app/__pycache__/*
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Flask
+instance/
+.webassets-cache
+
+# Dependencies
+pip-log.txt
+pip-delete-this-directory.txt
+
+# OS Files
+.DS_Store
+app/.DS_Store
+Thumbs.db
+
+# Project Specific
+node_modules/
+package-lock.json
